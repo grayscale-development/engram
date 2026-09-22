@@ -13,7 +13,7 @@
   "files": ["bin", "src", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
     "test": "node --test",
-    "lint": "node --check src/*.js && node --check bin/graph-ai.js",
+    "lint": "node --check src/*.js && node --check bin/graph-ai.js && node --check docs/index.js",
     "demo": "node scripts/demo.js",
     "benchmark": "node bin/graph-ai.js benchmark"
   },

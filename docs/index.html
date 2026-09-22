@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Graph-AI gives coding agents a compact local briefing for your repository." />
+    <meta name="theme-color" content="#0c0d0c" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Graph-AI — Your agent knows the repo." />
+    <meta property="og:description" content="A small local file that gives coding agents the right starting context." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Graph-AI — Your agent knows the repo.</title>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a class="brand" href="#top"><span>⌘</span> graph-ai</a>
+        <a class="github" href="https://github.com/grayscale-development/graph-ai" target="_blank" rel="noreferrer"><span aria-hidden="true">★</span> <span id="stars">GitHub</span> ↗</a>
+      </nav>
+
+      <section class="hero" id="top">
+        <p class="eyebrow">LOCAL REPOSITORY CONTEXT</p>
+        <h1>Your agent knows the repo.</h1>
+        <p class="lede">One small file. Better starting context.</p>
+        <p class="command-label">Run once, inside your repo</p>
+        <button class="command" id="copy-command" type="button"><span>$</span><code>npx --yes github:grayscale-development/graph-ai init</code><b id="copy-state">copy</b></button>
+        <p class="hint" id="copy-hint">Requires Node.js 20 or newer.</p>
+      </section>
+
+      <section class="languages" aria-label="Supported languages">
+        <span>SUPPORTED LANGUAGES</span>
+        <div><b>TypeScript</b><b>JavaScript</b><b>Python</b></div>
+      </section>
+
+      <section class="section timeline-section">
+        <p class="eyebrow">WHAT CHANGES</p>
+        <h2>Start in the right place.</h2>
+        <div class="timeline">
+          <div><time>00:00</time><p><strong>Agent arrives.</strong> No context.</p></div>
+          <div><time>00:08</time><p><strong>Graph-AI returns a 73-token brief.</strong> Files, rules, tests.</p></div>
+          <div><time>00:09</time><p><strong>Agent starts the task.</strong></p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="eyebrow">REAL FOOTPRINT</p>
+        <h2>Small file. Useful brief.</h2>
+        <div class="ledger">
+          <div class="ledger-primary"><strong>20.7 KB</strong><span>added to the repository</span><small>Graph-AI itself: 68 files · 98 KB source</small></div>
+          <div class="ledger-rows">
+            <div><b>73 tokens</b><span>task briefing instead of 24,521 estimated source tokens</span></div>
+            <div><b>126 ms</b><span>full build of a 500-file TypeScript fixture</span></div>
+            <div><b>100%</b><span>required-file and fact recall in the fixture</span></div>
+          </div>
+        </div>
+        <p class="hint">Measured on Graph-AI itself.</p>
+      </section>
+
+      <section class="section savings">
+        <div><p class="eyebrow">WHAT THAT CAN SAVE</p><h2>Less context. Less cost.</h2><p class="lede small-lede">At 120 sessions a month:</p></div>
+        <div class="savings-card">
+          <div class="savings-results"><div><strong id="token-savings">2.9M</strong><span>fewer input tokens</span></div><div><strong id="cost-savings">$8.80</strong><span>estimated input cost</span></div><div><strong id="time-savings">~20h</strong><span>less searching</span></div></div>
+          <details><summary>Adjust estimate</summary><label>Sessions / month <output id="sessions-output">120</output><input id="sessions" type="range" min="20" max="500" step="10" value="120" /></label><label>Input price / 1M <output id="price-output">$3.00</output><input id="price" type="range" min="0.5" max="15" step="0.5" value="3" /></label></details>
+          <p class="hint">Read-everything baseline.</p>
+        </div>
+      </section>
+
+      <section class="section status-section">
+        <div><p class="eyebrow">LIVE PROJECT STATUS</p><h2>Built in the open.</h2></div>
+        <div class="status-card"><div><i id="status-dot"></i><strong id="ci-status">Checking CI</strong><small id="ci-detail">GitHub Actions</small></div><div><strong id="test-speed">~1.1s</strong><small id="test-detail">local test suite</small></div><a id="ci-link" href="https://github.com/grayscale-development/graph-ai/actions" target="_blank" rel="noreferrer">View CI ↗</a></div>
+      </section>
+
+      <section class="install-band"><div><p class="eyebrow">INSTALL GRAPH-AI</p><code>npx --yes github:grayscale-development/graph-ai init</code></div><a href="https://github.com/grayscale-development/graph-ai" target="_blank" rel="noreferrer">View on GitHub ↗</a></section>
+    </main>
+    <footer><a class="brand" href="#top"><span>⌘</span> graph-ai</a><span>MIT licensed · local-first</span><a href="https://github.com/grayscale-development/graph-ai" target="_blank" rel="noreferrer">GitHub ↗</a></footer>
+    <script src="index.js"></script>
+  </body>
+</html>

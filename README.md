@@ -28,6 +28,16 @@ graph-ai context "change ignored file handling" --tokens 1200
 
 No network, API key, cloud account, or external model is required.
 
+## Website
+
+The product site lives in [`docs/`](docs/) as plain static HTML, CSS, and JavaScript—no website framework or separate deployment repository. The `Publish site` GitHub Actions workflow publishes it to GitHub Pages on pushes to `main` that change `docs/`.
+
+After GitHub Pages is enabled for the repository, it is available at:
+
+```
+https://grayscale-development.github.io/graph-ai/
+```
+
 ## Commands
 
 `init`, `build`, `diff`, `overview`, `context`, `query`, `inspect`, `export`, `add`, `sync`, `status`, `stats`, `evaluate`, and `benchmark` are implemented. Run `graph-ai help` for syntax.
