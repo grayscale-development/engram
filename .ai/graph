@@ -1,0 +1,4352 @@
+{
+  "format_version": 1,
+  "generator_version": "0.1.0",
+  "repository": {
+    "root": ".",
+    "indexed_revision": null,
+    "indexed_at": "2026-09-22T06:26:41.155Z",
+    "name": "graph-ai"
+  },
+  "files": {
+    "AGENTS.md": {
+      "hash": "b15848ea35b0628fbc97fbb125213da5aca65ed32574330f2a6f201252631689",
+      "size": 642,
+      "language": "Markdown"
+    },
+    "README.md": {
+      "hash": "a314866ddbc44d8f32c7f068e3eb7fda10ff253573a518f9b299ca58d123f9cb",
+      "size": 2393,
+      "language": "Markdown"
+    },
+    "package.json": {
+      "hash": "ec1e42bf385c74451e0d31415a367fbb547262abd95729f4c121d62210ebb545",
+      "size": 388,
+      "language": "JSON"
+    },
+    "src/cli.js": {
+      "hash": "c8e92375815a13193c550c207676662cbe0e70d9042e0ffc53e4c0d26098506b",
+      "size": 5814,
+      "language": "JavaScript"
+    },
+    "src/constants.js": {
+      "hash": "4854de65eae992830d61eaa1fbb4021fde31da3be68c6fdf29b00155e61c10d4",
+      "size": 919,
+      "language": "JavaScript"
+    },
+    "src/indexer.js": {
+      "hash": "46751b293e5565e9e8f4dd254d6189bf36828b009e77e128889ad28405bd0ede",
+      "size": 3915,
+      "language": "JavaScript"
+    },
+    "src/parser.js": {
+      "hash": "51b731c42d3eef3ce3d1994080d159d8be8676f6e91bb7ae5a43f5e17ff31d06",
+      "size": 1873,
+      "language": "JavaScript"
+    },
+    "src/query.js": {
+      "hash": "037483a3f04cbd1506d920ee7929a53b2dd6b7af8196211ebb7ecdbb45d1c0fb",
+      "size": 2842,
+      "language": "JavaScript"
+    },
+    "src/report.js": {
+      "hash": "97b7c6a298a5443882d265cffdf811777c1483210efe62509fd08c20d7a8db11",
+      "size": 2236,
+      "language": "JavaScript"
+    },
+    "src/scanner.js": {
+      "hash": "68cd6d57a9e3ab40349df97bb041568b8b8164a7420444ddfbbdc06b3c87d8fe",
+      "size": 1448,
+      "language": "JavaScript"
+    },
+    "src/semantic.js": {
+      "hash": "61e4e1506a6ea270cbd30fb7e8757c14957ef40315f75017a2a2638154913ecf",
+      "size": 2345,
+      "language": "JavaScript"
+    },
+    "src/storage.js": {
+      "hash": "3671ebf9eab514872e199e83c4777cf314853e5f878f175c81795b73fd390a27",
+      "size": 881,
+      "language": "JavaScript"
+    },
+    "src/utils.js": {
+      "hash": "b2dd89d51943176f4fea6ef1b06bdda66fa51facb0f74be13179005ab307d5ce",
+      "size": 944,
+      "language": "JavaScript"
+    }
+  },
+  "nodes": {
+    "code:file:AGENTS.md": {
+      "id": "code:file:AGENTS.md",
+      "type": "code.file",
+      "label": "AGENTS.md",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "AGENTS.md"
+      ],
+      "metadata": {
+        "language": "Markdown",
+        "symbols": [],
+        "imports": [],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "agents"
+        ]
+      }
+    },
+    "code:file:README.md": {
+      "id": "code:file:README.md",
+      "type": "code.file",
+      "label": "README.md",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "README.md"
+      ],
+      "metadata": {
+        "language": "Markdown",
+        "symbols": [],
+        "imports": [],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "readme"
+        ]
+      }
+    },
+    "code:file:package.json": {
+      "id": "code:file:package.json",
+      "type": "code.file",
+      "label": "package.json",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "package.json"
+      ],
+      "metadata": {
+        "language": "JSON",
+        "symbols": [],
+        "imports": [],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "package"
+        ]
+      }
+    },
+    "code:file:src/cli.js": {
+      "id": "code:file:src/cli.js",
+      "type": "code.file",
+      "label": "src/cli.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "help",
+            "kind": "symbol",
+            "line": 11
+          },
+          {
+            "name": "option",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "i",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "rootFor",
+            "kind": "symbol",
+            "line": 13
+          },
+          {
+            "name": "positional",
+            "kind": "symbol",
+            "line": 14
+          },
+          {
+            "name": "flags",
+            "kind": "symbol",
+            "line": 14
+          },
+          {
+            "name": "requireGraph",
+            "kind": "symbol",
+            "line": 15
+          },
+          {
+            "name": "graph",
+            "kind": "symbol",
+            "line": 15
+          },
+          {
+            "name": "jsonOrText",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "run",
+            "kind": "symbol",
+            "line": 17
+          },
+          {
+            "name": "command",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "root",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "prior",
+            "kind": "symbol",
+            "line": 21
+          },
+          {
+            "name": "graph",
+            "kind": "symbol",
+            "line": 25
+          },
+          {
+            "name": "task",
+            "kind": "symbol",
+            "line": 27
+          },
+          {
+            "name": "packet",
+            "kind": "symbol",
+            "line": 27
+          },
+          {
+            "name": "query",
+            "kind": "symbol",
+            "line": 28
+          },
+          {
+            "name": "result",
+            "kind": "symbol",
+            "line": 28
+          },
+          {
+            "name": "parts",
+            "kind": "symbol",
+            "line": 29
+          },
+          {
+            "name": "needle",
+            "kind": "symbol",
+            "line": 29
+          },
+          {
+            "name": "found",
+            "kind": "symbol",
+            "line": 29
+          },
+          {
+            "name": "parts",
+            "kind": "symbol",
+            "line": 30
+          },
+          {
+            "name": "type",
+            "kind": "symbol",
+            "line": 30
+          },
+          {
+            "name": "statement",
+            "kind": "symbol",
+            "line": 30
+          },
+          {
+            "name": "evidence",
+            "kind": "symbol",
+            "line": 30
+          },
+          {
+            "name": "result",
+            "kind": "symbol",
+            "line": 30
+          },
+          {
+            "name": "delta",
+            "kind": "symbol",
+            "line": 31
+          },
+          {
+            "name": "result",
+            "kind": "symbol",
+            "line": 31
+          },
+          {
+            "name": "size",
+            "kind": "symbol",
+            "line": 33
+          }
+        ],
+        "imports": [
+          "node:fs/promises",
+          "node:path",
+          "./indexer.js",
+          "./storage.js",
+          "./semantic.js",
+          "./query.js",
+          "./report.js",
+          "./utils.js",
+          "./constants.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "cli",
+          "help",
+          "option",
+          "rootfor",
+          "positional",
+          "flags",
+          "requiregraph",
+          "graph",
+          "jsonortext",
+          "run",
+          "command",
+          "root",
+          "prior",
+          "task",
+          "packet",
+          "query",
+          "result",
+          "parts",
+          "needle",
+          "found",
+          "type",
+          "statement",
+          "evidence",
+          "delta",
+          "size"
+        ]
+      }
+    },
+    "code:symbol:src/cli.js#help": {
+      "id": "code:symbol:src/cli.js#help",
+      "type": "code.symbol",
+      "label": "help",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "help",
+        "kind": "symbol",
+        "line": 11
+      }
+    },
+    "code:symbol:src/cli.js#option": {
+      "id": "code:symbol:src/cli.js#option",
+      "type": "code.symbol",
+      "label": "option",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "option",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/cli.js#i": {
+      "id": "code:symbol:src/cli.js#i",
+      "type": "code.symbol",
+      "label": "i",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "i",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/cli.js#rootFor": {
+      "id": "code:symbol:src/cli.js#rootFor",
+      "type": "code.symbol",
+      "label": "rootFor",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "rootFor",
+        "kind": "symbol",
+        "line": 13
+      }
+    },
+    "code:symbol:src/cli.js#positional": {
+      "id": "code:symbol:src/cli.js#positional",
+      "type": "code.symbol",
+      "label": "positional",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "positional",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/cli.js#flags": {
+      "id": "code:symbol:src/cli.js#flags",
+      "type": "code.symbol",
+      "label": "flags",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "flags",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/cli.js#requireGraph": {
+      "id": "code:symbol:src/cli.js#requireGraph",
+      "type": "code.symbol",
+      "label": "requireGraph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "requireGraph",
+        "kind": "symbol",
+        "line": 15
+      }
+    },
+    "code:symbol:src/cli.js#graph": {
+      "id": "code:symbol:src/cli.js#graph",
+      "type": "code.symbol",
+      "label": "graph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "graph",
+        "kind": "symbol",
+        "line": 25
+      }
+    },
+    "code:symbol:src/cli.js#jsonOrText": {
+      "id": "code:symbol:src/cli.js#jsonOrText",
+      "type": "code.symbol",
+      "label": "jsonOrText",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "jsonOrText",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/cli.js#run": {
+      "id": "code:symbol:src/cli.js#run",
+      "type": "code.symbol",
+      "label": "run",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "run",
+        "kind": "symbol",
+        "line": 17
+      }
+    },
+    "code:symbol:src/cli.js#command": {
+      "id": "code:symbol:src/cli.js#command",
+      "type": "code.symbol",
+      "label": "command",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "command",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/cli.js#root": {
+      "id": "code:symbol:src/cli.js#root",
+      "type": "code.symbol",
+      "label": "root",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "root",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/cli.js#prior": {
+      "id": "code:symbol:src/cli.js#prior",
+      "type": "code.symbol",
+      "label": "prior",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "prior",
+        "kind": "symbol",
+        "line": 21
+      }
+    },
+    "code:symbol:src/cli.js#task": {
+      "id": "code:symbol:src/cli.js#task",
+      "type": "code.symbol",
+      "label": "task",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "task",
+        "kind": "symbol",
+        "line": 27
+      }
+    },
+    "code:symbol:src/cli.js#packet": {
+      "id": "code:symbol:src/cli.js#packet",
+      "type": "code.symbol",
+      "label": "packet",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "packet",
+        "kind": "symbol",
+        "line": 27
+      }
+    },
+    "code:symbol:src/cli.js#query": {
+      "id": "code:symbol:src/cli.js#query",
+      "type": "code.symbol",
+      "label": "query",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "query",
+        "kind": "symbol",
+        "line": 28
+      }
+    },
+    "code:symbol:src/cli.js#result": {
+      "id": "code:symbol:src/cli.js#result",
+      "type": "code.symbol",
+      "label": "result",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "result",
+        "kind": "symbol",
+        "line": 31
+      }
+    },
+    "code:symbol:src/cli.js#parts": {
+      "id": "code:symbol:src/cli.js#parts",
+      "type": "code.symbol",
+      "label": "parts",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "parts",
+        "kind": "symbol",
+        "line": 30
+      }
+    },
+    "code:symbol:src/cli.js#needle": {
+      "id": "code:symbol:src/cli.js#needle",
+      "type": "code.symbol",
+      "label": "needle",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "needle",
+        "kind": "symbol",
+        "line": 29
+      }
+    },
+    "code:symbol:src/cli.js#found": {
+      "id": "code:symbol:src/cli.js#found",
+      "type": "code.symbol",
+      "label": "found",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "found",
+        "kind": "symbol",
+        "line": 29
+      }
+    },
+    "code:symbol:src/cli.js#type": {
+      "id": "code:symbol:src/cli.js#type",
+      "type": "code.symbol",
+      "label": "type",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "type",
+        "kind": "symbol",
+        "line": 30
+      }
+    },
+    "code:symbol:src/cli.js#statement": {
+      "id": "code:symbol:src/cli.js#statement",
+      "type": "code.symbol",
+      "label": "statement",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "statement",
+        "kind": "symbol",
+        "line": 30
+      }
+    },
+    "code:symbol:src/cli.js#evidence": {
+      "id": "code:symbol:src/cli.js#evidence",
+      "type": "code.symbol",
+      "label": "evidence",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "evidence",
+        "kind": "symbol",
+        "line": 30
+      }
+    },
+    "code:symbol:src/cli.js#delta": {
+      "id": "code:symbol:src/cli.js#delta",
+      "type": "code.symbol",
+      "label": "delta",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "delta",
+        "kind": "symbol",
+        "line": 31
+      }
+    },
+    "code:symbol:src/cli.js#size": {
+      "id": "code:symbol:src/cli.js#size",
+      "type": "code.symbol",
+      "label": "size",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/cli.js"
+      ],
+      "metadata": {
+        "name": "size",
+        "kind": "symbol",
+        "line": 33
+      }
+    },
+    "code:file:src/constants.js": {
+      "id": "code:file:src/constants.js",
+      "type": "code.file",
+      "label": "src/constants.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "FORMAT_VERSION",
+            "kind": "symbol",
+            "line": 1
+          },
+          {
+            "name": "GENERATOR_VERSION",
+            "kind": "symbol",
+            "line": 2
+          },
+          {
+            "name": "GRAPH_PATH",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "DEFAULT_IGNORES",
+            "kind": "symbol",
+            "line": 4
+          },
+          {
+            "name": "SENSITIVE_NAMES",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "TEXT_EXTENSIONS",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "LANGUAGE_BY_EXTENSION",
+            "kind": "symbol",
+            "line": 10
+          }
+        ],
+        "imports": [],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "constants",
+          "format_version",
+          "generator_version",
+          "graph_path",
+          "default_ignores",
+          "sensitive_names",
+          "text_extensions",
+          "language_by_extension"
+        ]
+      }
+    },
+    "code:symbol:src/constants.js#FORMAT_VERSION": {
+      "id": "code:symbol:src/constants.js#FORMAT_VERSION",
+      "type": "code.symbol",
+      "label": "FORMAT_VERSION",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "FORMAT_VERSION",
+        "kind": "symbol",
+        "line": 1
+      }
+    },
+    "code:symbol:src/constants.js#GENERATOR_VERSION": {
+      "id": "code:symbol:src/constants.js#GENERATOR_VERSION",
+      "type": "code.symbol",
+      "label": "GENERATOR_VERSION",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "GENERATOR_VERSION",
+        "kind": "symbol",
+        "line": 2
+      }
+    },
+    "code:symbol:src/constants.js#GRAPH_PATH": {
+      "id": "code:symbol:src/constants.js#GRAPH_PATH",
+      "type": "code.symbol",
+      "label": "GRAPH_PATH",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "GRAPH_PATH",
+        "kind": "symbol",
+        "line": 3
+      }
+    },
+    "code:symbol:src/constants.js#DEFAULT_IGNORES": {
+      "id": "code:symbol:src/constants.js#DEFAULT_IGNORES",
+      "type": "code.symbol",
+      "label": "DEFAULT_IGNORES",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "DEFAULT_IGNORES",
+        "kind": "symbol",
+        "line": 4
+      }
+    },
+    "code:symbol:src/constants.js#SENSITIVE_NAMES": {
+      "id": "code:symbol:src/constants.js#SENSITIVE_NAMES",
+      "type": "code.symbol",
+      "label": "SENSITIVE_NAMES",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "SENSITIVE_NAMES",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/constants.js#TEXT_EXTENSIONS": {
+      "id": "code:symbol:src/constants.js#TEXT_EXTENSIONS",
+      "type": "code.symbol",
+      "label": "TEXT_EXTENSIONS",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "TEXT_EXTENSIONS",
+        "kind": "symbol",
+        "line": 9
+      }
+    },
+    "code:symbol:src/constants.js#LANGUAGE_BY_EXTENSION": {
+      "id": "code:symbol:src/constants.js#LANGUAGE_BY_EXTENSION",
+      "type": "code.symbol",
+      "label": "LANGUAGE_BY_EXTENSION",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/constants.js"
+      ],
+      "metadata": {
+        "name": "LANGUAGE_BY_EXTENSION",
+        "kind": "symbol",
+        "line": 10
+      }
+    },
+    "code:file:src/indexer.js": {
+      "id": "code:file:src/indexer.js",
+      "type": "code.file",
+      "label": "src/indexer.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "fileId",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "symbolId",
+            "kind": "symbol",
+            "line": 7
+          },
+          {
+            "name": "codeNodesFor",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "id",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "parsed",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "nodes",
+            "kind": "symbol",
+            "line": 10
+          },
+          {
+            "name": "edges",
+            "kind": "symbol",
+            "line": 11
+          },
+          {
+            "name": "symbol",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "sid",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "endpoint",
+            "kind": "symbol",
+            "line": 13
+          },
+          {
+            "name": "eid",
+            "kind": "symbol",
+            "line": 13
+          },
+          {
+            "name": "resolveImport",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "base",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "clean",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "choices",
+            "kind": "symbol",
+            "line": 19
+          },
+          {
+            "name": "build",
+            "kind": "symbol",
+            "line": 22
+          },
+          {
+            "name": "graph",
+            "kind": "symbol",
+            "line": 23
+          },
+          {
+            "name": "scanned",
+            "kind": "symbol",
+            "line": 23
+          },
+          {
+            "name": "next",
+            "kind": "symbol",
+            "line": 23
+          },
+          {
+            "name": "before",
+            "kind": "symbol",
+            "line": 24
+          },
+          {
+            "name": "added",
+            "kind": "symbol",
+            "line": 24
+          },
+          {
+            "name": "modified",
+            "kind": "symbol",
+            "line": 24
+          },
+          {
+            "name": "unchanged",
+            "kind": "symbol",
+            "line": 24
+          },
+          {
+            "name": "deleted",
+            "kind": "symbol",
+            "line": 24
+          },
+          {
+            "name": "changed",
+            "kind": "symbol",
+            "line": 26
+          },
+          {
+            "name": "f",
+            "kind": "symbol",
+            "line": 31
+          },
+          {
+            "name": "indexed",
+            "kind": "symbol",
+            "line": 31
+          },
+          {
+            "name": "f",
+            "kind": "symbol",
+            "line": 32
+          },
+          {
+            "name": "parsed",
+            "kind": "symbol",
+            "line": 32
+          },
+          {
+            "name": "spec",
+            "kind": "symbol",
+            "line": 32
+          },
+          {
+            "name": "target",
+            "kind": "symbol",
+            "line": 32
+          },
+          {
+            "name": "semantic",
+            "kind": "symbol",
+            "line": 33
+          },
+          {
+            "name": "node",
+            "kind": "symbol",
+            "line": 34
+          },
+          {
+            "name": "affected",
+            "kind": "symbol",
+            "line": 36
+          },
+          {
+            "name": "semanticId",
+            "kind": "symbol",
+            "line": 43
+          }
+        ],
+        "imports": [
+          "./scanner.js",
+          "./parser.js",
+          "./storage.js",
+          "./utils.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "indexer",
+          "fileid",
+          "symbolid",
+          "codenodesfor",
+          "id",
+          "parsed",
+          "nodes",
+          "edges",
+          "symbol",
+          "sid",
+          "endpoint",
+          "eid",
+          "resolveimport",
+          "base",
+          "clean",
+          "choices",
+          "build",
+          "graph",
+          "scanned",
+          "next",
+          "before",
+          "added",
+          "modified",
+          "unchanged",
+          "deleted",
+          "changed",
+          "indexed",
+          "spec",
+          "target",
+          "semantic",
+          "node",
+          "affected",
+          "semanticid"
+        ]
+      }
+    },
+    "code:symbol:src/indexer.js#fileId": {
+      "id": "code:symbol:src/indexer.js#fileId",
+      "type": "code.symbol",
+      "label": "fileId",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "fileId",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/indexer.js#symbolId": {
+      "id": "code:symbol:src/indexer.js#symbolId",
+      "type": "code.symbol",
+      "label": "symbolId",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "symbolId",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:symbol:src/indexer.js#codeNodesFor": {
+      "id": "code:symbol:src/indexer.js#codeNodesFor",
+      "type": "code.symbol",
+      "label": "codeNodesFor",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "codeNodesFor",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/indexer.js#id": {
+      "id": "code:symbol:src/indexer.js#id",
+      "type": "code.symbol",
+      "label": "id",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "id",
+        "kind": "symbol",
+        "line": 9
+      }
+    },
+    "code:symbol:src/indexer.js#parsed": {
+      "id": "code:symbol:src/indexer.js#parsed",
+      "type": "code.symbol",
+      "label": "parsed",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "parsed",
+        "kind": "symbol",
+        "line": 32
+      }
+    },
+    "code:symbol:src/indexer.js#nodes": {
+      "id": "code:symbol:src/indexer.js#nodes",
+      "type": "code.symbol",
+      "label": "nodes",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "nodes",
+        "kind": "symbol",
+        "line": 10
+      }
+    },
+    "code:symbol:src/indexer.js#edges": {
+      "id": "code:symbol:src/indexer.js#edges",
+      "type": "code.symbol",
+      "label": "edges",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "edges",
+        "kind": "symbol",
+        "line": 11
+      }
+    },
+    "code:symbol:src/indexer.js#symbol": {
+      "id": "code:symbol:src/indexer.js#symbol",
+      "type": "code.symbol",
+      "label": "symbol",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "symbol",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/indexer.js#sid": {
+      "id": "code:symbol:src/indexer.js#sid",
+      "type": "code.symbol",
+      "label": "sid",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "sid",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/indexer.js#endpoint": {
+      "id": "code:symbol:src/indexer.js#endpoint",
+      "type": "code.symbol",
+      "label": "endpoint",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "endpoint",
+        "kind": "symbol",
+        "line": 13
+      }
+    },
+    "code:symbol:src/indexer.js#eid": {
+      "id": "code:symbol:src/indexer.js#eid",
+      "type": "code.symbol",
+      "label": "eid",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "eid",
+        "kind": "symbol",
+        "line": 13
+      }
+    },
+    "code:symbol:src/indexer.js#resolveImport": {
+      "id": "code:symbol:src/indexer.js#resolveImport",
+      "type": "code.symbol",
+      "label": "resolveImport",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "resolveImport",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/indexer.js#base": {
+      "id": "code:symbol:src/indexer.js#base",
+      "type": "code.symbol",
+      "label": "base",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "base",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/indexer.js#clean": {
+      "id": "code:symbol:src/indexer.js#clean",
+      "type": "code.symbol",
+      "label": "clean",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "clean",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/indexer.js#choices": {
+      "id": "code:symbol:src/indexer.js#choices",
+      "type": "code.symbol",
+      "label": "choices",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "choices",
+        "kind": "symbol",
+        "line": 19
+      }
+    },
+    "code:symbol:src/indexer.js#build": {
+      "id": "code:symbol:src/indexer.js#build",
+      "type": "code.symbol",
+      "label": "build",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "build",
+        "kind": "symbol",
+        "line": 22
+      }
+    },
+    "code:symbol:src/indexer.js#graph": {
+      "id": "code:symbol:src/indexer.js#graph",
+      "type": "code.symbol",
+      "label": "graph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "graph",
+        "kind": "symbol",
+        "line": 23
+      }
+    },
+    "code:symbol:src/indexer.js#scanned": {
+      "id": "code:symbol:src/indexer.js#scanned",
+      "type": "code.symbol",
+      "label": "scanned",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "scanned",
+        "kind": "symbol",
+        "line": 23
+      }
+    },
+    "code:symbol:src/indexer.js#next": {
+      "id": "code:symbol:src/indexer.js#next",
+      "type": "code.symbol",
+      "label": "next",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "next",
+        "kind": "symbol",
+        "line": 23
+      }
+    },
+    "code:symbol:src/indexer.js#before": {
+      "id": "code:symbol:src/indexer.js#before",
+      "type": "code.symbol",
+      "label": "before",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "before",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:symbol:src/indexer.js#added": {
+      "id": "code:symbol:src/indexer.js#added",
+      "type": "code.symbol",
+      "label": "added",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "added",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:symbol:src/indexer.js#modified": {
+      "id": "code:symbol:src/indexer.js#modified",
+      "type": "code.symbol",
+      "label": "modified",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "modified",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:symbol:src/indexer.js#unchanged": {
+      "id": "code:symbol:src/indexer.js#unchanged",
+      "type": "code.symbol",
+      "label": "unchanged",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "unchanged",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:symbol:src/indexer.js#deleted": {
+      "id": "code:symbol:src/indexer.js#deleted",
+      "type": "code.symbol",
+      "label": "deleted",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "deleted",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:symbol:src/indexer.js#changed": {
+      "id": "code:symbol:src/indexer.js#changed",
+      "type": "code.symbol",
+      "label": "changed",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "changed",
+        "kind": "symbol",
+        "line": 26
+      }
+    },
+    "code:symbol:src/indexer.js#f": {
+      "id": "code:symbol:src/indexer.js#f",
+      "type": "code.symbol",
+      "label": "f",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "f",
+        "kind": "symbol",
+        "line": 32
+      }
+    },
+    "code:symbol:src/indexer.js#indexed": {
+      "id": "code:symbol:src/indexer.js#indexed",
+      "type": "code.symbol",
+      "label": "indexed",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "indexed",
+        "kind": "symbol",
+        "line": 31
+      }
+    },
+    "code:symbol:src/indexer.js#spec": {
+      "id": "code:symbol:src/indexer.js#spec",
+      "type": "code.symbol",
+      "label": "spec",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "spec",
+        "kind": "symbol",
+        "line": 32
+      }
+    },
+    "code:symbol:src/indexer.js#target": {
+      "id": "code:symbol:src/indexer.js#target",
+      "type": "code.symbol",
+      "label": "target",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "target",
+        "kind": "symbol",
+        "line": 32
+      }
+    },
+    "code:symbol:src/indexer.js#semantic": {
+      "id": "code:symbol:src/indexer.js#semantic",
+      "type": "code.symbol",
+      "label": "semantic",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "semantic",
+        "kind": "symbol",
+        "line": 33
+      }
+    },
+    "code:symbol:src/indexer.js#node": {
+      "id": "code:symbol:src/indexer.js#node",
+      "type": "code.symbol",
+      "label": "node",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "node",
+        "kind": "symbol",
+        "line": 34
+      }
+    },
+    "code:symbol:src/indexer.js#affected": {
+      "id": "code:symbol:src/indexer.js#affected",
+      "type": "code.symbol",
+      "label": "affected",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "affected",
+        "kind": "symbol",
+        "line": 36
+      }
+    },
+    "code:symbol:src/indexer.js#semanticId": {
+      "id": "code:symbol:src/indexer.js#semanticId",
+      "type": "code.symbol",
+      "label": "semanticId",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/indexer.js"
+      ],
+      "metadata": {
+        "name": "semanticId",
+        "kind": "symbol",
+        "line": 43
+      }
+    },
+    "code:file:src/parser.js": {
+      "id": "code:file:src/parser.js",
+      "type": "code.file",
+      "label": "src/parser.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "lineOf",
+            "kind": "symbol",
+            "line": 4
+          },
+          {
+            "name": "matches",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "out",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "parseFile",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "symbols",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "imports",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "endpoints",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "test",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "basenameTerms",
+            "kind": "symbol",
+            "line": 18
+          }
+        ],
+        "imports": [
+          "node:path",
+          "./utils.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "parser",
+          "lineof",
+          "matches",
+          "out",
+          "parsefile",
+          "symbols",
+          "imports",
+          "endpoints",
+          "test",
+          "basenameterms"
+        ]
+      }
+    },
+    "code:symbol:src/parser.js#lineOf": {
+      "id": "code:symbol:src/parser.js#lineOf",
+      "type": "code.symbol",
+      "label": "lineOf",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "lineOf",
+        "kind": "symbol",
+        "line": 4
+      }
+    },
+    "code:symbol:src/parser.js#matches": {
+      "id": "code:symbol:src/parser.js#matches",
+      "type": "code.symbol",
+      "label": "matches",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "matches",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/parser.js#out": {
+      "id": "code:symbol:src/parser.js#out",
+      "type": "code.symbol",
+      "label": "out",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "out",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/parser.js#parseFile": {
+      "id": "code:symbol:src/parser.js#parseFile",
+      "type": "code.symbol",
+      "label": "parseFile",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "parseFile",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/parser.js#symbols": {
+      "id": "code:symbol:src/parser.js#symbols",
+      "type": "code.symbol",
+      "label": "symbols",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "symbols",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/parser.js#imports": {
+      "id": "code:symbol:src/parser.js#imports",
+      "type": "code.symbol",
+      "label": "imports",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "imports",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/parser.js#endpoints": {
+      "id": "code:symbol:src/parser.js#endpoints",
+      "type": "code.symbol",
+      "label": "endpoints",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "endpoints",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/parser.js#test": {
+      "id": "code:symbol:src/parser.js#test",
+      "type": "code.symbol",
+      "label": "test",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "test",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/parser.js#basenameTerms": {
+      "id": "code:symbol:src/parser.js#basenameTerms",
+      "type": "code.symbol",
+      "label": "basenameTerms",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/parser.js"
+      ],
+      "metadata": {
+        "name": "basenameTerms",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:file:src/query.js": {
+      "id": "code:file:src/query.js",
+      "type": "code.file",
+      "label": "src/query.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "searchable",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "rank",
+            "kind": "symbol",
+            "line": 4
+          },
+          {
+            "name": "q",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "nodes",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "scored",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "hay",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "overlap",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "authority",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "freshness",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "relatedFiles",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "ids",
+            "kind": "symbol",
+            "line": 10
+          },
+          {
+            "name": "files",
+            "kind": "symbol",
+            "line": 10
+          },
+          {
+            "name": "item",
+            "kind": "symbol",
+            "line": 11
+          },
+          {
+            "name": "p",
+            "kind": "symbol",
+            "line": 11
+          },
+          {
+            "name": "edge",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "other",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "node",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "contextPacket",
+            "kind": "symbol",
+            "line": 15
+          },
+          {
+            "name": "chosen",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "lines",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "groups",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "included",
+            "kind": "symbol",
+            "line": 17
+          },
+          {
+            "name": "entries",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "item",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "n",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "detail",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "cost",
+            "kind": "symbol",
+            "line": 18
+          },
+          {
+            "name": "files",
+            "kind": "symbol",
+            "line": 19
+          }
+        ],
+        "imports": [
+          "./utils.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "query",
+          "searchable",
+          "rank",
+          "nodes",
+          "scored",
+          "hay",
+          "overlap",
+          "authority",
+          "freshness",
+          "relatedfiles",
+          "ids",
+          "files",
+          "item",
+          "edge",
+          "other",
+          "node",
+          "contextpacket",
+          "chosen",
+          "lines",
+          "groups",
+          "included",
+          "entries",
+          "detail",
+          "cost"
+        ]
+      }
+    },
+    "code:symbol:src/query.js#searchable": {
+      "id": "code:symbol:src/query.js#searchable",
+      "type": "code.symbol",
+      "label": "searchable",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "searchable",
+        "kind": "symbol",
+        "line": 3
+      }
+    },
+    "code:symbol:src/query.js#rank": {
+      "id": "code:symbol:src/query.js#rank",
+      "type": "code.symbol",
+      "label": "rank",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "rank",
+        "kind": "symbol",
+        "line": 4
+      }
+    },
+    "code:symbol:src/query.js#q": {
+      "id": "code:symbol:src/query.js#q",
+      "type": "code.symbol",
+      "label": "q",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "q",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/query.js#nodes": {
+      "id": "code:symbol:src/query.js#nodes",
+      "type": "code.symbol",
+      "label": "nodes",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "nodes",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/query.js#scored": {
+      "id": "code:symbol:src/query.js#scored",
+      "type": "code.symbol",
+      "label": "scored",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "scored",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/query.js#hay": {
+      "id": "code:symbol:src/query.js#hay",
+      "type": "code.symbol",
+      "label": "hay",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "hay",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/query.js#overlap": {
+      "id": "code:symbol:src/query.js#overlap",
+      "type": "code.symbol",
+      "label": "overlap",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "overlap",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/query.js#authority": {
+      "id": "code:symbol:src/query.js#authority",
+      "type": "code.symbol",
+      "label": "authority",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "authority",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/query.js#freshness": {
+      "id": "code:symbol:src/query.js#freshness",
+      "type": "code.symbol",
+      "label": "freshness",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "freshness",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/query.js#relatedFiles": {
+      "id": "code:symbol:src/query.js#relatedFiles",
+      "type": "code.symbol",
+      "label": "relatedFiles",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "relatedFiles",
+        "kind": "symbol",
+        "line": 9
+      }
+    },
+    "code:symbol:src/query.js#ids": {
+      "id": "code:symbol:src/query.js#ids",
+      "type": "code.symbol",
+      "label": "ids",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "ids",
+        "kind": "symbol",
+        "line": 10
+      }
+    },
+    "code:symbol:src/query.js#files": {
+      "id": "code:symbol:src/query.js#files",
+      "type": "code.symbol",
+      "label": "files",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "files",
+        "kind": "symbol",
+        "line": 19
+      }
+    },
+    "code:symbol:src/query.js#item": {
+      "id": "code:symbol:src/query.js#item",
+      "type": "code.symbol",
+      "label": "item",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "item",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/query.js#p": {
+      "id": "code:symbol:src/query.js#p",
+      "type": "code.symbol",
+      "label": "p",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "p",
+        "kind": "symbol",
+        "line": 11
+      }
+    },
+    "code:symbol:src/query.js#edge": {
+      "id": "code:symbol:src/query.js#edge",
+      "type": "code.symbol",
+      "label": "edge",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "edge",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/query.js#other": {
+      "id": "code:symbol:src/query.js#other",
+      "type": "code.symbol",
+      "label": "other",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "other",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/query.js#node": {
+      "id": "code:symbol:src/query.js#node",
+      "type": "code.symbol",
+      "label": "node",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "node",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/query.js#contextPacket": {
+      "id": "code:symbol:src/query.js#contextPacket",
+      "type": "code.symbol",
+      "label": "contextPacket",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "contextPacket",
+        "kind": "symbol",
+        "line": 15
+      }
+    },
+    "code:symbol:src/query.js#chosen": {
+      "id": "code:symbol:src/query.js#chosen",
+      "type": "code.symbol",
+      "label": "chosen",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "chosen",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/query.js#lines": {
+      "id": "code:symbol:src/query.js#lines",
+      "type": "code.symbol",
+      "label": "lines",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "lines",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/query.js#groups": {
+      "id": "code:symbol:src/query.js#groups",
+      "type": "code.symbol",
+      "label": "groups",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "groups",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/query.js#included": {
+      "id": "code:symbol:src/query.js#included",
+      "type": "code.symbol",
+      "label": "included",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "included",
+        "kind": "symbol",
+        "line": 17
+      }
+    },
+    "code:symbol:src/query.js#entries": {
+      "id": "code:symbol:src/query.js#entries",
+      "type": "code.symbol",
+      "label": "entries",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "entries",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/query.js#n": {
+      "id": "code:symbol:src/query.js#n",
+      "type": "code.symbol",
+      "label": "n",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "n",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/query.js#detail": {
+      "id": "code:symbol:src/query.js#detail",
+      "type": "code.symbol",
+      "label": "detail",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "detail",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:symbol:src/query.js#cost": {
+      "id": "code:symbol:src/query.js#cost",
+      "type": "code.symbol",
+      "label": "cost",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/query.js"
+      ],
+      "metadata": {
+        "name": "cost",
+        "kind": "symbol",
+        "line": 18
+      }
+    },
+    "code:file:src/report.js": {
+      "id": "code:file:src/report.js",
+      "type": "code.file",
+      "label": "src/report.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "overview",
+            "kind": "symbol",
+            "line": 2
+          },
+          {
+            "name": "files",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "languages",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "semantic",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "areas",
+            "kind": "symbol",
+            "line": 3
+          },
+          {
+            "name": "status",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "semantic",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "stale",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "stats",
+            "kind": "symbol",
+            "line": 7
+          },
+          {
+            "name": "files",
+            "kind": "symbol",
+            "line": 7
+          },
+          {
+            "name": "sourceBytes",
+            "kind": "symbol",
+            "line": 7
+          }
+        ],
+        "imports": [
+          "./utils.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "report",
+          "overview",
+          "files",
+          "languages",
+          "semantic",
+          "areas",
+          "status",
+          "stale",
+          "stats",
+          "sourcebytes"
+        ]
+      }
+    },
+    "code:symbol:src/report.js#overview": {
+      "id": "code:symbol:src/report.js#overview",
+      "type": "code.symbol",
+      "label": "overview",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "overview",
+        "kind": "symbol",
+        "line": 2
+      }
+    },
+    "code:symbol:src/report.js#files": {
+      "id": "code:symbol:src/report.js#files",
+      "type": "code.symbol",
+      "label": "files",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "files",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:symbol:src/report.js#languages": {
+      "id": "code:symbol:src/report.js#languages",
+      "type": "code.symbol",
+      "label": "languages",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "languages",
+        "kind": "symbol",
+        "line": 3
+      }
+    },
+    "code:symbol:src/report.js#semantic": {
+      "id": "code:symbol:src/report.js#semantic",
+      "type": "code.symbol",
+      "label": "semantic",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "semantic",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/report.js#areas": {
+      "id": "code:symbol:src/report.js#areas",
+      "type": "code.symbol",
+      "label": "areas",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "areas",
+        "kind": "symbol",
+        "line": 3
+      }
+    },
+    "code:symbol:src/report.js#status": {
+      "id": "code:symbol:src/report.js#status",
+      "type": "code.symbol",
+      "label": "status",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "status",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/report.js#stale": {
+      "id": "code:symbol:src/report.js#stale",
+      "type": "code.symbol",
+      "label": "stale",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "stale",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/report.js#stats": {
+      "id": "code:symbol:src/report.js#stats",
+      "type": "code.symbol",
+      "label": "stats",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "stats",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:symbol:src/report.js#sourceBytes": {
+      "id": "code:symbol:src/report.js#sourceBytes",
+      "type": "code.symbol",
+      "label": "sourceBytes",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/report.js"
+      ],
+      "metadata": {
+        "name": "sourceBytes",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:file:src/scanner.js": {
+      "id": "code:file:src/scanner.js",
+      "type": "code.file",
+      "label": "src/scanner.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "ignoredByGit",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "scan",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "found",
+            "kind": "symbol",
+            "line": 13
+          },
+          {
+            "name": "walk",
+            "kind": "symbol",
+            "line": 14
+          },
+          {
+            "name": "entry",
+            "kind": "symbol",
+            "line": 15
+          },
+          {
+            "name": "full",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "relative",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "ext",
+            "kind": "symbol",
+            "line": 21
+          },
+          {
+            "name": "stat",
+            "kind": "symbol",
+            "line": 22
+          },
+          {
+            "name": "content",
+            "kind": "symbol",
+            "line": 24
+          }
+        ],
+        "imports": [
+          "node:fs/promises",
+          "node:path",
+          "./constants.js",
+          "./utils.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "scanner",
+          "ignoredbygit",
+          "scan",
+          "found",
+          "walk",
+          "entry",
+          "full",
+          "relative",
+          "ext",
+          "stat",
+          "content"
+        ]
+      }
+    },
+    "code:symbol:src/scanner.js#ignoredByGit": {
+      "id": "code:symbol:src/scanner.js#ignoredByGit",
+      "type": "code.symbol",
+      "label": "ignoredByGit",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "ignoredByGit",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/scanner.js#scan": {
+      "id": "code:symbol:src/scanner.js#scan",
+      "type": "code.symbol",
+      "label": "scan",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "scan",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/scanner.js#found": {
+      "id": "code:symbol:src/scanner.js#found",
+      "type": "code.symbol",
+      "label": "found",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "found",
+        "kind": "symbol",
+        "line": 13
+      }
+    },
+    "code:symbol:src/scanner.js#walk": {
+      "id": "code:symbol:src/scanner.js#walk",
+      "type": "code.symbol",
+      "label": "walk",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "walk",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/scanner.js#entry": {
+      "id": "code:symbol:src/scanner.js#entry",
+      "type": "code.symbol",
+      "label": "entry",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "entry",
+        "kind": "symbol",
+        "line": 15
+      }
+    },
+    "code:symbol:src/scanner.js#full": {
+      "id": "code:symbol:src/scanner.js#full",
+      "type": "code.symbol",
+      "label": "full",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "full",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/scanner.js#relative": {
+      "id": "code:symbol:src/scanner.js#relative",
+      "type": "code.symbol",
+      "label": "relative",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "relative",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/scanner.js#ext": {
+      "id": "code:symbol:src/scanner.js#ext",
+      "type": "code.symbol",
+      "label": "ext",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "ext",
+        "kind": "symbol",
+        "line": 21
+      }
+    },
+    "code:symbol:src/scanner.js#stat": {
+      "id": "code:symbol:src/scanner.js#stat",
+      "type": "code.symbol",
+      "label": "stat",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "stat",
+        "kind": "symbol",
+        "line": 22
+      }
+    },
+    "code:symbol:src/scanner.js#content": {
+      "id": "code:symbol:src/scanner.js#content",
+      "type": "code.symbol",
+      "label": "content",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/scanner.js"
+      ],
+      "metadata": {
+        "name": "content",
+        "kind": "symbol",
+        "line": 24
+      }
+    },
+    "code:file:src/semantic.js": {
+      "id": "code:file:src/semantic.js",
+      "type": "code.file",
+      "label": "src/semantic.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "readDelta",
+            "kind": "symbol",
+            "line": 4
+          },
+          {
+            "name": "raw",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "delta",
+            "kind": "symbol",
+            "line": 7
+          },
+          {
+            "name": "applyDelta",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "warnings",
+            "kind": "symbol",
+            "line": 10
+          },
+          {
+            "name": "change",
+            "kind": "symbol",
+            "line": 11
+          },
+          {
+            "name": "type",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "label",
+            "kind": "symbol",
+            "line": 12
+          },
+          {
+            "name": "id",
+            "kind": "symbol",
+            "line": 14
+          },
+          {
+            "name": "existing",
+            "kind": "symbol",
+            "line": 14
+          },
+          {
+            "name": "evidence",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "invalid",
+            "kind": "symbol",
+            "line": 16
+          },
+          {
+            "name": "related",
+            "kind": "symbol",
+            "line": 20
+          },
+          {
+            "name": "p",
+            "kind": "symbol",
+            "line": 21
+          },
+          {
+            "name": "fid",
+            "kind": "symbol",
+            "line": 21
+          }
+        ],
+        "imports": [
+          "node:fs/promises",
+          "./indexer.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "semantic",
+          "readdelta",
+          "raw",
+          "delta",
+          "applydelta",
+          "warnings",
+          "change",
+          "type",
+          "label",
+          "id",
+          "existing",
+          "evidence",
+          "invalid",
+          "related",
+          "fid"
+        ]
+      }
+    },
+    "code:symbol:src/semantic.js#readDelta": {
+      "id": "code:symbol:src/semantic.js#readDelta",
+      "type": "code.symbol",
+      "label": "readDelta",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "readDelta",
+        "kind": "symbol",
+        "line": 4
+      }
+    },
+    "code:symbol:src/semantic.js#raw": {
+      "id": "code:symbol:src/semantic.js#raw",
+      "type": "code.symbol",
+      "label": "raw",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "raw",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/semantic.js#delta": {
+      "id": "code:symbol:src/semantic.js#delta",
+      "type": "code.symbol",
+      "label": "delta",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "delta",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:symbol:src/semantic.js#applyDelta": {
+      "id": "code:symbol:src/semantic.js#applyDelta",
+      "type": "code.symbol",
+      "label": "applyDelta",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "applyDelta",
+        "kind": "symbol",
+        "line": 9
+      }
+    },
+    "code:symbol:src/semantic.js#warnings": {
+      "id": "code:symbol:src/semantic.js#warnings",
+      "type": "code.symbol",
+      "label": "warnings",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "warnings",
+        "kind": "symbol",
+        "line": 10
+      }
+    },
+    "code:symbol:src/semantic.js#change": {
+      "id": "code:symbol:src/semantic.js#change",
+      "type": "code.symbol",
+      "label": "change",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "change",
+        "kind": "symbol",
+        "line": 11
+      }
+    },
+    "code:symbol:src/semantic.js#type": {
+      "id": "code:symbol:src/semantic.js#type",
+      "type": "code.symbol",
+      "label": "type",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "type",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/semantic.js#label": {
+      "id": "code:symbol:src/semantic.js#label",
+      "type": "code.symbol",
+      "label": "label",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "label",
+        "kind": "symbol",
+        "line": 12
+      }
+    },
+    "code:symbol:src/semantic.js#id": {
+      "id": "code:symbol:src/semantic.js#id",
+      "type": "code.symbol",
+      "label": "id",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "id",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/semantic.js#existing": {
+      "id": "code:symbol:src/semantic.js#existing",
+      "type": "code.symbol",
+      "label": "existing",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "existing",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/semantic.js#evidence": {
+      "id": "code:symbol:src/semantic.js#evidence",
+      "type": "code.symbol",
+      "label": "evidence",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "evidence",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/semantic.js#invalid": {
+      "id": "code:symbol:src/semantic.js#invalid",
+      "type": "code.symbol",
+      "label": "invalid",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "invalid",
+        "kind": "symbol",
+        "line": 16
+      }
+    },
+    "code:symbol:src/semantic.js#related": {
+      "id": "code:symbol:src/semantic.js#related",
+      "type": "code.symbol",
+      "label": "related",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "related",
+        "kind": "symbol",
+        "line": 20
+      }
+    },
+    "code:symbol:src/semantic.js#p": {
+      "id": "code:symbol:src/semantic.js#p",
+      "type": "code.symbol",
+      "label": "p",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "p",
+        "kind": "symbol",
+        "line": 21
+      }
+    },
+    "code:symbol:src/semantic.js#fid": {
+      "id": "code:symbol:src/semantic.js#fid",
+      "type": "code.symbol",
+      "label": "fid",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/semantic.js"
+      ],
+      "metadata": {
+        "name": "fid",
+        "kind": "symbol",
+        "line": 21
+      }
+    },
+    "code:file:src/storage.js": {
+      "id": "code:file:src/storage.js",
+      "type": "code.file",
+      "label": "src/storage.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/storage.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "emptyGraph",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "loadGraph",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "file",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "saveGraph",
+            "kind": "symbol",
+            "line": 13
+          },
+          {
+            "name": "file",
+            "kind": "symbol",
+            "line": 14
+          }
+        ],
+        "imports": [
+          "node:fs/promises",
+          "node:path",
+          "./constants.js"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "storage",
+          "emptygraph",
+          "loadgraph",
+          "file",
+          "savegraph"
+        ]
+      }
+    },
+    "code:symbol:src/storage.js#emptyGraph": {
+      "id": "code:symbol:src/storage.js#emptyGraph",
+      "type": "code.symbol",
+      "label": "emptyGraph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/storage.js"
+      ],
+      "metadata": {
+        "name": "emptyGraph",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/storage.js#loadGraph": {
+      "id": "code:symbol:src/storage.js#loadGraph",
+      "type": "code.symbol",
+      "label": "loadGraph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/storage.js"
+      ],
+      "metadata": {
+        "name": "loadGraph",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/storage.js#file": {
+      "id": "code:symbol:src/storage.js#file",
+      "type": "code.symbol",
+      "label": "file",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/storage.js"
+      ],
+      "metadata": {
+        "name": "file",
+        "kind": "symbol",
+        "line": 14
+      }
+    },
+    "code:symbol:src/storage.js#saveGraph": {
+      "id": "code:symbol:src/storage.js#saveGraph",
+      "type": "code.symbol",
+      "label": "saveGraph",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/storage.js"
+      ],
+      "metadata": {
+        "name": "saveGraph",
+        "kind": "symbol",
+        "line": 13
+      }
+    },
+    "code:file:src/utils.js": {
+      "id": "code:file:src/utils.js",
+      "type": "code.file",
+      "label": "src/utils.js",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "language": "JavaScript",
+        "symbols": [
+          {
+            "name": "sha256",
+            "kind": "symbol",
+            "line": 4
+          },
+          {
+            "name": "tokenEstimate",
+            "kind": "symbol",
+            "line": 5
+          },
+          {
+            "name": "slug",
+            "kind": "symbol",
+            "line": 6
+          },
+          {
+            "name": "rel",
+            "kind": "symbol",
+            "line": 7
+          },
+          {
+            "name": "unique",
+            "kind": "symbol",
+            "line": 8
+          },
+          {
+            "name": "terms",
+            "kind": "symbol",
+            "line": 9
+          },
+          {
+            "name": "git",
+            "kind": "symbol",
+            "line": 12
+          }
+        ],
+        "imports": [
+          "node:crypto",
+          "node:path"
+        ],
+        "endpoints": [],
+        "test": false,
+        "keywords": [
+          "utils",
+          "sha256",
+          "tokenestimate",
+          "slug",
+          "rel",
+          "unique",
+          "terms",
+          "git"
+        ]
+      }
+    },
+    "code:symbol:src/utils.js#sha256": {
+      "id": "code:symbol:src/utils.js#sha256",
+      "type": "code.symbol",
+      "label": "sha256",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "sha256",
+        "kind": "symbol",
+        "line": 4
+      }
+    },
+    "code:symbol:src/utils.js#tokenEstimate": {
+      "id": "code:symbol:src/utils.js#tokenEstimate",
+      "type": "code.symbol",
+      "label": "tokenEstimate",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "tokenEstimate",
+        "kind": "symbol",
+        "line": 5
+      }
+    },
+    "code:symbol:src/utils.js#slug": {
+      "id": "code:symbol:src/utils.js#slug",
+      "type": "code.symbol",
+      "label": "slug",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "slug",
+        "kind": "symbol",
+        "line": 6
+      }
+    },
+    "code:symbol:src/utils.js#rel": {
+      "id": "code:symbol:src/utils.js#rel",
+      "type": "code.symbol",
+      "label": "rel",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "rel",
+        "kind": "symbol",
+        "line": 7
+      }
+    },
+    "code:symbol:src/utils.js#unique": {
+      "id": "code:symbol:src/utils.js#unique",
+      "type": "code.symbol",
+      "label": "unique",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "unique",
+        "kind": "symbol",
+        "line": 8
+      }
+    },
+    "code:symbol:src/utils.js#terms": {
+      "id": "code:symbol:src/utils.js#terms",
+      "type": "code.symbol",
+      "label": "terms",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "terms",
+        "kind": "symbol",
+        "line": 9
+      }
+    },
+    "code:symbol:src/utils.js#git": {
+      "id": "code:symbol:src/utils.js#git",
+      "type": "code.symbol",
+      "label": "git",
+      "source": "parser",
+      "authority": "derived",
+      "evidence": [
+        "src/utils.js"
+      ],
+      "metadata": {
+        "name": "git",
+        "kind": "symbol",
+        "line": 12
+      }
+    }
+  },
+  "edges": [
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#help"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#option"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#i"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#rootFor"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#positional"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#flags"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#requireGraph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#graph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#jsonOrText"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#run"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#command"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#root"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#prior"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#graph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#task"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#packet"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#query"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#result"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#parts"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#needle"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#found"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#parts"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#type"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#statement"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#evidence"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#result"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#delta"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#result"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/cli.js",
+      "to": "code:symbol:src/cli.js#size"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#FORMAT_VERSION"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#GENERATOR_VERSION"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#GRAPH_PATH"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#DEFAULT_IGNORES"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#SENSITIVE_NAMES"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#TEXT_EXTENSIONS"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/constants.js",
+      "to": "code:symbol:src/constants.js#LANGUAGE_BY_EXTENSION"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#fileId"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#symbolId"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#codeNodesFor"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#id"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#parsed"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#nodes"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#edges"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#symbol"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#sid"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#endpoint"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#eid"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#resolveImport"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#base"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#clean"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#choices"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#build"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#graph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#scanned"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#next"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#before"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#added"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#modified"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#unchanged"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#deleted"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#changed"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#f"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#indexed"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#f"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#parsed"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#spec"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#target"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#semantic"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#node"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#affected"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/indexer.js",
+      "to": "code:symbol:src/indexer.js#semanticId"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#lineOf"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#matches"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#out"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#parseFile"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#symbols"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#imports"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#endpoints"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#test"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/parser.js",
+      "to": "code:symbol:src/parser.js#basenameTerms"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#searchable"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#rank"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#q"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#nodes"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#scored"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#hay"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#overlap"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#authority"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#freshness"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#relatedFiles"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#ids"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#files"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#item"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#p"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#edge"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#other"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#node"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#contextPacket"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#chosen"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#lines"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#groups"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#included"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#entries"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#item"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#n"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#detail"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#cost"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/query.js",
+      "to": "code:symbol:src/query.js#files"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#overview"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#files"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#languages"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#semantic"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#areas"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#status"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#semantic"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#stale"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#stats"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#files"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/report.js",
+      "to": "code:symbol:src/report.js#sourceBytes"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#ignoredByGit"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#scan"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#found"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#walk"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#entry"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#full"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#relative"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#ext"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#stat"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/scanner.js",
+      "to": "code:symbol:src/scanner.js#content"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#readDelta"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#raw"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#delta"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#applyDelta"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#warnings"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#change"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#type"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#label"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#id"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#existing"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#evidence"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#invalid"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#related"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#p"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/semantic.js",
+      "to": "code:symbol:src/semantic.js#fid"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/storage.js",
+      "to": "code:symbol:src/storage.js#emptyGraph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/storage.js",
+      "to": "code:symbol:src/storage.js#loadGraph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/storage.js",
+      "to": "code:symbol:src/storage.js#file"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/storage.js",
+      "to": "code:symbol:src/storage.js#saveGraph"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/storage.js",
+      "to": "code:symbol:src/storage.js#file"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#sha256"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#tokenEstimate"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#slug"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#rel"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#unique"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#terms"
+    },
+    {
+      "type": "declares",
+      "from": "code:file:src/utils.js",
+      "to": "code:symbol:src/utils.js#git"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/indexer.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/storage.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/semantic.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/query.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/report.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/cli.js",
+      "to": "code:file:src/constants.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/indexer.js",
+      "to": "code:file:src/scanner.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/indexer.js",
+      "to": "code:file:src/parser.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/indexer.js",
+      "to": "code:file:src/storage.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/indexer.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/parser.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/query.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/report.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/scanner.js",
+      "to": "code:file:src/constants.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/scanner.js",
+      "to": "code:file:src/utils.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/semantic.js",
+      "to": "code:file:src/indexer.js"
+    },
+    {
+      "type": "imports",
+      "from": "code:file:src/storage.js",
+      "to": "code:file:src/constants.js"
+    }
+  ]
+}

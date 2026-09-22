@@ -1,0 +1,14 @@
+{
+  "name": "graph-ai",
+  "version": "0.1.0",
+  "description": "An auto-maintained manual for software repositories.",
+  "type": "module",
+  "bin": { "graph-ai": "bin/graph-ai.js" },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node --check src/*.js && node --check bin/graph-ai.js",
+    "demo": "node scripts/demo.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
