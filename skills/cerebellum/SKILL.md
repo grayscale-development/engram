@@ -12,7 +12,7 @@ The Cortex is a small, explicit chart of durable repository knowledge. You maint
 1. Read `.engram/cortex.json` and this Cerebellum.
 2. Inspect deliberately: begin with the README, agent instructions, package/configuration, entry points, tests, and a few representative product paths. Do not catalog every file.
 3. Write a compact Cortex with a one-paragraph `summary` plus only the areas, workflows, decisions, and conventions another agent needs to start useful work.
-4. Save it as JSON and run `npx --yes github:grayscale-development/engram replace --input cortex.json`.
+4. Save it as JSON, run `npx --yes github:grayscale-development/engram read --with-revision`, and pass the returned revision to `npx --yes github:grayscale-development/engram replace --input cortex.json --expected-revision <revision>`.
 5. Run `npx --yes github:grayscale-development/engram validate`.
 
 Use this shape:
@@ -43,6 +43,6 @@ After making a code change, or when you notice the Cortex contradicts the reposi
 }
 ```
 
-Run `npx --yes github:grayscale-development/engram apply --input patch.json`, then `validate`.
+Run `npx --yes github:grayscale-development/engram read --with-revision`, then `npx --yes github:grayscale-development/engram apply --input patch.json --expected-revision <revision>`, followed by `validate`. Add `--history` when this update needs an audit record.
 
 Keep the Cortex concise, evidence-backed, and limited to durable information. Never add source copies, secrets, transient debugging notes, or guesses.

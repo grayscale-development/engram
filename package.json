@@ -8,12 +8,14 @@
   "bugs": { "url": "https://github.com/grayscale-development/engram/issues" },
   "type": "module",
   "bin": {
-    "engram": "bin/engram.js"
+    "engram": "bin/engram.js",
+    "engram-mcp": "bin/engram-mcp.js"
   },
   "files": ["bin", "src", "skills", "docs", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
     "test": "node --test",
-    "lint": "node --check src/*.js && node --check bin/engram.js"
+    "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs",
+    "bench": "node bench/benchmark.mjs"
   },
   "engines": {
     "node": ">=20"

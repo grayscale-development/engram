@@ -1,3 +1,13 @@
 export const FORMAT_VERSION = 1;
 export const CORTEX_PATH = '.engram/cortex.json';
 export const CEREBELLUM_PATH = '.engram/skills/cerebellum/SKILL.md';
+export const HISTORY_PATH = '.engram/history';
+export const CORTEX_LOCK_PATH = '.engram/cortex.lock';
+export const MAX_CORTEX_BYTES = 1024 * 1024;
+export const MAX_CORTEX_ENTRIES = 5000;
+export const MAX_ID_LENGTH = 256;
+export const MAX_LABEL_LENGTH = 512;
+export const MAX_SUMMARY_LENGTH = 16384;
+export const MAX_EVIDENCE_PER_ENTRY = 32;
+export const MAX_EVIDENCE_LENGTH = 4096;
+export const HISTORY_SNAPSHOT_INTERVAL = 50;
