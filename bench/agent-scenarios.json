@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "tenant-cortex",
+      "category": "learning",
+      "fixture": "tenant-ledger",
+      "prepare_cortex": true,
+      "task": "Read the repository and the installed Cerebellum. Create a concise, evidence-backed Cortex for this repository. It must make a future agent able to find the transaction ownership boundary and its regression test quickly. Do not change application or test code.",
+      "expect": {
+        "cortex_evidence": ["src/transactions.mjs", "test/transactions.test.mjs"],
+        "cortex_keywords": ["transaction", "tenant"],
+        "unchanged": ["src/transactions.mjs", "test/transactions.test.mjs"]
+      }
+    },
+    {
+      "id": "tenant-diagnosis",
+      "category": "understanding",
+      "fixture": "tenant-ledger",
+      "task": "Investigate whether a caller from tenant A can update a transaction owned by tenant B. Write a concise diagnosis to the result file. State yes or no, explain authorization, lookup, persistence, and the smallest safe fix. Cite repository-relative file paths.",
+      "expect": {
+        "report_patterns": ["yes", "src/transactions\\.mjs", "body", "(stored|persisted|current)", "(tenant|app)"],
+        "unchanged": ["src/transactions.mjs", "test/transactions.test.mjs"]
+      }
+    },
+    {
+      "id": "tenant-repair",
+      "category": "editing",
+      "fixture": "tenant-ledger",
+      "task": "Run the tests, fix the authorization defect without weakening or deleting tests, then rerun the tests. Keep transaction ownership immutable through this update path. Write a one-paragraph verification note to the result file.",
+      "expect": {
+        "test": "npm test",
+        "unchanged": ["test/transactions.test.mjs"],
+        "report_patterns": ["(pass|passed|verify)"],
+        "must_change": ["src/transactions.mjs"]
+      }
+    },
+    {
+      "id": "settlement-regression",
+      "category": "verification",
+      "fixture": "settlement-math",
+      "task": "Inspect the settlement calculation. Add one focused regression test proving that a negative adjustment reduces the settlement. Do not change production code. Run the tests and write a brief verification note to the result file.",
+      "expect": {
+        "test": "npm test",
+        "unchanged": ["src/settlement.mjs"],
+        "must_change": ["test/settlement.test.mjs"],
+        "file_patterns": [{ "path": "test/settlement.test.mjs", "patterns": ["negative adjustment", "-25", "975"] }],
+        "report_patterns": ["(pass|passed|verify)"]
+      }
+    }
+  ]
+}

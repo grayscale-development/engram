@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.0 — 2026-09-22
+
+- Added a self-contained agent benchmark lab with disposable fixture repositories and scored learning, understanding, editing, and verification scenarios.
+- Added JSON/Markdown scorecards with elapsed time and optional Codex token usage.
+
 ## 3.2.0 — 2026-09-22
 
 - Added validated agent-authored retrieval keywords to Cortex entries.

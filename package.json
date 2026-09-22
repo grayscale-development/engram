@@ -1,6 +1,6 @@
 {
   "name": "@grayscale-development/engram",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "An AI-maintained repository cortex.",
   "keywords": ["ai", "coding-agents", "repository", "agent-memory", "brain", "developer-tools", "cli"],
   "homepage": "https://github.com/grayscale-development/engram#readme",
@@ -13,9 +13,10 @@
   },
   "files": ["bin", "src", "skills", "docs", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
-    "test": "node --test",
-    "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs",
-    "bench": "node bench/benchmark.mjs"
+    "test": "node --test test/*.test.js",
+    "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs && node --check bench/agent-benchmark.mjs",
+    "bench": "node bench/benchmark.mjs",
+    "bench:agent": "node bench/agent-benchmark.mjs"
   },
   "engines": {
     "node": ">=20"

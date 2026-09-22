@@ -40,4 +40,6 @@ For an agent host with MCP support, install the package and configure the persis
 
 Run `npm run bench` for repeatable local storage and CLI measurements. The architecture findings and measurement protocol are in [the performance report](docs/performance-report.md).
 
+Run `npm run bench:agent -- --validate` to validate the included disposable agent-evaluation fixtures. To run the learning, understanding, editing, and verification tasks against an agent, set `ENGRAM_AGENT_COMMAND` once and run `npm run bench:agent`; each scenario gets a fresh local copy and produces an ignored JSON/Markdown scorecard under `bench/results/`. See [the agent benchmark lab](docs/agent-benchmark.md).
+
 The installed Cerebellum explains the Cortex and update workflow. See [the Cortex format](docs/brain-format.md), [the agent workflow](docs/agent-workflow.md), and [the MCP workflow](docs/mcp.md).
