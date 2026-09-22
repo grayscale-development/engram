@@ -16,7 +16,3 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
-      - run: npm run demo
-      - run: node bin/graph-ai.js evaluate --fixture examples/loan-fulfillment
-      - run: node bin/graph-ai.js evaluate --fixture examples/organization-access
-      - run: node bin/graph-ai.js benchmark --files 200

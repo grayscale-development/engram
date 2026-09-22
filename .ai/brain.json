@@ -1,0 +1,73 @@
+{
+  "repository": {
+    "name": "graph-ai",
+    "root": "."
+  },
+  "chart": {
+    "summary": "Graph-AI is a local CLI that stores a compact repository brain written and maintained by AI agents; it deliberately performs no source scanning, parsing, ranking, or fact inference.",
+    "areas": [
+      {
+        "id": "brain-storage",
+        "label": "Brain storage",
+        "summary": "The CLI creates, reads, replaces, validates, and patches .ai/brain.json.",
+        "evidence": [
+          "src/cli.js",
+          "src/storage.js",
+          "src/semantic.js"
+        ]
+      },
+      {
+        "id": "universal-skill",
+        "label": "Universal skill",
+        "summary": "init installs the repository-brain skill, which tells agents how to create and maintain the chart.",
+        "evidence": [
+          "skills/repository-brain/SKILL.md",
+          "src/cli.js"
+        ]
+      }
+    ],
+    "workflows": [
+      {
+        "id": "bootstrap",
+        "label": "Bootstrap",
+        "summary": "A user copies the README prompt into an agent; the agent runs init, reads the installed skill, writes the first chart, and validates it.",
+        "evidence": [
+          "README.md",
+          "skills/repository-brain/SKILL.md"
+        ]
+      },
+      {
+        "id": "maintenance",
+        "label": "Maintenance",
+        "summary": "Agents update or remove chart entries after meaningful code changes or when they notice a disagreement with the repository.",
+        "evidence": [
+          "skills/repository-brain/SKILL.md"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "id": "agent-owned-knowledge",
+        "label": "Agent-owned knowledge",
+        "summary": "All repository understanding is authored and maintained by agents, not derived by Graph-AI from code.",
+        "evidence": [
+          "README.md",
+          "AGENTS.md"
+        ]
+      }
+    ],
+    "conventions": [
+      {
+        "id": "minimal-docs",
+        "label": "Minimal docs",
+        "summary": "README and docs stay concise; the skill contains the operative workflow.",
+        "evidence": [
+          "README.md",
+          "docs/agent-workflow.md"
+        ]
+      }
+    ]
+  },
+  "format_version": 1,
+  "updated_at": "2026-09-22T17:31:38.887Z"
+}

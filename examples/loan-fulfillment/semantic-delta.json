@@ -1,9 +1,0 @@
-{
-  "changes": [
-    { "type": "product.concept", "label": "Fulfillment Task", "statement": "A unit of loan fulfillment work that can require documents before completion.", "evidence": ["src/server/models/FulfillmentTask.js", "src/frontend/tasks/TaskModal.js"] },
-    { "type": "product.concept", "label": "Existing Document Selection", "statement": "Users can satisfy a task document requirement using a document already attached to the loan instead of uploading a duplicate.", "evidence": ["src/frontend/tasks/ExistingDocumentPicker.js", "src/server/services/TaskService.js", "tests/task-documents.spec.js"], "related": ["code:file:src/frontend/tasks/TaskModal.js"] },
-    { "type": "workflow", "label": "Attach document to fulfillment task", "statement": "Loan → fulfillment task → documents → select existing loan document → attach to task.", "evidence": ["src/frontend/tasks/TaskModal.js", "src/frontend/tasks/ExistingDocumentPicker.js"] },
-    { "type": "practice.architecture", "label": "Service-layer task rules", "statement": "Task business rules and authorization belong in backend services rather than frontend components.", "evidence": ["src/server/services/TaskService.js", "src/server/services/authorization.js", "AGENTS.md"] },
-    { "type": "decision.compatibility", "label": "Legacy document upload endpoint", "statement": "Keep document upload support for older clients until they are retired.", "evidence": ["docs/legacy.md", "src/server/controllers/TaskController.js"] }
-  ]
-}

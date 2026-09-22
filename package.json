@@ -1,8 +1,8 @@
 {
   "name": "graph-ai",
   "version": "1.0.2",
-  "description": "An auto-maintained manual for software repositories.",
-  "keywords": ["ai", "coding-agents", "repository", "code-graph", "developer-tools", "cli"],
+  "description": "An AI-maintained repository brain.",
+  "keywords": ["ai", "coding-agents", "repository", "agent-memory", "developer-tools", "cli"],
   "homepage": "https://github.com/grayscale-development/graph-ai#readme",
   "repository": { "type": "git", "url": "git+https://github.com/grayscale-development/graph-ai.git" },
   "bugs": { "url": "https://github.com/grayscale-development/graph-ai/issues" },
@@ -10,22 +10,14 @@
   "bin": {
     "graph-ai": "bin/graph-ai.js"
   },
-  "files": ["bin", "src", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
+  "files": ["bin", "src", "skills", "docs", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
     "test": "node --test",
-    "lint": "node --check src/*.js && node --check bin/graph-ai.js && node --check docs/index.js",
-    "demo": "node scripts/demo.js",
-    "benchmark": "node bin/graph-ai.js benchmark",
-    "measure:orientation": "node scripts/measure-orientation.js"
+    "lint": "node --check src/*.js && node --check bin/graph-ai.js"
   },
   "engines": {
     "node": ">=20"
   },
   "license": "MIT",
-  "dependencies": {
-    "tree-sitter": "^0.21.1",
-    "tree-sitter-javascript": "^0.21.4",
-    "tree-sitter-python": "^0.21.0",
-    "tree-sitter-typescript": "^0.21.2"
-  }
+  "dependencies": {}
 }

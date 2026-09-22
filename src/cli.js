@@ -1,63 +1,41 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { build, freshness } from './indexer.js';
-import { loadGraph, saveGraph } from './storage.js';
-import { applyDelta, readDelta } from './semantic.js';
-import { contextPacket, rank } from './query.js';
-import { overview, status, stats } from './report.js';
-import { git } from './utils.js';
-import { GRAPH_PATH } from './constants.js';
-import { evaluateFixture, evaluationText } from './evaluate.js';
-import { diffText, previewDiff } from './diff.js';
-import { benchmarkText, runBenchmark } from './benchmark.js';
+import { fileURLToPath } from 'node:url';
+import { BRAIN_PATH, SKILL_PATH } from './constants.js';
+import { emptyBrain, loadBrain, saveBrain, validateBrain } from './storage.js';
+import { applyOperations, readJson } from './semantic.js';
 
-const help = `Graph-AI — local repository intelligence\n\nCommands:\n  init [--root path]                 create .ai/graph\n  build [--root path]                update structural graph\n  diff [--json]                      preview graph changes without writing\n  overview [--root path]             compact orientation\n  context <task> [--tokens n]        task-specific context packet\n  query <terms> [--json]             targeted knowledge search\n  inspect [file|concept|practice] <value>\n  export [--output path]             write readable graph JSON\n  add <type> <statement> [--evidence a,b]\n  sync [--input delta.json|-]        build plus agent semantic delta\n  status | stats                     freshness and compression\n  evaluate --fixture path             local context-retrieval evaluation\n  benchmark [--files n]              local indexing benchmark\n\nSemantic delta: { "changes": [{ "type": "product.concept", "label": "Saved card selection", "statement": "Users can reuse saved cards at checkout.", "evidence": ["src/checkout.js"] }] }. Existing agent nodes can use action: "verify" or action: "delete" with their id.`;
-const guidanceStart = '<!-- graph-ai:start -->';
-const guidanceEnd = '<!-- graph-ai:end -->';
-function option(args, name, fallback = null) { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : fallback; }
-function rootFor(args) { return path.resolve(option(args, '--root', process.cwd())); }
-function positional(args) { const flags = new Set(['--root', '--tokens', '--input', '--evidence']); return args.filter((a, i) => !a.startsWith('--') && !flags.has(args[i - 1])); }
-function claudeGuidance(graph) {
-  const orientation = contextPacket(graph, 'tell me about this repo', 2000).text;
-  return `# Graph-AI\n\n${guidanceStart}\n## Repository orientation\n\nUse this generated brief for repository-orientation requests. It is refreshed by \`graph-ai sync\`.\n\n\`\`\`text\n${orientation}\n\`\`\`\n\nFor implementation work, run \`npx --yes github:grayscale-development/graph-ai context "<current task>" --tokens 2000\` before broad exploration, then inspect the recommended files. Before finishing, run tests and \`npx --yes github:grayscale-development/graph-ai sync\`.\n${guidanceEnd}\n`;
+const help = `Graph-AI — an agent-maintained repository brain\n\nCommands:\n  init [--root path]                 create the empty brain and install the skill\n  read [--root path]                 print the brain\n  replace --input brain.json         replace the brain with an agent-authored chart\n  apply --input patch.json           apply agent-authored CRUD operations\n  status [--root path]               show chart counts\n  validate [--root path]             validate the stored brain\n\nGraph-AI never scans, parses, or derives facts from source code. Agents maintain the brain through the installed skill.`;
+const option = (args, name, fallback = null) => { const index = args.indexOf(name); return index >= 0 ? args[index + 1] : fallback; };
+const rootFor = (args) => path.resolve(option(args, '--root', process.cwd()));
+const inputFor = (args, root) => { const input = option(args, '--input'); if (!input) throw new Error('--input is required'); return input === '-' ? '-' : path.resolve(root, input); };
+const requireBrain = async (root) => { const brain = await loadBrain(root); if (!brain) throw new Error(`no ${BRAIN_PATH}; run graph-ai init first`); return brain; };
+const sourceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+async function installSkill(root) {
+  const source = path.join(sourceRoot, 'skills', 'repository-brain', 'SKILL.md'); const target = path.join(root, SKILL_PATH);
+  await fs.mkdir(path.dirname(target), { recursive: true }); await fs.copyFile(source, target);
 }
-async function writeClaudeGuidance(root, graph, create = false) {
-  const file = path.join(root, 'CLAUDE.md');
-  const content = claudeGuidance(graph);
-  let existing = '';
-  try { existing = await fs.readFile(file, 'utf8'); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; }
-  if (!existing) { if (!create) return 'skipped'; await fs.writeFile(file, content); return 'created'; }
-  const pattern = new RegExp(`${guidanceStart}[\\s\\S]*?${guidanceEnd}`);
-  if (!pattern.test(existing)) return 'skipped';
-  await fs.writeFile(file, existing.replace(pattern, content.trim()));
-  return 'updated';
+function status(brain) {
+  const chart = brain.chart;
+  return `REPOSITORY BRAIN\nRepository: ${brain.repository.name}\nUpdated: ${brain.updated_at}\nSummary: ${chart.summary || 'Not written yet'}\nAreas: ${chart.areas.length}\nWorkflows: ${chart.workflows.length}\nDecisions: ${chart.decisions.length}\nConventions: ${chart.conventions.length}`;
 }
-async function requireGraph(root) { const graph = await loadGraph(root); if (!graph) throw new Error(`no ${GRAPH_PATH}; run graph-ai init first`); return graph; }
-function jsonOrText(value, args) { process.stdout.write(`${args.includes('--json') ? JSON.stringify(value, null, 2) : value}\n`); }
+
 export async function run(args) {
   const command = args[0]; const root = rootFor(args);
   if (!command || ['help', '--help', '-h'].includes(command)) return process.stdout.write(`${help}\n`);
-  if (command === 'evaluate') { const fixture = option(args, '--fixture'); if (!fixture) throw new Error('evaluate requires --fixture path'); const result = await evaluateFixture(path.resolve(root, fixture)); return jsonOrText(args.includes('--json') ? result : evaluationText(result), args); }
-  if (command === 'benchmark') { const result = await runBenchmark(Number(option(args, '--files', '500'))); return jsonOrText(args.includes('--json') ? result : benchmarkText(result), args); }
-  if (command === 'init' || command === 'build') {
-    const prior = command === 'build' ? await requireGraph(root) : await loadGraph(root);
-    let { graph, summary } = await build(root, prior); graph.repository.name = path.basename(root);
-    const guidance = command === 'init' ? await writeClaudeGuidance(root, graph, true) : null;
-    if (guidance && guidance !== 'skipped') ({ graph } = await build(root, graph));
-    await saveGraph(root, graph);
-    process.stdout.write(`Graph-AI ${command === 'init' ? 'initialized' : 'updated'}.\nFiles indexed: ${Object.keys(graph.files).length}\nSymbols/nodes: ${Object.keys(graph.nodes).length}\nRelationships: ${graph.edges.length}\nAdded: ${summary.added.length} · Modified: ${summary.modified.length} · Deleted: ${summary.deleted.length} · Renamed: ${summary.renamed.length}\nParsed this run: ${summary.parsed}\nAffected semantic knowledge: ${summary.stale}\nCreated: ${GRAPH_PATH}${guidance === 'created' ? '\nCreated: CLAUDE.md' : guidance === 'updated' ? '\nUpdated: Graph-AI block in CLAUDE.md' : ''}\n`); return;
+  if (command === 'init') {
+    let brain = await loadBrain(root); const created = !brain; if (!brain) brain = emptyBrain(root); await saveBrain(root, brain); await installSkill(root);
+    return process.stdout.write(`Graph-AI ${created ? 'initialized' : 'ready'}.\nCreated: ${created ? BRAIN_PATH : 'existing brain preserved'}\nInstalled: ${SKILL_PATH}\nNext: have your agent read the skill and write the first chart.\n`);
   }
-  const graph = await requireGraph(root);
-  if (command === 'diff') { const diff = await previewDiff(root, graph); return jsonOrText(args.includes('--json') ? diff : diffText(diff), args); }
-  if (command === 'export') { const output = option(args, '--output'); const json = `${JSON.stringify(graph, null, 2)}\n`; if (output) { const file = path.resolve(root, output); await fs.writeFile(file, json); return process.stdout.write(`Exported readable graph: ${file}\n`); } return process.stdout.write(json); }
-  if (command === 'overview') return jsonOrText(overview(graph), args);
-  if (command === 'context') { const task = positional(args).slice(1).join(' '); if (!task) throw new Error('context requires a task'); const packet = contextPacket(graph, task, Number(option(args, '--tokens', '2000'))); return jsonOrText(args.includes('--json') ? packet : packet.text, args); }
-  if (command === 'query') { const query = positional(args).slice(1).join(' '); if (!query) throw new Error('query requires terms'); const result = rank(graph, query).slice(0, 12).map(({ node, score }) => ({ score, id: node.id, type: node.type, label: node.label, statement: node.statement, status: node.status, evidence: node.evidence })); return jsonOrText(args.includes('--json') ? result : result.map((n) => `${n.type}: ${n.label}${n.statement ? `\n  ${n.statement}` : ''}${n.status ? ` [${n.status}]` : ''}`).join('\n'), args); }
-  if (command === 'inspect') { const parts = positional(args).slice(1); const needle = parts.slice(1).join(' ') || parts[0]; const found = Object.values(graph.nodes).filter((n) => n.id.includes(needle) || n.label.toLowerCase().includes(needle.toLowerCase()) || n.type.includes(parts[0] || '')).slice(0, 15); return jsonOrText(args.includes('--json') ? found : found.map((n) => `${n.id}\n  type: ${n.type}\n  source: ${n.source}/${n.authority}\n  statement: ${n.statement || '—'}\n  evidence: ${(n.evidence || []).join(', ') || '—'}\n  status: ${n.status || 'current'}`).join('\n'), args); }
-  if (command === 'add') { const parts = positional(args).slice(1); const type = parts.shift(); const statement = parts.join(' '); if (!type || !statement) throw new Error('usage: graph-ai add <type> <statement> [--evidence a,b] [--scope path]'); const evidence = (option(args, '--evidence', '') || '').split(',').filter(Boolean); const scope = option(args, '--scope'); const result = applyDelta(graph, { changes: [{ type: `practice.${type}`, label: statement.slice(0, 64), statement, evidence, scope }] }, 'human'); await saveGraph(root, graph); process.stdout.write(`Added canonical knowledge: ${result.applied}\n`); return; }
-  if (command === 'sync') { let { graph: updated, summary } = await build(root, graph); const input = option(args, '--input'); const delta = await readDelta(input && input !== '-' ? path.resolve(root, input) : input); const result = applyDelta(updated, delta, 'agent'); const guidance = await writeClaudeGuidance(root, updated); if (guidance === 'updated') ({ graph: updated } = await build(root, updated)); await saveGraph(root, updated); process.stdout.write(`Structural graph updated.\nChanged files: ${summary.added.length + summary.modified.length + summary.deleted.length} · Renamed: ${summary.renamed.length}\nParsed this run: ${summary.parsed}\nSemantic updates applied: ${result.applied}\nPotentially stale knowledge: ${summary.stale}\n${result.warnings.length ? `Warnings: ${result.warnings.join('; ')}\n` : ''}${GRAPH_PATH} updated.${guidance === 'updated' ? '\nUpdated: Graph-AI block in CLAUDE.md' : ''}\n`); return; }
-  if (command === 'status') return process.stdout.write(`${status(graph, await git(root, ['rev-parse', 'HEAD']), Boolean(await git(root, ['status', '--porcelain'])), await freshness(root, graph))}\n`);
-  if (command === 'stats') { const size = (await fs.stat(path.join(root, GRAPH_PATH))).size; return process.stdout.write(`${stats(graph, size)}\n`); }
+  const brain = await requireBrain(root);
+  if (command === 'read') return process.stdout.write(`${JSON.stringify(brain, null, 2)}\n`);
+  if (command === 'status') return process.stdout.write(`${status(brain)}\n`);
+  if (command === 'validate') { validateBrain(brain); return process.stdout.write(`Valid: ${BRAIN_PATH}\n`); }
+  if (command === 'replace') {
+    const replacement = validateBrain(await readJson(inputFor(args, root))); replacement.repository.name ||= brain.repository.name; replacement.repository.root ||= '.'; await saveBrain(root, replacement);
+    return process.stdout.write(`Brain replaced: ${BRAIN_PATH}\n`);
+  }
+  if (command === 'apply') { const applied = applyOperations(brain, await readJson(inputFor(args, root))); await saveBrain(root, brain); return process.stdout.write(`Brain updated: ${applied} operation${applied === 1 ? '' : 's'}\n`); }
   throw new Error(`unknown command: ${command}`);
 }

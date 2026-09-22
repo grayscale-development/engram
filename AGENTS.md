@@ -1,15 +1,5 @@
-# Graph-AI agent workflow
+# Graph-AI workflow
 
-This repository uses Graph-AI. Before broad exploration, run:
+Read `skills/repository-brain/SKILL.md` before changing the repository brain.
 
-1. `graph-ai overview`
-2. `graph-ai context "<current task>" --tokens 2000`
-3. Inspect the recommended files before expanding the search.
-
-Before finishing work, run tests and `graph-ai sync`. If the task revealed durable product behavior, a workflow, practice, constraint, or decision, submit a compact semantic delta:
-
-```json
-{ "changes": [{ "type": "product.concept", "label": "Concept", "statement": "Durable fact.", "evidence": ["src/file.js"] }] }
-```
-
-Then run `graph-ai sync --input delta.json`. Do not store transient implementation chatter.
+Graph-AI does not analyze source code. Agents create and maintain `.ai/brain.json` through `replace` and `apply` whenever durable repository knowledge changes.

@@ -1,9 +1,0 @@
-{
-  "name": "organization access",
-  "default_tokens": 500,
-  "tasks": [
-    { "name": "membership authorization", "query": "fix organization membership authorization", "expected_files": ["app/permissions.py", "app/services.py"], "expected_facts": ["Backend authorization is authoritative"] },
-    { "name": "organization switch", "query": "change active organization switching", "expected_files": ["web/organization-switcher.js", "app/services.py"], "expected_facts": ["User → choose organization"] },
-    { "name": "unknown domain", "query": "optimize warehouse forklift maintenance schedule", "expected_files": [], "expected_facts": [], "expect_empty": true }
-  ]
-}
