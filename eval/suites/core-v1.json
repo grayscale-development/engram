@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "suite_id": "engram-core-v1",
+  "scenarios": [
+    {
+      "id": "tenant-diagnosis",
+      "capability": "understanding",
+      "fixture": "tenant-ledger",
+      "prompt": "Investigate whether a caller from tenant A can update a transaction owned by tenant B. Write RESULT.json only with answer ('yes' or 'no'), a nonempty minimal_fix, and claims object: { authorization: { file, line }, lookup: { file, line }, persistence: { file, line } }. Every citation must be repository-relative with a positive line number. Do not edit the repository.",
+      "allowed_changes": [],
+      "baseline_judge_passes": false,
+      "judge": "eval/judges/tenant-diagnosis.mjs"
+    },
+    {
+      "id": "tenant-repair",
+      "capability": "editing",
+      "fixture": "tenant-ledger",
+      "prompt": "Fix the tenant-authorization defect. Preserve the existing test. Make transaction ownership immutable through this update path. Run the tests. Write RESULT.json only with a nonempty summary and tests_run array.",
+      "allowed_changes": ["src/transactions.mjs"],
+      "baseline_judge_passes": false,
+      "judge": "eval/judges/tenant-repair.mjs"
+    },
+    {
+      "id": "settlement-regression",
+      "capability": "verification",
+      "fixture": "settlement-math",
+      "prompt": "Inspect the settlement calculation. Add one focused regression test proving a negative adjustment reduces settlement. Do not edit production code. Run tests. Write RESULT.json only with a nonempty summary and tests_run array.",
+      "allowed_changes": ["test/settlement.test.mjs"],
+      "baseline_judge_passes": false,
+      "judge": "eval/judges/settlement-regression.mjs"
+    }
+  ],
+  "paired_scenarios": [
+    {
+      "id": "tenant-cortex-transfer",
+      "capability": "learning-transfer",
+      "fixture": "tenant-ledger",
+      "teacher_prompt": "Read the repository and installed Cerebellum. Create an evidence-backed Cortex that helps a later agent investigate the transaction ownership boundary. Do not change application or test code. Write RESULT.json only with a nonempty summary.",
+      "teacher_allowed_changes": [".engram/cortex.json"],
+      "teacher_judge": "eval/judges/tenant-cortex.mjs",
+      "control_prompt": "Investigate whether a caller from tenant A can update a transaction owned by tenant B. Write RESULT.json only with answer ('yes' or 'no'), a nonempty minimal_fix, and claims object: { authorization: { file, line }, lookup: { file, line }, persistence: { file, line } }. Every citation must be repository-relative with a positive line number. Do not edit the repository.",
+      "treatment_prompt": "Use the installed Cortex focus command before investigating whether a caller from tenant A can update a transaction owned by tenant B. Write RESULT.json only with answer ('yes' or 'no'), a nonempty minimal_fix, and claims object: { authorization: { file, line }, lookup: { file, line }, persistence: { file, line } }. Every citation must be repository-relative with a positive line number. Do not edit the repository.",
+      "student_allowed_changes": [],
+      "student_judge": "eval/judges/tenant-diagnosis.mjs"
+    }
+  ]
+}

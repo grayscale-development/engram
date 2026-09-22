@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "your-isolated-agent",
+  "executor": "container",
+  "image": "registry.example/your-agent@sha256:replace-me",
+  "command": "your-agent",
+  "args": ["--workspace", "{workspace}", "--task", "{task}", "--result", "{result}"],
+  "network": "none",
+  "pass_env": []
+}

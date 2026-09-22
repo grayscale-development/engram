@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "id": "codex-local",
+  "trust_level": "unsafe-local",
+  "executable": "codex",
+  "args": ["exec", "--ephemeral", "--skip-git-repo-check", "--sandbox", "workspace-write", "--json", "-C", "{workspace}", "{prompt}"],
+  "pass_env": ["HOME", "PATH", "TERM", "LANG", "LC_ALL"],
+  "metadata": { "provider": "openai", "model": "record the selected model in your copied adapter", "reasoning_effort": "record the selected effort in your copied adapter" }
+}

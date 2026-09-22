@@ -1,6 +1,6 @@
 {
   "name": "@grayscale-development/engram",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "An AI-maintained repository cortex.",
   "keywords": ["ai", "coding-agents", "repository", "agent-memory", "brain", "developer-tools", "cli"],
   "homepage": "https://github.com/grayscale-development/engram#readme",
@@ -11,12 +11,12 @@
     "engram": "bin/engram.js",
     "engram-mcp": "bin/engram-mcp.js"
   },
-  "files": ["bin", "src", "skills", "docs", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
+  "files": ["bin", "src", "skills", "docs", "bench", "eval", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
     "test": "node --test test/*.test.js",
-    "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs && node --check bench/agent-benchmark.mjs",
+    "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs && node --check eval/runner.mjs && node --check eval/judges/*.mjs",
     "bench": "node bench/benchmark.mjs",
-    "bench:agent": "node bench/agent-benchmark.mjs"
+    "eval": "node eval/runner.mjs"
   },
   "engines": {
     "node": ">=20"

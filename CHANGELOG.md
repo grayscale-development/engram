@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0 — 2026-09-22
+
+- Replaced the shell-command agent benchmark prototype with protected eval v2: typed adapters, full-diff integrity checks, external judges, reproducible reports, and a paired Cortex transfer experiment.
+- Added explicit unsafe-local and container execution contracts; eval fixtures and runners now ship in the npm package.
+
 ## 3.3.0 — 2026-09-22
 
 - Added a self-contained agent benchmark lab with disposable fixture repositories and scored learning, understanding, editing, and verification scenarios.
