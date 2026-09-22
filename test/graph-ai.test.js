@@ -42,6 +42,12 @@ test('tree-sitter adapters extract JavaScript, TypeScript, and Python structure'
   assert.equal(ts.parser, 'tree-sitter'); assert.ok(ts.symbols.some((s) => s.name === 'Loan')); assert.ok(ts.symbols.some((s) => s.name === 'load'));
   assert.equal(py.parser, 'tree-sitter'); assert.ok(py.symbols.some((s) => s.name === 'Task')); assert.ok(py.symbols.some((s) => s.name === 'complete')); assert.ok(py.calls.includes('permit'));
 });
+test('generic repository orientation recommends conventional entry points', async () => {
+  const root = await fixture(); await fs.writeFile(path.join(root, 'README.md'), '# Checkout\n'); await fs.writeFile(path.join(root, 'package.json'), JSON.stringify({ name: 'checkout' })); await fs.mkdir(path.join(root, 'app')); await fs.writeFile(path.join(root, 'app', 'router.js'), 'export default {}');
+  const { graph } = await build(root); const packet = contextPacket(graph, 'tell me about this repo', 2000);
+  assert.deepEqual(packet.files, ['README.md', 'package.json', 'app/router.js']);
+  assert.match(packet.text, /REPOSITORY OVERVIEW/);
+});
 test('falls back to regex extraction when Tree-sitter declines a large source file', () => {
   const content = `${'// padding\n'.repeat(3_300)}export function largeFileHelper() { return true; }`;
   const parsed = parseFile({ path: 'src/large-file.js', language: 'JavaScript', content });

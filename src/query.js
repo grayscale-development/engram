@@ -43,7 +43,22 @@ export function relatedFiles(graph, selected, query) {
   }
   return { start, adjacent: [...adjacent, ...candidates.filter((candidate) => !start.includes(candidate) && !adjacent.includes(candidate))].slice(0, 4) };
 }
+function isOrientationQuery(query) {
+  const orientationTerms = new Set(['tell', 'me', 'repo', 'repository', 'project', 'codebase', 'overview', 'orient', 'orientation', 'explain']);
+  const q = queryTerms(query);
+  return q.length > 0 && q.every((term) => orientationTerms.has(term));
+}
+function orientationPacket(graph, query) {
+  const paths = Object.keys(graph.files).sort(); const choose = (pattern) => paths.find((file) => pattern.test(file));
+  const files = [choose(/(^|\/)readme\.md$/i), choose(/(^|\/)package\.json$/i), choose(/(^|\/)(app\/router|src\/index|main|index)\.[cm]?[jt]sx?$/i), choose(/(^|\/)config\//i)].filter(Boolean);
+  for (const file of paths) if (files.length < 3 && !files.includes(file)) files.push(file);
+  const selected = files.slice(0, 3); const languages = [...new Set(Object.values(graph.files).map((file) => file.language))];
+  const lines = [`TASK\n${query}`, `\nREPOSITORY OVERVIEW\n- ${paths.length} indexed files\n- Stack: ${languages.join(', ') || 'No indexed source'}`, `\nSTART HERE\n${selected.map((file) => `- ${file}`).join('\n')}`];
+  lines.push(`\nPACKET\n~${tokenEstimate(lines.join('\n'))} tokens; ${selected.length} start files; 0 adjacent files`);
+  return { text: lines.join('\n'), nodes: selected.map((file) => `code:file:${file}`).filter((id) => graph.nodes[id]), files: selected, adjacent_files: [], tokens: tokenEstimate(lines.join('\n')) };
+}
 export function contextPacket(graph, query, budget = 2000) {
+  if (isOrientationQuery(query)) return orientationPacket(graph, query);
   const chosen = rank(graph, query); const lines = [`TASK\n${query}`]; const groups = [['CANONICAL CONSTRAINTS', (n) => n.authority === 'canonical'], ['PRODUCT / WORKFLOWS', (n) => /product|workflow|concept/.test(n.type)], ['ARCHITECTURE / CODE', (n) => n.type.startsWith('code.')], ['DECISIONS / NOTES', (n) => !n.type.startsWith('code.')]];
   const included = []; let used = tokenEstimate(lines.join('\n'));
   const globalThreshold = chosen[0] ? chosen[0].score * 0.55 : Infinity;
