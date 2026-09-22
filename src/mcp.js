@@ -6,7 +6,7 @@ const schema = (properties, required = []) => ({ type: 'object', properties, req
 const rootProperty = { type: 'string', description: 'Absolute or current-working-directory-relative repository root.' };
 export const tools = [
   { name: 'engram_read', description: 'Read the authoritative compact Cortex snapshot and its optimistic-concurrency revision.', inputSchema: schema({ root: rootProperty }) },
-  { name: 'engram_focus', description: 'Return the small, task-relevant subset of an agent-authored Cortex. Use it to navigate, then verify the cited source.', inputSchema: schema({ root: rootProperty, query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 50 } }, ['query']) },
+  { name: 'engram_focus', description: 'Return a bounded task-relevant Cortex slice, evidence-opening queue, and correctness gate. Use it to navigate, then verify the cited source.', inputSchema: schema({ root: rootProperty, query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 50 }, evidence_limit: { type: 'integer', minimum: 1, maximum: 20 } }, ['query']) },
   { name: 'engram_replace', description: 'Replace a Cortex only when expected_revision matches the latest read. Set history true to append an audit event.', inputSchema: schema({ root: rootProperty, expected_revision: { type: 'string' }, cortex: { type: 'object' }, history: { type: 'boolean' } }, ['expected_revision', 'cortex']) },
   { name: 'engram_apply', description: 'Apply Cortex CRUD operations only when expected_revision matches the latest read. Set history true to append an audit event.', inputSchema: schema({ root: rootProperty, expected_revision: { type: 'string' }, patch: { type: 'object' }, history: { type: 'boolean' } }, ['expected_revision', 'patch']) },
   { name: 'engram_validate', description: 'Validate the current Cortex and return its revision.', inputSchema: schema({ root: rootProperty }) },
@@ -17,12 +17,12 @@ const toolResult = (value) => ({ content: [{ type: 'text', text: JSON.stringify(
 const rootFor = (args) => path.resolve(args.root ?? process.cwd());
 export async function handleMcpRequest(request) {
   const args = request.params?.arguments ?? {};
-  if (request.method === 'initialize') return { protocolVersion: request.params?.protocolVersion ?? '2024-11-05', capabilities: { tools: {} }, serverInfo: { name: 'engram', version: '3.1.0' } };
+  if (request.method === 'initialize') return { protocolVersion: request.params?.protocolVersion ?? '2024-11-05', capabilities: { tools: {} }, serverInfo: { name: 'engram', version: '3.2.0' } };
   if (request.method === 'tools/list') return { tools };
   if (request.method !== 'tools/call') throw new Error(`unsupported MCP method: ${request.method}`);
   const root = rootFor(args);
   if (request.params?.name === 'engram_read') return toolResult(await readCortexSnapshot(root));
-  if (request.params?.name === 'engram_focus') return toolResult(focusCortex(await readCortexSnapshot(root), args.query, args.limit ?? 8));
+  if (request.params?.name === 'engram_focus') return toolResult(focusCortex(await readCortexSnapshot(root), args.query, args.limit ?? 5, args.evidence_limit ?? 5));
   if (request.params?.name === 'engram_replace') return toolResult(await replaceCortex(root, args));
   if (request.params?.name === 'engram_apply') return toolResult(await applyCortexPatch(root, args));
   if (request.params?.name === 'engram_validate') return toolResult(await validateCortexSnapshot(root));

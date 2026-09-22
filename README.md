@@ -26,7 +26,7 @@ scratch_cache="$(mktemp -d)" && npm_config_cache="$scratch_cache" npx --yes gith
 node .engram/runtime/bin/engram.js read
 node .engram/runtime/bin/engram.js read --with-revision
 node .engram/runtime/bin/engram.js read --pretty
-node .engram/runtime/bin/engram.js focus --query "authorization persistence"
+node .engram/runtime/bin/engram.js focus --query "authorization persistence" --limit 5 --evidence-limit 5
 node .engram/runtime/bin/engram.js replace --input cortex.json --expected-revision <revision>
 node .engram/runtime/bin/engram.js apply --input patch.json --expected-revision <revision>
 node .engram/runtime/bin/engram.js apply --input patch.json --expected-revision <revision> --history

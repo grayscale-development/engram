@@ -8,14 +8,16 @@ This report is for AI operation, not manual editing. The Cortex should remain a 
 
 ## Agent diagnosis benchmark
 
-On 2026-09-22, the same read-only diagnosis prompts were run with Codex on clean `master` snapshots of a small Ember addon and a .NET API. The baseline had no `.engram` directory. The focused run used a maintained Cortex entry and `focus`, then verified the cited source. The one-time Cortex creation cost is intentionally excluded: this measures the work an agent performs after a Cortex exists.
+On 2026-09-22, identical read-only diagnosis prompts were run with Codex on clean `master` snapshots of a small Ember addon and a .NET API. The baseline had no `.engram` directory. The evidence-first run used a maintained Cortex entry and `focus`, opened its five-path initial evidence queue, completed the source-verification gate, and then expanded only for unproven conclusions. One-time Cortex creation is intentionally excluded: this measures work after a Cortex exists.
 
-| Repository / task | Baseline time / input | Focused time / input | Factual checklist |
+| Repository / task | Baseline time / input | Evidence-first time / input | Factual checklist |
 | --- | ---: | ---: | ---: |
-| `nano-utils`: adjusted payoff calculation | 86.34 s / 147,684 | 80.22 s / 98,917 | 6/6 both |
-| `API`: cross-app merchant transaction update | 128.47 s / 631,009 | 123.99 s / 150,705 after Cortex maintenance | 7/7 both |
+| `nano-utils`: adjusted payoff calculation | 82.54 s / 107,977 | 94.57 s / 103,154 | 6/6 both |
+| `API`: cross-app merchant transaction update | 133.12 s / 696,518 | 122.63 s / 492,588 | 6/7 → 7/7 |
 
-The first focused API run was faster (96.66 s / 561,647 input tokens) but incorrectly said the update publishes under the old app. The baseline investigation established the real post-save behavior: the publish filter detects the changed app identifier and throws before publishing. That invariant was added to the Cortex; the recorded warm rerun is the valid focused result. This is intentional evidence, not a filtered result: Cortex quality depends on agents recording durable discoveries after they verify them.
+The two-task total fell from 804,495 to 595,742 reported input tokens (26.0%). The API run was 7.9% faster and used 29.3% fewer input tokens. The smaller frontend run used 4.5% fewer tokens but took 14.6% longer, so a single-sample wall-clock result is mixed rather than a universal speed claim; use repeated fixed-runner samples before setting a latency target.
+
+The baseline API diagnosis left an incorrect ambiguity that the reassigned record might publish to its old app. The evidence-first gate required post-action tracing and established the actual behavior: after the database write, the publish filter sees the changed application identifier, throws before publication, and an Ember response becomes HTTP 500. This is why the protocol treats Cortex facts and keywords as navigation only and requires source-backed conclusions.
 
 `init` now installs a local, dependency-free Node runtime under `.engram/runtime`. Normal Cortex work uses that runtime and is independent of npm cache, registry, and GitHub availability. The bootstrap command itself still needs a Node runtime and a way to obtain Engram; use an isolated npm cache when the host cache is not writable.
 
@@ -44,14 +46,14 @@ The table is after compact JSON, working-set limits, revisions, and locking. `di
 
 | Cortex entries | Stored bytes | Direct read p50 / p95 | Direct apply p50 / p95 | CLI status p50 / p95 | CLI apply p50 / p95 |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 10 | 1,635 | 0.077 / 0.217 ms | 0.988 / 1.691 ms | 43.018 / 45.236 ms | 84.981 / 88.391 ms |
-| 100 | 14,595 | 0.117 / 0.157 ms | 0.905 / 1.169 ms | 41.267 / 42.605 ms | 85.743 / 89.025 ms |
-| 1,000 | 147,795 | 0.603 / 0.863 ms | 3.067 / 5.540 ms | 41.409 / 43.256 ms | 88.091 / 99.245 ms |
-| 5,000 | 755,795 | 2.867 / 3.589 ms | 12.219 / 14.277 ms | 47.533 / 59.153 ms | 107.454 / 115.086 ms |
+| 10 | 1,635 | 0.056 / 0.135 ms | 0.462 / 0.609 ms | 39.263 / 42.855 ms | 76.405 / 82.727 ms |
+| 100 | 14,595 | 0.109 / 0.151 ms | 0.648 / 0.786 ms | 36.581 / 38.108 ms | 76.443 / 80.497 ms |
+| 1,000 | 147,795 | 0.604 / 0.783 ms | 2.710 / 3.458 ms | 38.166 / 39.571 ms | 81.379 / 89.063 ms |
+| 5,000 | 755,795 | 2.536 / 2.918 ms | 11.354 / 13.456 ms | 42.771 / 46.013 ms | 99.803 / 106.567 ms |
 
 Before the compact-storage change, the same 5,000-entry benchmark persisted 1,125,880 bytes. The change removes about 33% of on-disk and tool-output whitespace without changing the JSON data model. `engram read` is compact by default; `engram read --pretty` remains available for display.
 
-The command shell, not JSON, remains the bottleneck. At 1,000 entries, the complete in-process safe workflow p50 is 3.067 ms while two fresh CLI commands take 88.091 ms. A separate 100-sample startup-floor check measured Node no-op p50/p95 at 30.604/31.693 ms and a compiled Rust no-op at 1.501/2.716 ms. This is not an equivalent Cortex implementation; it isolates the maximum latency opportunity from changing runtime startup.
+The command shell, not JSON, remains the bottleneck. At 1,000 entries, the complete in-process safe workflow p50 is 2.710 ms while two fresh CLI commands take 81.379 ms. A separate 100-sample startup-floor check measured Node no-op p50/p95 at 30.604/31.693 ms and a compiled Rust no-op at 1.501/2.716 ms. This is not an equivalent Cortex implementation; it isolates the maximum latency opportunity from changing runtime startup.
 
 ## Format decision
 

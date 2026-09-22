@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { CORTEX_LOCK_PATH, CORTEX_PATH, FORMAT_VERSION, MAX_CORTEX_BYTES, MAX_CORTEX_ENTRIES, MAX_EVIDENCE_LENGTH, MAX_EVIDENCE_PER_ENTRY, MAX_ID_LENGTH, MAX_LABEL_LENGTH, MAX_SUMMARY_LENGTH } from './constants.js';
+import { CORTEX_LOCK_PATH, CORTEX_PATH, FORMAT_VERSION, MAX_CORTEX_BYTES, MAX_CORTEX_ENTRIES, MAX_EVIDENCE_LENGTH, MAX_EVIDENCE_PER_ENTRY, MAX_ID_LENGTH, MAX_KEYWORD_LENGTH, MAX_KEYWORDS_PER_ENTRY, MAX_LABEL_LENGTH, MAX_SUMMARY_LENGTH } from './constants.js';
 
 export class CortexBusyError extends Error {
   constructor() { super('another Cortex mutation is in progress; read the latest snapshot and retry'); this.code = 'CORTEX_BUSY'; }
@@ -51,6 +51,10 @@ export function validateCortex(cortex) {
       if (item.evidence !== undefined && (!Array.isArray(item.evidence) || item.evidence.some((value) => typeof value !== 'string'))) throw new Error(`cortex.chart.${collection}.${item.id}.evidence must be an array of strings`);
       if (item.evidence?.length > MAX_EVIDENCE_PER_ENTRY) throw new Error(`cortex.chart.${collection}.${item.id}.evidence exceeds ${MAX_EVIDENCE_PER_ENTRY} paths`);
       if (item.evidence?.some((value) => value.length > MAX_EVIDENCE_LENGTH)) throw new Error(`cortex.chart.${collection}.${item.id}.evidence path exceeds ${MAX_EVIDENCE_LENGTH} characters`);
+      if (item.keywords !== undefined && (!Array.isArray(item.keywords) || item.keywords.some((value) => typeof value !== 'string' || !value.trim()))) throw new Error(`cortex.chart.${collection}.${item.id}.keywords must be an array of non-empty strings`);
+      if (item.keywords?.length > MAX_KEYWORDS_PER_ENTRY) throw new Error(`cortex.chart.${collection}.${item.id}.keywords exceeds ${MAX_KEYWORDS_PER_ENTRY} entries`);
+      if (item.keywords?.some((value) => value.length > MAX_KEYWORD_LENGTH)) throw new Error(`cortex.chart.${collection}.${item.id}.keyword exceeds ${MAX_KEYWORD_LENGTH} characters`);
+      if (item.keywords && new Set(item.keywords.map((value) => value.toLowerCase())).size !== item.keywords.length) throw new Error(`cortex.chart.${collection}.${item.id}.keywords has duplicates`);
     }
   }
   if (entryCount > MAX_CORTEX_ENTRIES) throw new Error(`cortex exceeds the ${MAX_CORTEX_ENTRIES}-entry AI working-set limit`);

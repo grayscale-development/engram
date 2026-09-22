@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0 — 2026-09-22
+
+- Added validated agent-authored retrieval keywords to Cortex entries.
+- `focus` and `engram_focus` now return a capped evidence-opening queue and a source-verification correctness gate.
+- Made verified investigation memory, scoped instruction reading, and evidence-first expansion explicit Cerebellum requirements.
+
 ## 3.1.0 — 2026-09-22
 
 - `init` now installs a self-contained local runtime at `.engram/runtime`, removing network and npm-cache dependencies from normal Cortex reads, mutations, and validation.

@@ -15,7 +15,7 @@ Use `engram-mcp` as a local stdio MCP server when an agent host supports MCP. It
 The server provides six tools:
 
 1. `engram_read` returns `{ cortex, revision }` from the authoritative local snapshot.
-2. `engram_focus` accepts a short task query and returns only matching, agent-authored entries. Verify its evidence before relying on it.
+2. `engram_focus` accepts a short task query and returns matching, agent-authored entries, a bounded evidence-opening queue, and a correctness gate. Verify its evidence before relying on it.
 3. `engram_apply` accepts `patch` and required `expected_revision`.
 4. `engram_replace` accepts `cortex` and required `expected_revision`.
 5. `engram_validate` returns a validated snapshot and revision.

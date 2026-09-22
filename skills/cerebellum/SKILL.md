@@ -15,7 +15,7 @@ The Cerebellum is for creating and maintaining a Cortex. It is not ordinary task
 
 1. Read `.engram/cortex.json` and this Cerebellum.
 2. Inspect deliberately: begin with the README, agent instructions, package/configuration, entry points, tests, and a few representative product paths. Do not catalog every file.
-3. Write a compact Cortex with a one-paragraph `summary` plus only the areas, workflows, decisions, and conventions another agent needs to start useful work.
+3. Write a compact Cortex with a one-paragraph `summary` plus only the areas, workflows, decisions, and conventions another agent needs to start useful work. Give each investigation-relevant entry 2–8 distinctive, agent-authored `keywords` (domain nouns, aliases, route verbs, risk names) so future task wording retrieves it reliably.
 4. Save it as JSON, run `node .engram/runtime/bin/engram.js read --with-revision`, and pass the returned revision to `node .engram/runtime/bin/engram.js replace --input cortex.json --expected-revision <revision>`.
 5. Run `node .engram/runtime/bin/engram.js validate`.
 
@@ -28,7 +28,7 @@ Use this shape:
   "repository": { "name": "repo", "root": "." },
   "chart": {
     "summary": "What this repository is and how it is organized.",
-    "areas": [{ "id": "checkout", "label": "Checkout", "summary": "...", "evidence": ["src/checkout.js"] }],
+    "areas": [{ "id": "checkout", "label": "Checkout", "summary": "...", "keywords": ["cart", "payment", "charge"], "evidence": ["src/checkout.js"] }],
     "workflows": [{ "id": "tests", "label": "Tests", "summary": "...", "evidence": ["package.json"] }],
     "decisions": [],
     "conventions": []
@@ -38,7 +38,7 @@ Use this shape:
 
 ## Maintain the Cortex
 
-After making a code change, or when you notice the Cortex contradicts the repository, immediately update the affected chart entries. Use `apply` for a small change and `replace` for a redesigned Cortex. Remove obsolete entries; do not leave stale claims.
+After making a code change, finishing an investigation, or noticing the Cortex contradicts the repository, immediately update the affected chart entries. Use `apply` for a small change and `replace` for a redesigned Cortex. Remove obsolete entries; do not leave stale claims.
 
 ```json
 {
@@ -61,4 +61,9 @@ Before investigating, extract two to five distinctive task terms and run:
 node .engram/runtime/bin/engram.js focus --query "merchant transaction authorization"
 ```
 
-`focus` returns only matching agent-authored entries plus their evidence paths. Treat it as a navigation map, never proof: inspect the cited source before making a factual claim. If it has no useful match, investigate normally. After the task, add or improve one durable entry if the investigation revealed a recurring boundary, state transition, or test seam that would make the next related task faster and safer.
+`focus` returns only matching agent-authored entries, a capped `evidence_paths` opening queue, and a correctness gate. Treat it as a navigation map, never proof.
+
+1. Open only `evidence_paths` first. Expand to other source only when a requested answer remains unproven.
+2. Read only task-relevant repository instructions. Do not recursively open unrelated imports, credential guidance, or service-operation material; directly applicable instructions still win.
+3. Complete the returned correctness gate before answering. For authorization or persistence work, explicitly trace the authorized entity, loaded entity, mutated entity, and post-action behavior.
+4. Before closing an investigation, upsert one durable entry when you verified a recurring boundary, state transition, test seam, or correction. Include distinctive keywords and direct evidence; do not save guesses or one-off debugging notes.

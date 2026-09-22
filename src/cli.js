@@ -14,7 +14,7 @@ Commands:
   read [--with-revision] [--pretty] [--root path]         print compact Cortex JSON; include a mutation revision when needed
   replace --input cortex.json --expected-revision hash     safely replace the Cortex
   apply --input patch.json --expected-revision hash        safely apply agent-authored CRUD operations
-  focus --query words [--limit number] [--root path]       return a small task-relevant Cortex slice
+  focus --query words [--limit number] [--evidence-limit number] [--root path]  return a bounded task-relevant Cortex slice
   status [--root path]                                    show Cortex counts and current revision
   validate [--root path]                                  validate the stored Cortex
   history [--root path]                                   verify the optional Cortex audit history
@@ -54,8 +54,8 @@ export async function run(args) {
     return process.stdout.write(`${JSON.stringify(output, null, args.includes('--pretty') ? 2 : undefined)}\n`);
   }
   if (command === 'focus') {
-    const limit = Number(option(args, '--limit', '8'));
-    return process.stdout.write(`${JSON.stringify(focusCortex(await readCortexSnapshot(root), requiredOption(args, '--query'), limit))}\n`);
+    const limit = Number(option(args, '--limit', '5')); const evidenceLimit = Number(option(args, '--evidence-limit', '5'));
+    return process.stdout.write(`${JSON.stringify(focusCortex(await readCortexSnapshot(root), requiredOption(args, '--query'), limit, evidenceLimit))}\n`);
   }
   if (command === 'status') return process.stdout.write(`${status(await readCortexSnapshot(root))}\n`);
   if (command === 'validate') { const snapshot = await validateCortexSnapshot(root); return process.stdout.write(`Valid: ${CORTEX_PATH}\nRevision: ${snapshot.revision}\n`); }

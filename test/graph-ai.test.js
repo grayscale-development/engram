@@ -35,14 +35,32 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
 test('focus returns a bounded task-relevant Cortex slice without reading source', async () => {
   const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
   await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [
-    { op: 'upsert', collection: 'areas', item: { id: 'merchant-transaction-update', label: 'Merchant transaction authorization', summary: 'The update route authorizes the application relationship before persistence.', evidence: ['API/MerchantTransactionController.cs'] } },
-    { op: 'upsert', collection: 'workflows', item: { id: 'release', label: 'Release', summary: 'Runs deployment checks.', evidence: ['ci/release.yml'] } }
+    { op: 'upsert', collection: 'areas', item: { id: 'merchant-transaction-update', label: 'Merchant transaction authorization', summary: 'The update route authorizes the application relationship before persistence.', keywords: ['tenant-isolation', 'cross-app'], evidence: ['API/MerchantTransactionController.cs', 'API/MerchantTransactionConverter.cs'] } },
+    { op: 'upsert', collection: 'workflows', item: { id: 'release', label: 'Release', summary: 'Runs deployment checks.', keywords: ['deployment'], evidence: ['ci/release.yml'] } }
   ] } });
-  const current = await readCortexSnapshot(root); const focused = focusCortex(current, 'merchant authorization', 1);
-  assert.equal(focused.revision, current.revision); assert.equal(focused.matches.length, 1); assert.equal(focused.matches[0].id, 'merchant-transaction-update'); assert.deepEqual(focused.matches[0].matchedTerms.sort(), ['authorization', 'merchant']);
-  const cliFocus = JSON.parse(await runInstalled(root, 'focus', '--query', 'merchant authorization', '--limit', '1'));
+  const current = await readCortexSnapshot(root); const focused = focusCortex(current, 'tenant-isolation', 1, 1);
+  assert.equal(focused.revision, current.revision); assert.equal(focused.matches.length, 1); assert.equal(focused.matches[0].id, 'merchant-transaction-update'); assert.deepEqual(focused.matches[0].matchedTerms, ['tenant-isolation']); assert.deepEqual(focused.evidence_paths, ['API/MerchantTransactionController.cs']); assert.deepEqual(focused.matches[0].evidence, ['API/MerchantTransactionController.cs']); assert.equal(focused.protocol.initial_evidence_limit, 1); assert.match(focused.protocol.correctness_gate[1], /authorized entity/);
+  const cliFocus = JSON.parse(await runInstalled(root, 'focus', '--query', 'tenant-isolation', '--limit', '1', '--evidence-limit', '1'));
   assert.equal(cliFocus.matches[0].id, 'merchant-transaction-update');
   assert.throws(() => focusCortex(current, 'merchant', 0), /1 through 50/);
+  assert.throws(() => focusCortex(current, 'merchant', 1, 0), /1 through 20/);
+});
+
+test('focus spreads its evidence budget across top matches before expanding one match', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [
+    { op: 'upsert', collection: 'areas', item: { id: 'first', label: 'Shared concern', summary: 'First durable concern.', keywords: ['shared'], evidence: ['src/first.js', 'src/first-detail.js'] } },
+    { op: 'upsert', collection: 'workflows', item: { id: 'second', label: 'Shared workflow', summary: 'Second durable concern.', keywords: ['shared'], evidence: ['src/second.js', 'src/second-detail.js'] } }
+  ] } });
+  const focused = focusCortex(await readCortexSnapshot(root), 'shared', 2, 3);
+  assert.deepEqual(focused.evidence_paths, ['src/first.js', 'src/second.js', 'src/first-detail.js']);
+});
+
+test('validation rejects malformed or duplicate retrieval keywords', () => {
+  const malformed = chart('product'); malformed.chart.areas = [{ id: 'security', label: 'Security', summary: 'Guards tenant data.', keywords: ['Tenant', 'tenant'] }];
+  assert.throws(() => validateCortex(malformed), /keywords has duplicates/);
+  malformed.chart.areas[0].keywords = ['x'.repeat(129)];
+  assert.throws(() => validateCortex(malformed), /keyword exceeds/);
 });
 
 test('replace and apply require a fresh revision and preserve agent-owned CRUD', async () => {
@@ -114,7 +132,7 @@ test('the persistent MCP handler returns structured snapshots and mutation confl
   const applied = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [{ op: 'upsert', collection: 'conventions', item: { id: 'compact', label: 'Compact', summary: 'Keep context small.' } }] } } } });
   assert.equal(applied.structuredContent.cortex.chart.conventions[0].id, 'compact');
   const focused = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_focus', arguments: { root, query: 'compact' } } });
-  assert.equal(focused.structuredContent.matches[0].id, 'compact');
+  assert.equal(focused.structuredContent.matches[0].id, 'compact'); assert.equal(focused.structuredContent.protocol.initial_evidence_limit, 5);
   await assert.rejects(handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [] } } } }), (error) => error.code === 'REVISION_CONFLICT' && error.current.revision === applied.structuredContent.revision);
 });
 

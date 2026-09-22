@@ -11,4 +11,6 @@ export const MAX_LABEL_LENGTH = 512;
 export const MAX_SUMMARY_LENGTH = 16384;
 export const MAX_EVIDENCE_PER_ENTRY = 32;
 export const MAX_EVIDENCE_LENGTH = 4096;
+export const MAX_KEYWORDS_PER_ENTRY = 24;
+export const MAX_KEYWORD_LENGTH = 128;
 export const HISTORY_SNAPSHOT_INTERVAL = 50;

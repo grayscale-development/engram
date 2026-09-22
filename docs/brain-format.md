@@ -15,13 +15,13 @@
 }
 ```
 
-Each Cortex item needs an `id`, `label`, `summary`, and evidence paths when available. Keep only durable information another agent needs to work effectively.
+Each Cortex item needs an `id`, `label`, `summary`, and evidence paths when available. It can also contain an optional `keywords` array of 2–8 distinctive agent-authored aliases, domain nouns, route verbs, or risk names. `keywords` are for retrieval only; they are not source-derived facts. Keep only durable information another agent needs to work effectively.
 
 Engram persists compact JSON and `read` returns compact JSON by default because agents consume structured context directly. Use `engram read --pretty` only for a formatted display.
 
 ## Task-focused retrieval
 
-Use `node .engram/runtime/bin/engram.js focus --query "distinctive task terms"` to receive the repository summary, current revision, and up to eight matching agent-authored entries. It ranks matches by the terms in their IDs, labels, summaries, and evidence paths. It does not read source code or infer a result, so an agent must verify cited source before answering.
+Use `node .engram/runtime/bin/engram.js focus --query "distinctive task terms"` to receive the repository summary, current revision, up to five matching agent-authored entries, a five-path `evidence_paths` opening queue, and a correctness gate. It ranks matches by terms in agent-authored keywords, IDs, labels, summaries, and evidence paths. It does not read source code or infer a result, so an agent must verify cited source before answering. Use `--limit` and `--evidence-limit` only when a task genuinely needs a larger bounded set.
 
 ## AI working-set limits
 
