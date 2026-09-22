@@ -1,0 +1,14 @@
+{
+  "name": "loan fulfillment",
+  "default_tokens": 600,
+  "tasks": [
+    { "name": "existing document selection", "query": "change how existing documents are selected for a fulfillment task", "expected_files": ["src/frontend/tasks/ExistingDocumentPicker.js", "src/server/services/TaskService.js"], "expected_facts": ["Users can satisfy a task document requirement"] },
+    { "name": "task authorization", "query": "fix task document authorization", "expected_files": ["src/server/services/TaskService.js", "src/server/services/authorization.js"], "expected_facts": ["Task business rules and authorization belong"] },
+    { "name": "legacy upload", "query": "remove old document upload endpoint", "expected_files": ["src/server/controllers/TaskController.js"], "expected_facts": ["Keep document upload support for older clients"] },
+    { "name": "task document workflow", "query": "change task document behavior", "expected_files": ["src/frontend/tasks/TaskModal.js", "src/frontend/tasks/ExistingDocumentPicker.js"], "expected_facts": ["Loan → fulfillment task → documents"] }
+  ],
+  "mutations": [
+    { "name": "deleted picker evidence", "op": "delete", "path": "src/frontend/tasks/ExistingDocumentPicker.js", "expected_stale": "Existing Document Selection" },
+    { "name": "changed service evidence", "op": "append", "path": "src/server/services/TaskService.js", "content": "\n// behavior changed\n", "expected_stale": "Existing Document Selection" }
+  ]
+}

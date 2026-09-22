@@ -1,14 +1,25 @@
 {
   "name": "graph-ai",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "An auto-maintained manual for software repositories.",
   "type": "module",
-  "bin": { "graph-ai": "bin/graph-ai.js" },
+  "bin": {
+    "graph-ai": "bin/graph-ai.js"
+  },
   "scripts": {
     "test": "node --test",
     "lint": "node --check src/*.js && node --check bin/graph-ai.js",
-    "demo": "node scripts/demo.js"
+    "demo": "node scripts/demo.js",
+    "benchmark": "node bin/graph-ai.js benchmark"
   },
-  "engines": { "node": ">=18" },
-  "license": "MIT"
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-javascript": "^0.21.4",
+    "tree-sitter-python": "^0.21.0",
+    "tree-sitter-typescript": "^0.21.2"
+  }
 }

@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { DEFAULT_IGNORES, SENSITIVE_NAMES, TEXT_EXTENSIONS, LANGUAGE_BY_EXTENSION } from './constants.js';
 import { rel, sha256 } from './utils.js';
 
-async function ignoredByGit(root, relative) {
-  try {
-    const { execFile } = await import('node:child_process');
-    return await new Promise((resolve) => execFile('git', ['check-ignore', '-q', '--', relative], { cwd: root }, (error) => resolve(!error)));
-  } catch { return false; }
+function ignoredByGit(root, paths) {
+  if (!paths.length) return new Set();
+  const result = spawnSync('git', ['check-ignore', '-z', '--stdin'], { cwd: root, input: Buffer.from(`${paths.join('\0')}\0`), encoding: 'buffer', stdio: ['pipe', 'pipe', 'ignore'] });
+  if (!result.stdout?.length) return new Set();
+  return new Set(result.stdout.toString('utf8').split('\0').filter(Boolean));
 }
 export async function scan(root) {
   const found = [];
@@ -24,7 +25,6 @@ export async function scan(root) {
     for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name); const relative = rel(root, full);
       if (DEFAULT_IGNORES.has(entry.name) || SENSITIVE_NAMES.test(relative) || locallyIgnored(relative)) continue;
-      if (await ignoredByGit(root, relative)) continue;
       if (entry.isDirectory()) await walk(full);
       else if (entry.isFile()) {
         const ext = path.extname(entry.name).toLowerCase();
@@ -37,5 +37,6 @@ export async function scan(root) {
     }
   }
   await walk(root);
-  return found;
+  const gitIgnored = ignoredByGit(root, found.map((file) => file.path));
+  return found.filter((file) => !gitIgnored.has(file.path));
 }

@@ -1,0 +1,8 @@
+{
+  "changes": [
+    { "type": "product.concept", "label": "Organization membership", "statement": "Users may belong to multiple organizations and select one active organization.", "evidence": ["app/models.py", "app/services.py", "web/organization-switcher.js"] },
+    { "type": "workflow", "label": "Switch active organization", "statement": "User → choose organization → switch request → backend membership validation → active organization changes.", "evidence": ["web/organization-switcher.js", "web/session-api.js", "app/routes.py", "app/services.py"] },
+    { "type": "practice.authorization", "label": "Backend organization authorization", "statement": "Backend authorization is authoritative; the server verifies organization membership before switching active organization.", "evidence": ["app/permissions.py", "app/services.py", "AGENTS.md"] },
+    { "type": "decision.authorization", "label": "Frontend switch is convenience", "statement": "Frontend organization switching is a convenience and cannot replace backend membership checks.", "evidence": ["docs/decision.md", "app/permissions.py"] }
+  ]
+}

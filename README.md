@@ -30,14 +30,65 @@ No network, API key, cloud account, or external model is required.
 
 `init`, `build`, `overview`, `context`, `query`, `inspect`, `add`, `sync`, `status`, and `stats` are implemented. Run `graph-ai help` for syntax.
 
-`.ai/graph` is versioned, pretty JSON: portable, inspectable, and Git-friendly. It stores hashes, metadata, symbols, dependency relationships, compact semantic nodes, and evidence references—never source-file copies or secret values.
+Typical lifecycle:
 
-## What v0 indexes
+```sh
+graph-ai init
+graph-ai context "fix saved card selection" --tokens 1200
+# make and test the code change
+graph-ai sync --input semantic-delta.json
+```
 
-JavaScript, TypeScript, and Python receive regex-based structural extraction for declarations, relative imports, endpoints, and tests. Other text files retain safe metadata. The scanner honors `.gitignore`, skips common dependency/build folders, and excludes obvious secret files.
+`sync` accepts a small agent-authored JSON delta rather than allowing agents to rewrite the graph. `add` creates protected human canonical knowledge:
 
-Semantic nodes are submitted through a structured delta. Parser facts are `derived`; agent facts are `inferred`; `graph-ai add` creates protected `canonical` human knowledge. Evidence changes mark non-canonical semantic nodes `possibly_stale`, which is surfaced lazily in future context packets.
+```sh
+graph-ai add frontend "New user interfaces use React." --evidence AGENTS.md
+```
+
+Scope a rule when it applies only to part of the repository:
+
+```sh
+graph-ai add frontend "Use React Query for remote state." --scope frontend --evidence AGENTS.md
+```
+
+For stale agent knowledge, a delta can explicitly verify or delete the existing node by ID. Canonical human knowledge remains protected from agent overwrite or deletion.
+
+`.ai/graph` is versioned gzip-compressed JSON: compact, portable, and inspectable with `graph-ai inspect`. Use `graph-ai export --output graph.json` when a full readable artifact is needed for review or CI. Graph-AI transparently reads older plain-JSON v0.1/v0.2 graphs and rewrites them in the compact v0.3 form on the next build or sync. It stores hashes, metadata, symbols, dependency relationships, compact semantic nodes, and evidence references—never source-file copies or secret values.
+
+Use `graph-ai diff` before `build` or `sync` to preview changed paths, node/edge counts, and semantic knowledge that would become stale. This is the review-friendly counterpart to the compact binary artifact.
+
+## What v1 indexes
+
+JavaScript, TypeScript, and Python receive Tree-sitter structural extraction for declarations, imports, calls, endpoints, and tests. Other text files retain safe metadata. The scanner honors `.gitignore`, skips common dependency/build folders, and excludes obvious secret files.
+
+Semantic nodes are submitted through a structured delta. Parser facts are `derived`; agent facts are `inferred`; `graph-ai add` creates protected `canonical` human knowledge. Evidence changes mark non-canonical semantic nodes `possibly_stale`, which is surfaced lazily in future context packets. Agent knowledge that directly contradicts a same-scope canonical rule is accepted only with an explicit warning; canonical intent is never silently changed.
+
+`graph-ai status` computes freshness from indexed content hashes and reports exact added, modified, and deleted files. This is more reliable than treating every dirty Git worktree as a structural graph change.
+
+Content-identical file moves are detected as renames. Evidence and code-file relationships follow the new path without unnecessarily staling the associated semantic knowledge.
+
+## Implementation architecture
+
+- **Scanner:** recursively discovers safe text files, honors Git and basic `.gitignore` rules, skips generated/dependency folders, and excludes obvious secrets.
+- **Indexer:** hashes files, identifies added/modified/deleted paths, extracts JS/TS/Python declarations, relative imports, routes, and test files, then constructs nodes and edges.
+- **Storage:** `.ai/graph` is a single versioned JSON artifact. Source is referenced by path and hash; it is never copied into the graph.
+- **Retrieval:** local token/identifier/path overlap, authority, freshness, and graph-adjacent evidence select a bounded context packet. Token counts use the documented character÷4 approximation.
+- **Semantic layer:** deltas carry type, label, statement, evidence, related node IDs, confidence, and provenance. Changed evidence marks knowledge for lazy verification; canonical nodes cannot be overwritten by agent input.
+
+## Demo and validation
+
+`npm run demo` runs two simulated sessions against `examples/checkout-app`: session A records saved-card behavior, and session B retrieves the workflow, behavior, and three relevant files in a 125-token context packet. `npm test` covers scanning and ignores, graph construction/import edges, serialization, context budgets, semantic provenance, stale-on-modification, stale-on-deletion, and canonical protection.
+
+`graph-ai evaluate --fixture examples/loan-fulfillment` runs a local retrieval evaluation over a layered frontend/API/service fixture. It reports required-file recall, recommendation precision, semantic-fact recall, and packet size. This keeps Graph-AI focused on its actual hypothesis: a small packet should identify the right source and durable knowledge for a fresh agent.
+
+## v1 priorities
+
+1. Add TypeScript path aliases, package import resolution, and language-specific route extraction.
+2. Add rename-aware evidence tracking using Git history/content similarity.
+3. Improve relation-aware ranking and contradiction warnings beyond protected canonical overwrites.
+4. Expand independent evaluation fixtures and large-repository benchmarks.
+5. Introduce a compact node/edge schema beneath the compressed storage format for very large repositories.
 
 ## Limitations
 
-This is deliberately a small prototype: parsing is not yet AST/Tree-sitter precise, rename tracking is path-based, import resolution is relative-only, and contradiction detection is limited to canonical overwrite protection. The graph is optimized for validating the lifecycle, not for universal language coverage.
+Graph-AI remains intentionally local and compact. Rename tracking is currently path-based, import resolution is relative-only, and contradiction detection is limited to canonical overwrite protection. Tree-sitter support currently covers JavaScript, TypeScript, and Python; other languages receive safe file-level indexing.
