@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 — 2026-09-21
+
+- Updated GitHub Actions runtimes to v5.
+
 ## 1.0.0 — 2026-09-21
 
 - Created the local-first `graph-ai` CLI and portable `.ai/graph` artifact.
