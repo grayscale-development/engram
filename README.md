@@ -59,6 +59,8 @@ For stale agent knowledge, a delta can explicitly verify or delete the existing 
 
 Use `graph-ai diff` before `build` or `sync` to preview changed paths, node/edge counts, and semantic knowledge that would become stale. This is the review-friendly counterpart to the compact binary artifact.
 
+Context packets deliberately separate source recommendations into `START HERE` (up to three implementation files to open first) and `ALSO RELEVANT` (tests, documentation, decisions, and adjacent code). This keeps the first action small without hiding useful supporting context.
+
 ## What v1 indexes
 
 JavaScript, TypeScript, and Python receive Tree-sitter structural extraction for declarations, imports, calls, endpoints, and tests. Other text files retain safe metadata. The scanner honors `.gitignore`, skips common dependency/build folders, and excludes obvious secret files.

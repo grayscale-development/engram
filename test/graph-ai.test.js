@@ -105,11 +105,11 @@ test('freshness reports exact added, modified, and deleted paths', async () => {
 });
 test('loan fulfillment evaluation maintains useful compact context', async () => {
   const result = await evaluateFixture(path.resolve('examples/loan-fulfillment'));
-  assert.equal(result.mean_file_recall, 1); assert.equal(result.mean_fact_recall, 1); assert.ok(result.mean_file_precision >= 0.4); assert.equal(result.mutation_pass_rate, 1); assert.ok(result.mean_tokens <= 250);
+  assert.equal(result.mean_file_recall, 1); assert.equal(result.mean_fact_recall, 1); assert.ok(result.mean_file_precision >= 0.7); assert.equal(result.mutation_pass_rate, 1); assert.ok(result.mean_tokens <= 250); assert.ok(result.tasks.every((task) => task.files.length <= 3));
 });
 test('organization access evaluation rejects unrelated tasks', async () => {
   const result = await evaluateFixture(path.resolve('examples/organization-access'));
-  assert.equal(result.mean_file_recall, 1); assert.equal(result.mean_fact_recall, 1); assert.equal(result.negative_pass_rate, 1); assert.ok(result.mean_file_precision >= 0.4);
+  assert.equal(result.mean_file_recall, 1); assert.equal(result.mean_fact_recall, 1); assert.equal(result.negative_pass_rate, 1); assert.ok(result.mean_file_precision >= 0.7); assert.ok(result.tasks.every((task) => task.files.length <= 3));
 });
 test('diff previews structural and semantic impact without mutating the graph', async () => {
   const root = await fixture(); const { graph } = await build(root); applyDelta(graph, { changes: [{ type: 'product.concept', label: 'Card handling', statement: 'Cards are handled.', evidence: ['src/cards.js'] }] });

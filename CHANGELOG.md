@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 — 2026-09-22
+
+- Added role-aware, path-aware, and diversity-aware source ranking.
+- Split context files into `START HERE` and `ALSO RELEVANT` tiers.
+- Increased fixture start-file precision while retaining 100% required-file recall.
+
 ## 1.0.1 — 2026-09-21
 
 - Updated GitHub Actions runtimes to v5.

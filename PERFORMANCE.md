@@ -44,6 +44,8 @@ The first realistic fixture is `examples/loan-fulfillment`: 25 files spanning a 
 | 2026-09-21 | 4 loan-fulfillment tasks, initial broad expansion | 100.0% | 30.0% | 100.0% | 316 | Correct but too many adjacent files. |
 | 2026-09-21 | Same set, evidence-weighted files + direct term boost | 100.0% | 42.5% | 100.0% | 181 | The evaluator now guards this floor: ≥40% precision and ≤250 mean tokens. |
 | 2026-09-21 | 3 organization-access tasks, including unrelated negative query | 100.0% | 60.0% | 100.0% | 136 | Negative-query rejection: 100%; verifies Python-first retrieval independently of the loan fixture. |
+| 2026-09-22 | Two-tier source ranking: start files vs adjacent context | 100.0% | 75.0% | 100.0% | 197 | Loan fixture: up to three `START HERE` files, role/path priors, and redundancy penalty; supporting files move to `ALSO RELEVANT`. |
+| 2026-09-22 | Same two-tier ranking, organization-access fixture | 100.0% | 77.8% | 100.0% | 148 | Negative-query rejection remains 100%; independent Python-first fixture confirms the gain. |
 
 ## Metrics to track next
 

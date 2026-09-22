@@ -32,7 +32,7 @@ export async function evaluateFixture(fixtureRoot) {
       const packet = contextPacket(graph, task.query, task.tokens || spec.default_tokens || 800);
       const fileHits = task.expected_files.filter((file) => packet.files.includes(file));
       const factHits = task.expected_facts.filter((fact) => packet.text.includes(fact)); const negativePass = task.expect_empty ? packet.files.length === 0 && packet.nodes.length === 0 : null;
-      return { name: task.name, query: task.query, tokens: packet.tokens, files: packet.files, file_recall: task.expected_files.length ? fileHits.length / task.expected_files.length : 1, file_precision: packet.files.length ? fileHits.length / packet.files.length : 1, fact_recall: task.expected_facts.length ? factHits.length / task.expected_facts.length : 1, negative_pass: negativePass, missing_files: task.expected_files.filter((f) => !fileHits.includes(f)), missing_facts: task.expected_facts.filter((f) => !factHits.includes(f)) };
+      return { name: task.name, query: task.query, tokens: packet.tokens, files: packet.files, adjacent_files: packet.adjacent_files, file_recall: task.expected_files.length ? fileHits.length / task.expected_files.length : 1, file_precision: packet.files.length ? fileHits.length / packet.files.length : 1, fact_recall: task.expected_facts.length ? factHits.length / task.expected_facts.length : 1, negative_pass: negativePass, missing_files: task.expected_files.filter((f) => !fileHits.includes(f)), missing_facts: task.expected_facts.filter((f) => !factHits.includes(f)) };
     });
     const mean = (key) => tasks.reduce((total, task) => total + task[key], 0) / tasks.length;
     const negatives = tasks.filter((task) => task.negative_pass !== null); const mutations = [];
