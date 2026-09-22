@@ -5,6 +5,29 @@ import { loadCortexWithRevision } from './storage.js';
 const collections = ['areas', 'workflows', 'decisions', 'conventions'];
 const words = (value) => value.toLowerCase().match(/[\p{L}\p{N}_-]+/gu) ?? [];
 
+function matchingEntries(cortex, query) {
+  const terms = [...new Set(words(query))];
+  if (terms.length === 0) throw new Error('query must contain a searchable word');
+  return collections.flatMap((collection) => cortex.chart[collection].map((entry) => {
+    const fields = { id: entry.id, label: entry.label, summary: entry.summary, evidence: entry.evidence?.join(' ') ?? '' };
+    const lowered = Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, value.toLowerCase()]));
+    const matchedTerms = terms.filter((term) => Object.values(lowered).some((value) => value.includes(term)));
+    const score = matchedTerms.reduce((total, term) => total + (lowered.label.includes(term) ? 5 : 0) + (lowered.id.includes(term) ? 3 : 0) + (lowered.summary.includes(term) ? 2 : 0) + (lowered.evidence.includes(term) ? 1 : 0), 0);
+    return { score, matchedTerms, collection, ...entry };
+  })).filter((entry) => entry.score > 0).sort((left, right) => right.score - left.score || left.collection.localeCompare(right.collection) || left.id.localeCompare(right.id));
+}
+
+export function focusCortex(snapshot, query, limit = 8) {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new Error('limit must be an integer from 1 through 50');
+  return {
+    repository: snapshot.cortex.repository,
+    revision: snapshot.revision,
+    summary: snapshot.cortex.chart.summary,
+    query,
+    matches: matchingEntries(snapshot.cortex, query).slice(0, limit)
+  };
+}
+
 export async function buildCortexIndex(roots) {
   if (!Array.isArray(roots) || roots.length === 0) throw new Error('index input requires a non-empty roots array');
   const repositories = [];

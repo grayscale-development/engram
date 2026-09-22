@@ -12,13 +12,14 @@ Use `engram-mcp` as a local stdio MCP server when an agent host supports MCP. It
 }
 ```
 
-The server provides five tools:
+The server provides six tools:
 
 1. `engram_read` returns `{ cortex, revision }` from the authoritative local snapshot.
-2. `engram_apply` accepts `patch` and required `expected_revision`.
-3. `engram_replace` accepts `cortex` and required `expected_revision`.
-4. `engram_validate` returns a validated snapshot and revision.
-5. `engram_history_verify` verifies the optional audit chain and recovery snapshots.
+2. `engram_focus` accepts a short task query and returns only matching, agent-authored entries. Verify its evidence before relying on it.
+3. `engram_apply` accepts `patch` and required `expected_revision`.
+4. `engram_replace` accepts `cortex` and required `expected_revision`.
+5. `engram_validate` returns a validated snapshot and revision.
+6. `engram_history_verify` verifies the optional audit chain and recovery snapshots.
 
 Use the revision returned by `engram_read` exactly once for a mutation. A changed snapshot returns a `REVISION_CONFLICT` with the newest `{ cortex, revision }`; read it, merge the intended durable facts, and retry. A simultaneous write in progress returns `CORTEX_BUSY`; read and retry rather than guessing.
 

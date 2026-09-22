@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
-import { buildCortexIndex, searchCortexIndex } from '../src/index.js';
+import { buildCortexIndex, focusCortex, searchCortexIndex } from '../src/index.js';
 import { handleMcpRequest } from '../src/mcp.js';
 import { recoverHistory } from '../src/history.js';
 import { applyCortexPatch, readCortexSnapshot, replaceCortex, verifyCortexHistory } from '../src/service.js';
@@ -16,6 +16,8 @@ const cli = path.resolve('bin/engram.js');
 const mcpBin = path.resolve('bin/engram-mcp.js');
 async function fixture() { return fs.mkdtemp(path.join(os.tmpdir(), 'engram-cortex-')); }
 async function run(root, ...args) { return (await exec(process.execPath, [cli, ...args, '--root', root])).stdout; }
+async function runInstalled(root, ...args) { return (await exec(process.execPath, [path.join(root, '.engram/runtime/bin/engram.js'), ...args, '--root', root])).stdout; }
+async function runInstalledResult(root, ...args) { return exec(process.execPath, [path.join(root, '.engram/runtime/bin/engram.js'), ...args, '--root', root]); }
 async function snapshot(root) { return JSON.parse(await run(root, 'read', '--with-revision')); }
 async function writeJson(root, name, value) { const file = path.join(root, name); await fs.writeFile(file, JSON.stringify(value)); return file; }
 const chart = (name, summary = 'A concise product.') => ({ repository: { name }, chart: { summary, areas: [], workflows: [], decisions: [], conventions: [] } });
@@ -23,8 +25,24 @@ const chart = (name, summary = 'A concise product.') => ({ repository: { name },
 test('init creates an empty agent-owned Cortex and installs the Cerebellum', async () => {
   const root = await fixture(); const output = await run(root, 'init'); const cortex = await loadCortex(root);
   assert.match(output, /Engram initialized/); assert.equal(cortex.chart.summary, ''); assert.deepEqual(cortex.chart.areas, []);
-  const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, rank, or infer facts/);
+  const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
+  assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /Local runtime/);
+  assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
+  const installedRead = await runInstalledResult(root, 'read'); assert.match(installedRead.stdout, /"repository"/); assert.doesNotMatch(installedRead.stderr, /MODULE_TYPELESS_PACKAGE_JSON/);
   assert.match(await run(root, 'status'), /Revision:/); assert.match(await run(root, 'validate'), /Valid/);
+});
+
+test('focus returns a bounded task-relevant Cortex slice without reading source', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [
+    { op: 'upsert', collection: 'areas', item: { id: 'merchant-transaction-update', label: 'Merchant transaction authorization', summary: 'The update route authorizes the application relationship before persistence.', evidence: ['API/MerchantTransactionController.cs'] } },
+    { op: 'upsert', collection: 'workflows', item: { id: 'release', label: 'Release', summary: 'Runs deployment checks.', evidence: ['ci/release.yml'] } }
+  ] } });
+  const current = await readCortexSnapshot(root); const focused = focusCortex(current, 'merchant authorization', 1);
+  assert.equal(focused.revision, current.revision); assert.equal(focused.matches.length, 1); assert.equal(focused.matches[0].id, 'merchant-transaction-update'); assert.deepEqual(focused.matches[0].matchedTerms.sort(), ['authorization', 'merchant']);
+  const cliFocus = JSON.parse(await runInstalled(root, 'focus', '--query', 'merchant authorization', '--limit', '1'));
+  assert.equal(cliFocus.matches[0].id, 'merchant-transaction-update');
+  assert.throws(() => focusCortex(current, 'merchant', 0), /1 through 50/);
 });
 
 test('replace and apply require a fresh revision and preserve agent-owned CRUD', async () => {
@@ -95,6 +113,8 @@ test('the persistent MCP handler returns structured snapshots and mutation confl
   const first = read.structuredContent;
   const applied = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [{ op: 'upsert', collection: 'conventions', item: { id: 'compact', label: 'Compact', summary: 'Keep context small.' } }] } } } });
   assert.equal(applied.structuredContent.cortex.chart.conventions[0].id, 'compact');
+  const focused = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_focus', arguments: { root, query: 'compact' } } });
+  assert.equal(focused.structuredContent.matches[0].id, 'compact');
   await assert.rejects(handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [] } } } }), (error) => error.code === 'REVISION_CONFLICT' && error.current.revision === applied.structuredContent.revision);
 });
 

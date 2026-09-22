@@ -6,6 +6,19 @@ Keep minified JSON as the Cortex format. It is the fastest complete implementati
 
 This report is for AI operation, not manual editing. The Cortex should remain a small, durable map of a repository, never a source-code index or a conversation log.
 
+## Agent diagnosis benchmark
+
+On 2026-09-22, the same read-only diagnosis prompts were run with Codex on clean `master` snapshots of a small Ember addon and a .NET API. The baseline had no `.engram` directory. The focused run used a maintained Cortex entry and `focus`, then verified the cited source. The one-time Cortex creation cost is intentionally excluded: this measures the work an agent performs after a Cortex exists.
+
+| Repository / task | Baseline time / input | Focused time / input | Factual checklist |
+| --- | ---: | ---: | ---: |
+| `nano-utils`: adjusted payoff calculation | 86.34 s / 147,684 | 80.22 s / 98,917 | 6/6 both |
+| `API`: cross-app merchant transaction update | 128.47 s / 631,009 | 123.99 s / 150,705 after Cortex maintenance | 7/7 both |
+
+The first focused API run was faster (96.66 s / 561,647 input tokens) but incorrectly said the update publishes under the old app. The baseline investigation established the real post-save behavior: the publish filter detects the changed app identifier and throws before publishing. That invariant was added to the Cortex; the recorded warm rerun is the valid focused result. This is intentional evidence, not a filtered result: Cortex quality depends on agents recording durable discoveries after they verify them.
+
+`init` now installs a local, dependency-free Node runtime under `.engram/runtime`. Normal Cortex work uses that runtime and is independent of npm cache, registry, and GitHub availability. The bootstrap command itself still needs a Node runtime and a way to obtain Engram; use an isolated npm cache when the host cache is not writable.
+
 ## What was measured
 
 Measurements ran on 2026-09-22 on darwin-arm64 with Node v22.12.0. The benchmark creates and removes isolated temporary repositories, uses 80 samples for direct storage operations and 30 for CLI operations, and reports p50/p95 wall time. Filesystem cache is warm after one unrecorded invocation. Run it with:

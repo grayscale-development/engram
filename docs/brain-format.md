@@ -19,6 +19,10 @@ Each Cortex item needs an `id`, `label`, `summary`, and evidence paths when avai
 
 Engram persists compact JSON and `read` returns compact JSON by default because agents consume structured context directly. Use `engram read --pretty` only for a formatted display.
 
+## Task-focused retrieval
+
+Use `node .engram/runtime/bin/engram.js focus --query "distinctive task terms"` to receive the repository summary, current revision, and up to eight matching agent-authored entries. It ranks matches by the terms in their IDs, labels, summaries, and evidence paths. It does not read source code or infer a result, so an agent must verify cited source before answering.
+
 ## AI working-set limits
 
 The validator rejects Cortex data over 1 MiB serialized or 5,000 total entries. IDs, labels, summaries, evidence counts, and evidence-path lengths are also bounded. These limits prevent an agent from turning the Cortex into a source dump; a normal repository should remain well below 100 durable entries.

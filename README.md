@@ -9,26 +9,29 @@ It does not parse, scan, or infer from source code. An agent studies the reposit
 ```text
 Set up Engram in this repository.
 
-1. Run `npx --yes github:grayscale-development/engram init`.
+1. Bootstrap once with an isolated temporary npm cache, then run `npx --yes github:grayscale-development/engram init`. This needs network access only for the bootstrap command; `init` installs the local runtime used afterward.
 2. Read `.engram/skills/cerebellum/SKILL.md` and follow it exactly.
 3. Analyze this repository as an experienced engineer, then form the first concise Cortex in a JSON file. Include only durable product areas, workflows, decisions, and conventions with evidence paths.
-4. Run `npx --yes github:grayscale-development/engram read --with-revision`, then use its `revision` in `replace --input cortex.json --expected-revision <revision>`.
-5. Run `npx --yes github:grayscale-development/engram validate`.
+4. Run `node .engram/runtime/bin/engram.js read --with-revision`, then use its `revision` in `replace --input cortex.json --expected-revision <revision>`.
+5. Run `node .engram/runtime/bin/engram.js validate`.
 6. From now on, read a fresh revision before every `apply` or `replace`, then update the Cortex immediately after meaningful code changes or discovered mismatches.
 ```
 
 ## Commands
 
 ```sh
-npx --yes github:grayscale-development/engram init
-npx --yes github:grayscale-development/engram read
-npx --yes github:grayscale-development/engram read --with-revision
-npx --yes github:grayscale-development/engram read --pretty
-npx --yes github:grayscale-development/engram replace --input cortex.json --expected-revision <revision>
-npx --yes github:grayscale-development/engram apply --input patch.json --expected-revision <revision>
-npx --yes github:grayscale-development/engram apply --input patch.json --expected-revision <revision> --history
-npx --yes github:grayscale-development/engram history
-npx --yes github:grayscale-development/engram validate
+# Bootstrap only: use an isolated npm cache if the default cache is not writable.
+scratch_cache="$(mktemp -d)" && npm_config_cache="$scratch_cache" npx --yes github:grayscale-development/engram init
+# All normal work is offline from the target repository.
+node .engram/runtime/bin/engram.js read
+node .engram/runtime/bin/engram.js read --with-revision
+node .engram/runtime/bin/engram.js read --pretty
+node .engram/runtime/bin/engram.js focus --query "authorization persistence"
+node .engram/runtime/bin/engram.js replace --input cortex.json --expected-revision <revision>
+node .engram/runtime/bin/engram.js apply --input patch.json --expected-revision <revision>
+node .engram/runtime/bin/engram.js apply --input patch.json --expected-revision <revision> --history
+node .engram/runtime/bin/engram.js history
+node .engram/runtime/bin/engram.js validate
 ```
 
 `read` and the stored Cortex use compact JSON by default to keep agent context and disk I/O small. Add `--pretty` only when a formatted display is useful.

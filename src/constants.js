@@ -1,6 +1,7 @@
 export const FORMAT_VERSION = 1;
 export const CORTEX_PATH = '.engram/cortex.json';
 export const CEREBELLUM_PATH = '.engram/skills/cerebellum/SKILL.md';
+export const RUNTIME_PATH = '.engram/runtime';
 export const HISTORY_PATH = '.engram/history';
 export const CORTEX_LOCK_PATH = '.engram/cortex.lock';
 export const MAX_CORTEX_BYTES = 1024 * 1024;

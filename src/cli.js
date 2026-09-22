@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CEREBELLUM_PATH, CORTEX_PATH } from './constants.js';
-import { buildCortexIndex, readCortexIndex, searchCortexIndex, writeCortexIndex } from './index.js';
+import { CEREBELLUM_PATH, CORTEX_PATH, RUNTIME_PATH } from './constants.js';
+import { buildCortexIndex, focusCortex, readCortexIndex, searchCortexIndex, writeCortexIndex } from './index.js';
 import { readJson } from './semantic.js';
 import { applyCortexPatch, readCortexSnapshot, replaceCortex, validateCortexSnapshot, verifyCortexHistory } from './service.js';
 import { emptyCortex, loadCortex, saveCortex } from './storage.js';
@@ -14,6 +14,7 @@ Commands:
   read [--with-revision] [--pretty] [--root path]         print compact Cortex JSON; include a mutation revision when needed
   replace --input cortex.json --expected-revision hash     safely replace the Cortex
   apply --input patch.json --expected-revision hash        safely apply agent-authored CRUD operations
+  focus --query words [--limit number] [--root path]       return a small task-relevant Cortex slice
   status [--root path]                                    show Cortex counts and current revision
   validate [--root path]                                  validate the stored Cortex
   history [--root path]                                   verify the optional Cortex audit history
@@ -31,6 +32,11 @@ async function installSkill(root) {
   const source = path.join(sourceRoot, 'skills', 'cerebellum', 'SKILL.md'); const target = path.join(root, CEREBELLUM_PATH);
   await fs.mkdir(path.dirname(target), { recursive: true }); await fs.copyFile(source, target);
 }
+async function installRuntime(root) {
+  const target = path.join(root, RUNTIME_PATH);
+  for (const directory of ['bin', 'src']) await fs.cp(path.join(sourceRoot, directory), path.join(target, directory), { recursive: true, force: true });
+  await fs.writeFile(path.join(target, 'package.json'), `${JSON.stringify({ private: true, type: 'module' })}\n`);
+}
 function status(snapshot) {
   const chart = snapshot.cortex.chart;
   return `CORTEX\nRepository: ${snapshot.cortex.repository.name}\nRevision: ${snapshot.revision}\nUpdated: ${snapshot.cortex.updated_at}\nSummary: ${chart.summary || 'Not written yet'}\nAreas: ${chart.areas.length}\nWorkflows: ${chart.workflows.length}\nDecisions: ${chart.decisions.length}\nConventions: ${chart.conventions.length}`;
@@ -40,12 +46,16 @@ export async function run(args) {
   const command = args[0]; const root = rootFor(args);
   if (!command || ['help', '--help', '-h'].includes(command)) return process.stdout.write(`${help}\n`);
   if (command === 'init') {
-    const cortex = await loadCortex(root); const created = !cortex; if (!cortex) await saveCortex(root, emptyCortex(root)); await installSkill(root);
-    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nCortex: ${created ? CORTEX_PATH : 'existing Cortex preserved'}\nCerebellum: ${CEREBELLUM_PATH}\nNext: run read --with-revision, then have your agent read the Cerebellum and write the first Cortex chart.\n`);
+    const cortex = await loadCortex(root); const created = !cortex; if (!cortex) await saveCortex(root, emptyCortex(root)); await Promise.all([installSkill(root), installRuntime(root)]);
+    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nCortex: ${created ? CORTEX_PATH : 'existing Cortex preserved'}\nCerebellum: ${CEREBELLUM_PATH}\nLocal runtime: ${RUNTIME_PATH}/bin/engram.js\nNext: run node ${RUNTIME_PATH}/bin/engram.js read --with-revision, then have your agent read the Cerebellum and write the first Cortex chart.\n`);
   }
   if (command === 'read') {
     const snapshot = await readCortexSnapshot(root); const output = args.includes('--with-revision') ? snapshot : snapshot.cortex;
     return process.stdout.write(`${JSON.stringify(output, null, args.includes('--pretty') ? 2 : undefined)}\n`);
+  }
+  if (command === 'focus') {
+    const limit = Number(option(args, '--limit', '8'));
+    return process.stdout.write(`${JSON.stringify(focusCortex(await readCortexSnapshot(root), requiredOption(args, '--query'), limit))}\n`);
   }
   if (command === 'status') return process.stdout.write(`${status(await readCortexSnapshot(root))}\n`);
   if (command === 'validate') { const snapshot = await validateCortexSnapshot(root); return process.stdout.write(`Valid: ${CORTEX_PATH}\nRevision: ${snapshot.revision}\n`); }
