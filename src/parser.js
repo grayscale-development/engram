@@ -36,12 +36,12 @@ export function parseFile(file) {
   if (!parsedAst && (language === 'TypeScript' || language === 'JavaScript')) {
     symbols.push(...matches(content, /\b(?:export\s+)?(?:default\s+)?(?:async\s+)?(?:function|class|interface|type|const)\s+([A-Za-z_$][\w$]*)/g, (m) => ({ name: m[1], kind: /class|interface/.test(m[0]) ? 'class' : 'symbol', line: lineOf(content, m.index) })));
     imports.push(...matches(content, /(?:import[\s\S]*?from\s*|require\s*\()\s*['\"]([^'\"]+)['\"]/g, (m) => m[1]));
-    endpoints.push(...matches(content, /\b(?:app|router)\.(get|post|put|patch|delete)\s*\(\s*['\"]([^'\"]+)/g, (m) => ({ method: m[1].toUpperCase(), path: m[2] })));
   } else if (!parsedAst && language === 'Python') {
     symbols.push(...matches(content, /^\s*(?:async\s+def|def|class)\s+([A-Za-z_]\w*)/gm, (m) => ({ name: m[1], kind: m[0].includes('class') ? 'class' : 'function', line: lineOf(content, m.index) })));
     imports.push(...matches(content, /^\s*(?:from\s+([\w.]+)\s+import|import\s+([\w.]+))/gm, (m) => m[1] || m[2]));
-    endpoints.push(...matches(content, /@\w+\.(get|post|put|patch|delete)\s*\(\s*['\"]([^'\"]+)/g, (m) => ({ method: m[1].toUpperCase(), path: m[2] })));
   }
+  if (language === 'TypeScript' || language === 'JavaScript') endpoints.push(...matches(content, /\b(?:app|router)\.(get|post|put|patch|delete)\s*\(\s*['\"]([^'\"]+)/g, (m) => ({ method: m[1].toUpperCase(), path: m[2] })));
+  if (language === 'Python') endpoints.push(...matches(content, /@\w+\.(get|post|put|patch|delete)\s*\(\s*['\"]([^'\"]+)/g, (m) => ({ method: m[1].toUpperCase(), path: m[2] })));
   if (language === 'Markdown') symbols.push(...matches(content, /^(#{1,6})\s+(.+)$/gm, (m) => ({ name: m[2].trim(), kind: 'section', line: lineOf(content, m.index) })));
   const basenameTerms = terms(path.basename(filePath, path.extname(filePath)));
   return { symbols, imports: unique(imports), calls: unique(calls), endpoints, test, parser: parsedAst?.parser || 'regex', keywords: unique([...basenameTerms, ...symbols.flatMap((s) => terms(s.name))]) };

@@ -26,6 +26,7 @@ The first build captures changed-file work. The immediate second build is the in
 | 2026-09-21 | retrieval evaluator + loan fixture | 48 | 56,279 | 113,269 | 201.3% | not rerun | not rerun | The fixture adds deliberately indexed source, docs, tests, and semantic-delta data. The ratio increase is a reminder that the current explicit JSON node schema remains the next storage-cost target. |
 | 2026-09-21 | v0.3 gzip JSON storage | 48 | 58,069 | 12,873 | 22.2% | not rerun | not rerun | 100,396 bytes / 88.6% smaller than the same explicit graph before compression. `inspect` and `export` preserve human/CI access; Git binary diffs are the intentional tradeoff. |
 | 2026-09-21 | batched Git ignore check | 500 synthetic TS files | n/a | 54,657 | n/a | 1%: 53.41ms (5 parsed) | 0%: 52.62ms (0 parsed) | Replaced one `git check-ignore` process per file with one batched invocation. The same 500-file benchmark was ~4.45s before and 52.62ms after for an unchanged rebuild. |
+| 2026-09-21 | v1 benchmark verification | 500 synthetic TS files | n/a | 54,656 | n/a | 1%: 52.68ms (5 parsed) | 0%: 53.88ms (0 parsed) | Full build: 126.06ms (501 parsed); 5%: 54.94ms (25 parsed); 100%: 116.8ms (500 parsed); RSS: 101,433,344 bytes. |
 
 ## Implemented optimizations
 
@@ -42,6 +43,7 @@ The first realistic fixture is `examples/loan-fulfillment`: 25 files spanning a 
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | 2026-09-21 | 4 loan-fulfillment tasks, initial broad expansion | 100.0% | 30.0% | 100.0% | 316 | Correct but too many adjacent files. |
 | 2026-09-21 | Same set, evidence-weighted files + direct term boost | 100.0% | 42.5% | 100.0% | 181 | The evaluator now guards this floor: ≥40% precision and ≤250 mean tokens. |
+| 2026-09-21 | 3 organization-access tasks, including unrelated negative query | 100.0% | 60.0% | 100.0% | 136 | Negative-query rejection: 100%; verifies Python-first retrieval independently of the loan fixture. |
 
 ## Metrics to track next
 

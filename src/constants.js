@@ -1,5 +1,5 @@
 export const FORMAT_VERSION = 3;
-export const GENERATOR_VERSION = '0.3.0';
+export const GENERATOR_VERSION = '1.0.0';
 export const GRAPH_PATH = '.ai/graph';
 export const DEFAULT_IGNORES = new Set([
   '.git', '.ai', 'node_modules', 'dist', 'build', 'coverage', '.next', 'vendor', 'bin', 'obj',

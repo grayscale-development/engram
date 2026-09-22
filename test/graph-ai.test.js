@@ -11,6 +11,10 @@ import { evaluateFixture } from '../src/evaluate.js';
 import { previewDiff } from '../src/diff.js';
 import { parseFile } from '../src/parser.js';
 import { runBenchmark } from '../src/benchmark.js';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const exec = promisify(execFile);
 
 async function fixture() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'graph-ai-'));
@@ -31,10 +35,10 @@ test('builds structural graph, respects ignores, and preserves import relationsh
   await saveGraph(root, graph); assert.equal((await loadGraph(root)).format_version, 3); const raw = await fs.readFile(graphFile); assert.equal(raw[0], 0x1f); await saveGraph(root, graph); assert.deepEqual(await fs.readFile(graphFile), raw);
 });
 test('tree-sitter adapters extract JavaScript, TypeScript, and Python structure', () => {
-  const js = parseFile({ path: 'src/widget.js', language: 'JavaScript', content: "import { helper } from './helper.js'; export class Widget {} export function render() { return helper(); }" });
+  const js = parseFile({ path: 'src/widget.js', language: 'JavaScript', content: "import { helper } from './helper.js'; export class Widget {} export function render() { return helper(); } router.get('/widgets', render);" });
   const ts = parseFile({ path: 'src/types.ts', language: 'TypeScript', content: "export interface Loan { id: string }; export const load = () => 1;" });
   const py = parseFile({ path: 'app/tasks.py', language: 'Python', content: 'from app.auth import permit\nclass Task:\n    def complete(self):\n        return permit()\n' });
-  assert.equal(js.parser, 'tree-sitter'); assert.deepEqual(js.imports, ['./helper.js']); assert.ok(js.symbols.some((s) => s.name === 'Widget')); assert.ok(js.calls.includes('helper'));
+  assert.equal(js.parser, 'tree-sitter'); assert.deepEqual(js.imports, ['./helper.js']); assert.ok(js.symbols.some((s) => s.name === 'Widget')); assert.ok(js.calls.includes('helper')); assert.deepEqual(js.endpoints, [{ method: 'GET', path: '/widgets' }]);
   assert.equal(ts.parser, 'tree-sitter'); assert.ok(ts.symbols.some((s) => s.name === 'Loan')); assert.ok(ts.symbols.some((s) => s.name === 'load'));
   assert.equal(py.parser, 'tree-sitter'); assert.ok(py.symbols.some((s) => s.name === 'Task')); assert.ok(py.symbols.some((s) => s.name === 'complete')); assert.ok(py.calls.includes('permit'));
 });
@@ -114,4 +118,14 @@ test('diff previews structural and semantic impact without mutating the graph', 
 });
 test('benchmark demonstrates hash-selected incremental parsing', async () => {
   const result = await runBenchmark(20); assert.equal(result.initial.parsed, 21); assert.deepEqual(result.updates.map((update) => update.parsed), [0, 1, 1, 20]); assert.ok(result.graph_bytes > 0);
+});
+test('CLI lifecycle initializes, learns, retrieves, previews, and exports', async () => {
+  const root = await fixture(); const cli = path.resolve('bin/graph-ai.js');
+  const run = async (...args) => (await exec(process.execPath, [cli, ...args, '--root', root])).stdout;
+  assert.match(await run('init'), /Graph-AI initialized/);
+  await fs.writeFile(path.join(root, 'delta.json'), JSON.stringify({ changes: [{ type: 'product.concept', label: 'Saved card reuse', statement: 'Customers can reuse saved cards at checkout.', evidence: ['src/cards.js'] }] }));
+  assert.match(await run('sync', '--input', 'delta.json'), /Semantic updates applied: 1/);
+  assert.match(await run('context', 'fix saved card checkout', '--tokens', '300'), /Customers can reuse/);
+  assert.match(await run('diff'), /Graph would change: no/);
+  const exported = path.join(root, 'exported.json'); assert.match(await run('export', '--output', exported), /Exported readable graph/); assert.equal(JSON.parse(await fs.readFile(exported, 'utf8')).format_version, 3);
 });

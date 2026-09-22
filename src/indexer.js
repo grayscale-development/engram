@@ -2,6 +2,7 @@ import { scan } from './scanner.js';
 import { parseFile } from './parser.js';
 import { emptyGraph } from './storage.js';
 import { git, slug } from './utils.js';
+import { GENERATOR_VERSION } from './constants.js';
 
 const fileId = (p) => `code:file:${p}`;
 const symbolId = (p, name) => `code:symbol:${p}#${name}`;
@@ -84,7 +85,7 @@ export async function build(root, prior = null) {
     if (affected.length) { node.status = 'possibly_stale'; node.stale_reason = affected.map((p) => deleted.includes(p) ? `${p} deleted` : `${p} changed`).join('; '); stale++; }
   }
   graph.repository.indexed_at = new Date().toISOString(); graph.repository.indexed_revision = await git(root, ['rev-parse', 'HEAD']);
-  graph.format_version = 3; graph.generator_version = '0.3.0';
+  graph.format_version = 3; graph.generator_version = GENERATOR_VERSION;
   return { graph, summary: { added, modified, deleted, renamed, unchanged, stale, parsed: toParse.length } };
 }
 export async function freshness(root, graph) {

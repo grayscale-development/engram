@@ -17,7 +17,9 @@ SOURCE REPOSITORY → graph-ai build → .ai/graph
 ## Quick start
 
 ```sh
-npm install
+git clone https://github.com/grayscale-development/graph-ai.git
+cd graph-ai
+npm ci
 npm link
 graph-ai init
 graph-ai overview
@@ -28,7 +30,7 @@ No network, API key, cloud account, or external model is required.
 
 ## Commands
 
-`init`, `build`, `overview`, `context`, `query`, `inspect`, `add`, `sync`, `status`, and `stats` are implemented. Run `graph-ai help` for syntax.
+`init`, `build`, `diff`, `overview`, `context`, `query`, `inspect`, `export`, `add`, `sync`, `status`, `stats`, `evaluate`, and `benchmark` are implemented. Run `graph-ai help` for syntax.
 
 Typical lifecycle:
 
@@ -83,11 +85,11 @@ Content-identical file moves are detected as renames. Evidence and code-file rel
 
 ## v1 priorities
 
-1. Add TypeScript path aliases, package import resolution, and language-specific route extraction.
-2. Add rename-aware evidence tracking using Git history/content similarity.
-3. Improve relation-aware ranking and contradiction warnings beyond protected canonical overwrites.
-4. Expand independent evaluation fixtures and large-repository benchmarks.
-5. Introduce a compact node/edge schema beneath the compressed storage format for very large repositories.
+1. Add language-specific route extraction and framework-aware symbols.
+2. Improve relation-aware ranking beyond lexical and evidence weighting.
+3. Add more independent fixtures and real-world corpus evaluation.
+4. Introduce a compact node/edge schema beneath the compressed storage format for very large repositories.
+5. Expand language support based on measured repository demand.
 
 ## Limitations
 
