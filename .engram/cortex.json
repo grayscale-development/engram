@@ -1,0 +1,55 @@
+{
+  "repository": {
+    "name": "engram",
+    "root": "."
+  },
+  "chart": {
+    "summary": "Engram is a local CLI that stores a compact repository Cortex written and maintained by AI agents; it deliberately performs no source scanning, parsing, ranking, or fact inference.",
+    "areas": [
+      {
+        "id": "cortex-storage",
+        "label": "Cortex storage",
+        "summary": "The CLI creates, reads, replaces, validates, and atomically patches .engram/cortex.json.",
+        "evidence": ["src/cli.js", "src/storage.js", "src/semantic.js"]
+      },
+      {
+        "id": "cerebellum",
+        "label": "Cerebellum",
+        "summary": "init installs the Cerebellum, which tells agents how to form and maintain the Cortex.",
+        "evidence": ["skills/cerebellum/SKILL.md", "src/cli.js"]
+      }
+    ],
+    "workflows": [
+      {
+        "id": "bootstrap",
+        "label": "Bootstrap",
+        "summary": "A user copies the README prompt into an agent; the agent runs init, reads the Cerebellum, forms the first Cortex, and validates it.",
+        "evidence": ["README.md", "skills/cerebellum/SKILL.md"]
+      },
+      {
+        "id": "maintenance",
+        "label": "Maintenance",
+        "summary": "Agents update or remove Cortex entries after meaningful code changes or when they notice a disagreement with the repository.",
+        "evidence": ["skills/cerebellum/SKILL.md"]
+      }
+    ],
+    "decisions": [
+      {
+        "id": "agent-owned-knowledge",
+        "label": "Agent-owned knowledge",
+        "summary": "All repository understanding is authored and maintained by agents, not derived by Engram from code.",
+        "evidence": ["README.md", "AGENTS.md"]
+      }
+    ],
+    "conventions": [
+      {
+        "id": "minimal-docs",
+        "label": "Minimal docs",
+        "summary": "README and docs stay concise; the Cerebellum contains the operative workflow.",
+        "evidence": ["README.md", "docs/agent-workflow.md"]
+      }
+    ]
+  },
+  "format_version": 1,
+  "updated_at": "2026-09-22T17:33:38.553Z"
+}

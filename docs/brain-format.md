@@ -1,6 +1,6 @@
-# Brain format
+# Cortex format
 
-`.ai/brain.json` is deliberately small and agent-authored.
+`.engram/cortex.json` is deliberately small and agent-authored.
 
 ```json
 {
@@ -15,4 +15,4 @@
 }
 ```
 
-Each chart item needs an `id`, `label`, `summary`, and evidence paths when available. Keep only durable information another agent needs to work effectively.
+Each Cortex item needs an `id`, `label`, `summary`, and evidence paths when available. Keep only durable information another agent needs to work effectively.

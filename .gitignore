@@ -2,3 +2,4 @@
 node_modules/
 graph.json
 .ai/skills/
+.engram/skills/

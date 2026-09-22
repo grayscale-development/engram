@@ -1,5 +1,5 @@
-# Graph-AI workflow
+# Engram workflow
 
-Read `skills/repository-brain/SKILL.md` before changing the repository brain.
+Read `skills/cerebellum/SKILL.md` before changing the repository Cortex.
 
-Graph-AI does not analyze source code. Agents create and maintain `.ai/brain.json` through `replace` and `apply` whenever durable repository knowledge changes.
+Engram does not analyze source code. Agents create and maintain `.engram/cortex.json` through `replace` and `apply` whenever durable repository knowledge changes.

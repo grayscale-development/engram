@@ -1,19 +1,19 @@
 {
-  "name": "graph-ai",
-  "version": "2.0.0",
-  "description": "An AI-maintained repository brain.",
-  "keywords": ["ai", "coding-agents", "repository", "agent-memory", "developer-tools", "cli"],
-  "homepage": "https://github.com/grayscale-development/graph-ai#readme",
-  "repository": { "type": "git", "url": "git+https://github.com/grayscale-development/graph-ai.git" },
-  "bugs": { "url": "https://github.com/grayscale-development/graph-ai/issues" },
+  "name": "engram",
+  "version": "3.0.0",
+  "description": "An AI-maintained repository cortex.",
+  "keywords": ["ai", "coding-agents", "repository", "agent-memory", "brain", "developer-tools", "cli"],
+  "homepage": "https://github.com/grayscale-development/engram#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/grayscale-development/engram.git" },
+  "bugs": { "url": "https://github.com/grayscale-development/engram/issues" },
   "type": "module",
   "bin": {
-    "graph-ai": "bin/graph-ai.js"
+    "engram": "bin/engram.js"
   },
   "files": ["bin", "src", "skills", "docs", "README.md", "AGENTS.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
   "scripts": {
     "test": "node --test",
-    "lint": "node --check src/*.js && node --check bin/graph-ai.js"
+    "lint": "node --check src/*.js && node --check bin/engram.js"
   },
   "engines": {
     "node": ">=20"
