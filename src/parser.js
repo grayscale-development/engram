@@ -11,7 +11,9 @@ const languageFor = { JavaScript, TypeScript: TypeScript.typescript, Python };
 function walk(node, visit) { visit(node); for (let i = 0; i < node.namedChildCount; i++) walk(node.namedChild(i), visit); }
 function astParse(file) {
   const language = languageFor[file.language]; if (!language) return null;
-  const parser = new Parser(); parser.setLanguage(language); const tree = parser.parse(file.content);
+  const parser = new Parser(); let tree;
+  try { parser.setLanguage(language); tree = parser.parse(file.content); }
+  catch { return null; }
   const symbols = []; const imports = []; const calls = [];
   const addSymbol = (node, kind) => { const name = node.childForFieldName('name'); if (name) symbols.push({ name: name.text, kind, line: node.startPosition.row + 1 }); };
   walk(tree.rootNode, (node) => {

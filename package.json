@@ -15,7 +15,8 @@
     "test": "node --test",
     "lint": "node --check src/*.js && node --check bin/graph-ai.js && node --check docs/index.js",
     "demo": "node scripts/demo.js",
-    "benchmark": "node bin/graph-ai.js benchmark"
+    "benchmark": "node bin/graph-ai.js benchmark",
+    "measure:orientation": "node scripts/measure-orientation.js"
   },
   "engines": {
     "node": ">=20"

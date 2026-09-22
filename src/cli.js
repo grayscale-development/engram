@@ -12,9 +12,17 @@ import { diffText, previewDiff } from './diff.js';
 import { benchmarkText, runBenchmark } from './benchmark.js';
 
 const help = `Graph-AI — local repository intelligence\n\nCommands:\n  init [--root path]                 create .ai/graph\n  build [--root path]                update structural graph\n  diff [--json]                      preview graph changes without writing\n  overview [--root path]             compact orientation\n  context <task> [--tokens n]        task-specific context packet\n  query <terms> [--json]             targeted knowledge search\n  inspect [file|concept|practice] <value>\n  export [--output path]             write readable graph JSON\n  add <type> <statement> [--evidence a,b]\n  sync [--input delta.json|-]        build plus agent semantic delta\n  status | stats                     freshness and compression\n  evaluate --fixture path             local context-retrieval evaluation\n  benchmark [--files n]              local indexing benchmark\n\nSemantic delta: { "changes": [{ "type": "product.concept", "label": "Saved card selection", "statement": "Users can reuse saved cards at checkout.", "evidence": ["src/checkout.js"] }] }. Existing agent nodes can use action: "verify" or action: "delete" with their id.`;
+const claudeGuidance = `# Graph-AI\n\nBefore broad exploration, run:\n\n1. \`npx --yes github:grayscale-development/graph-ai overview\`\n2. \`npx --yes github:grayscale-development/graph-ai context "<current task>" --tokens 2000\`\n3. Inspect the recommended files before expanding the search.\n\nBefore finishing work, run tests and \`npx --yes github:grayscale-development/graph-ai sync\`.\n`;
 function option(args, name, fallback = null) { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : fallback; }
 function rootFor(args) { return path.resolve(option(args, '--root', process.cwd())); }
 function positional(args) { const flags = new Set(['--root', '--tokens', '--input', '--evidence']); return args.filter((a, i) => !a.startsWith('--') && !flags.has(args[i - 1])); }
+async function seedClaudeGuidance(root) {
+  const file = path.join(root, 'CLAUDE.md');
+  try { await fs.access(file); return false; }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  await fs.writeFile(file, claudeGuidance);
+  return true;
+}
 async function requireGraph(root) { const graph = await loadGraph(root); if (!graph) throw new Error(`no ${GRAPH_PATH}; run graph-ai init first`); return graph; }
 function jsonOrText(value, args) { process.stdout.write(`${args.includes('--json') ? JSON.stringify(value, null, 2) : value}\n`); }
 export async function run(args) {
@@ -25,7 +33,8 @@ export async function run(args) {
   if (command === 'init' || command === 'build') {
     const prior = command === 'build' ? await requireGraph(root) : await loadGraph(root);
     const { graph, summary } = await build(root, prior); graph.repository.name = path.basename(root); await saveGraph(root, graph);
-    process.stdout.write(`Graph-AI ${command === 'init' ? 'initialized' : 'updated'}.\nFiles indexed: ${Object.keys(graph.files).length}\nSymbols/nodes: ${Object.keys(graph.nodes).length}\nRelationships: ${graph.edges.length}\nAdded: ${summary.added.length} · Modified: ${summary.modified.length} · Deleted: ${summary.deleted.length} · Renamed: ${summary.renamed.length}\nParsed this run: ${summary.parsed}\nAffected semantic knowledge: ${summary.stale}\nCreated: ${GRAPH_PATH}\n`); return;
+    const guidanceCreated = command === 'init' && await seedClaudeGuidance(root);
+    process.stdout.write(`Graph-AI ${command === 'init' ? 'initialized' : 'updated'}.\nFiles indexed: ${Object.keys(graph.files).length}\nSymbols/nodes: ${Object.keys(graph.nodes).length}\nRelationships: ${graph.edges.length}\nAdded: ${summary.added.length} · Modified: ${summary.modified.length} · Deleted: ${summary.deleted.length} · Renamed: ${summary.renamed.length}\nParsed this run: ${summary.parsed}\nAffected semantic knowledge: ${summary.stale}\nCreated: ${GRAPH_PATH}${guidanceCreated ? '\nCreated: CLAUDE.md' : ''}\n`); return;
   }
   const graph = await requireGraph(root);
   if (command === 'diff') { const diff = await previewDiff(root, graph); return jsonOrText(args.includes('--json') ? diff : diffText(diff), args); }

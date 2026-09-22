@@ -13,8 +13,11 @@ test("static product site has its required entry points and Pages workflow", asy
   assert.match(html, /TypeScript/);
   assert.match(html, /JavaScript/);
   assert.match(html, /Python/);
+  assert.match(html, /HUGE TOKEN SAVINGS/);
+  assert.match(html, /SELF-MAINTAINING/);
+  assert.match(html, /Small\. Fast\. Accurate\./);
   assert.match(html, /<script src="index.js"><\/script>/);
-  assert.match(script, /grayscale-development\/graph-ai/);
+  assert.match(script, /navigator\.clipboard/);
   assert.match(workflow, /actions\/deploy-pages@v4/);
   assert.match(workflow, /path: docs/);
 });

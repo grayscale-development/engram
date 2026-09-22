@@ -42,6 +42,12 @@ test('tree-sitter adapters extract JavaScript, TypeScript, and Python structure'
   assert.equal(ts.parser, 'tree-sitter'); assert.ok(ts.symbols.some((s) => s.name === 'Loan')); assert.ok(ts.symbols.some((s) => s.name === 'load'));
   assert.equal(py.parser, 'tree-sitter'); assert.ok(py.symbols.some((s) => s.name === 'Task')); assert.ok(py.symbols.some((s) => s.name === 'complete')); assert.ok(py.calls.includes('permit'));
 });
+test('falls back to regex extraction when Tree-sitter declines a large source file', () => {
+  const content = `${'// padding\n'.repeat(3_300)}export function largeFileHelper() { return true; }`;
+  const parsed = parseFile({ path: 'src/large-file.js', language: 'JavaScript', content });
+  assert.equal(parsed.parser, 'regex');
+  assert.ok(parsed.symbols.some((symbol) => symbol.name === 'largeFileHelper'));
+});
 test('resolves TypeScript aliases, local packages, barrels, and Python modules', async () => {
   const root = await fixture();
   await fs.writeFile(path.join(root, 'tsconfig.json'), JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@app/*': ['src/*'] } } }));
@@ -122,7 +128,8 @@ test('benchmark demonstrates hash-selected incremental parsing', async () => {
 test('CLI lifecycle initializes, learns, retrieves, previews, and exports', async () => {
   const root = await fixture(); const cli = path.resolve('bin/graph-ai.js');
   const run = async (...args) => (await exec(process.execPath, [cli, ...args, '--root', root])).stdout;
-  assert.match(await run('init'), /Graph-AI initialized/);
+  const initialized = await run('init'); assert.match(initialized, /Graph-AI initialized/); assert.match(initialized, /Created: CLAUDE\.md/);
+  assert.match(await fs.readFile(path.join(root, 'CLAUDE.md'), 'utf8'), /graph-ai context/);
   await fs.writeFile(path.join(root, 'delta.json'), JSON.stringify({ changes: [{ type: 'product.concept', label: 'Saved card reuse', statement: 'Customers can reuse saved cards at checkout.', evidence: ['src/cards.js'] }] }));
   assert.match(await run('sync', '--input', 'delta.json'), /Semantic updates applied: 1/);
   assert.match(await run('context', 'fix saved card checkout', '--tokens', '300'), /Customers can reuse/);
