@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" fill="none">
+  <rect width="1280" height="640" fill="#238636"/>
+  <g transform="translate(270 130) scale(8)">
+    <path d="M9 14.5 24 7l15 7.5v19L24 41 9 33.5v-19Z" stroke="#d4ff69" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="m15 18 9 4.5 9-4.5M24 22.5V33" stroke="#d4ff69" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="M750 226h10l35 83h-19l-7-18h-30l-7 18h-19l37-83Zm4 22-10 27h20l-10-27ZM813 226h18l38 52v-52h18v83h-17l-39-53v53h-18v-83ZM910 226h18v83h-18v-83ZM951 226h29c25 0 43 17 43 41s-18 42-43 42h-29v-83Zm18 17v49h11c15 0 25-10 25-25s-10-24-25-24h-11ZM1042 226h18v83h-18v-83ZM1083 226h18l38 52v-52h18v83h-17l-39-53v53h-18v-83Z" fill="#f7fff0"/>
+  <text x="750" y="360" fill="#d4ff69" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="3.2">REPOSITORY MEMORY FOR AI AGENTS</text>
+</svg>
