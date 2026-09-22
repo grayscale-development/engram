@@ -36,3 +36,15 @@ test('init preserves an existing chart and refreshes only the installed skill', 
   const root = await fixture(); await run(root, 'init'); const brain = await loadBrain(root); brain.chart.summary = 'Keep me.'; await fs.writeFile(path.join(root, '.ai/brain.json'), JSON.stringify(brain));
   assert.match(await run(root, 'init'), /existing brain preserved/); assert.equal((await loadBrain(root)).chart.summary, 'Keep me.');
 });
+
+test('replace rejects malformed charts without overwriting the existing brain', async () => {
+  const root = await fixture(); await run(root, 'init'); const before = await fs.readFile(path.join(root, '.ai/brain.json'), 'utf8');
+  await fs.writeFile(path.join(root, 'invalid-chart.json'), JSON.stringify({ repository: { name: 'product' }, chart: { summary: 'Bad chart.', areas: [{ id: 'same', label: 'One', summary: 'First.' }, { id: 'same', label: 'Two', summary: 'Second.' }], workflows: [], decisions: [], conventions: [] } }));
+  await assert.rejects(run(root, 'replace', '--input', 'invalid-chart.json'), /duplicate id/);
+  assert.equal(await fs.readFile(path.join(root, '.ai/brain.json'), 'utf8'), before);
+});
+
+test('validation permits agent-provided evidence paths without analyzing them', async () => {
+  const root = await fixture(); await run(root, 'init'); await fs.writeFile(path.join(root, 'chart.json'), JSON.stringify({ repository: { name: 'product' }, chart: { summary: 'A product.', areas: [{ id: 'area', label: 'Area', summary: 'An agent-described area.', evidence: ['not-a-real-file'] }], workflows: [], decisions: [], conventions: [] } }));
+  await run(root, 'replace', '--input', 'chart.json'); assert.match(await run(root, 'validate'), /Valid/);
+});

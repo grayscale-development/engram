@@ -7,9 +7,23 @@ export function emptyBrain(root) {
 }
 export function validateBrain(brain) {
   if (!brain || typeof brain !== 'object' || Array.isArray(brain)) throw new Error('brain must be a JSON object');
+  if (brain.format_version !== undefined && brain.format_version !== FORMAT_VERSION) throw new Error(`unsupported brain format: ${brain.format_version}`);
   if (!brain.repository || typeof brain.repository !== 'object') throw new Error('brain.repository must be an object');
   if (!brain.chart || typeof brain.chart !== 'object') throw new Error('brain.chart must be an object');
-  for (const collection of ['areas', 'workflows', 'decisions', 'conventions']) if (!Array.isArray(brain.chart[collection])) throw new Error(`brain.chart.${collection} must be an array`);
+  if (typeof brain.repository.name !== 'string' || !brain.repository.name.trim()) throw new Error('brain.repository.name must be a non-empty string');
+  if (typeof brain.chart.summary !== 'string') throw new Error('brain.chart.summary must be a string');
+  for (const collection of ['areas', 'workflows', 'decisions', 'conventions']) {
+    if (!Array.isArray(brain.chart[collection])) throw new Error(`brain.chart.${collection} must be an array`);
+    const ids = new Set();
+    for (const item of brain.chart[collection]) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error(`brain.chart.${collection} entries must be objects`);
+      if (typeof item.id !== 'string' || !item.id.trim()) throw new Error(`brain.chart.${collection} entries need a non-empty id`);
+      if (ids.has(item.id)) throw new Error(`brain.chart.${collection} has duplicate id: ${item.id}`); ids.add(item.id);
+      if (typeof item.label !== 'string' || !item.label.trim()) throw new Error(`brain.chart.${collection}.${item.id} needs a non-empty label`);
+      if (typeof item.summary !== 'string' || !item.summary.trim()) throw new Error(`brain.chart.${collection}.${item.id} needs a non-empty summary`);
+      if (item.evidence !== undefined && (!Array.isArray(item.evidence) || item.evidence.some((value) => typeof value !== 'string'))) throw new Error(`brain.chart.${collection}.${item.id}.evidence must be an array of strings`);
+    }
+  }
   return brain;
 }
 export async function loadBrain(root) {
@@ -19,5 +33,5 @@ export async function loadBrain(root) {
 }
 export async function saveBrain(root, brain) {
   validateBrain(brain); brain.format_version = FORMAT_VERSION; brain.updated_at = new Date().toISOString();
-  const file = path.join(root, BRAIN_PATH); await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(file, `${JSON.stringify(brain, null, 2)}\n`);
+  const file = path.join(root, BRAIN_PATH); const temporary = `${file}.${process.pid}.tmp`; await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(temporary, `${JSON.stringify(brain, null, 2)}\n`); await fs.rename(temporary, file);
 }

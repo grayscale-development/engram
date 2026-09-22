@@ -9,7 +9,7 @@
       {
         "id": "brain-storage",
         "label": "Brain storage",
-        "summary": "The CLI creates, reads, replaces, validates, and patches .ai/brain.json.",
+        "summary": "The CLI creates, reads, replaces, validates, and atomically patches .ai/brain.json.",
         "evidence": [
           "src/cli.js",
           "src/storage.js",
@@ -69,5 +69,5 @@
     ]
   },
   "format_version": 1,
-  "updated_at": "2026-09-22T17:31:38.887Z"
+  "updated_at": "2026-09-22T17:33:38.553Z"
 }
