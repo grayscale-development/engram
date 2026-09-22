@@ -16,6 +16,9 @@ test("static product site has its required entry points and Pages workflow", asy
   assert.match(html, /HUGE TOKEN SAVINGS/);
   assert.match(html, /SELF-MAINTAINING/);
   assert.match(html, /Small\. Fast\. Accurate\./);
+  assert.match(html, /MEASURED ORIENTATION TRIAL/);
+  assert.match(html, /12\.4 seconds faster, including setup\./);
+  assert.match(html, /200,996 → 120,433 tokens/);
   assert.match(html, /<script src="index.js"><\/script>/);
   assert.match(script, /navigator\.clipboard/);
   assert.match(workflow, /actions\/deploy-pages@v4/);

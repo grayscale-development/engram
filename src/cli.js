@@ -21,13 +21,13 @@ function claudeGuidance(graph) {
   const orientation = contextPacket(graph, 'tell me about this repo', 2000).text;
   return `# Graph-AI\n\n${guidanceStart}\n## Repository orientation\n\nUse this generated brief for repository-orientation requests. It is refreshed by \`graph-ai sync\`.\n\n\`\`\`text\n${orientation}\n\`\`\`\n\nFor implementation work, run \`npx --yes github:grayscale-development/graph-ai context "<current task>" --tokens 2000\` before broad exploration, then inspect the recommended files. Before finishing, run tests and \`npx --yes github:grayscale-development/graph-ai sync\`.\n${guidanceEnd}\n`;
 }
-async function writeClaudeGuidance(root, graph) {
+async function writeClaudeGuidance(root, graph, create = false) {
   const file = path.join(root, 'CLAUDE.md');
   const content = claudeGuidance(graph);
   let existing = '';
   try { existing = await fs.readFile(file, 'utf8'); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
-  if (!existing) { await fs.writeFile(file, content); return 'created'; }
+  if (!existing) { if (!create) return 'skipped'; await fs.writeFile(file, content); return 'created'; }
   const pattern = new RegExp(`${guidanceStart}[\\s\\S]*?${guidanceEnd}`);
   if (!pattern.test(existing)) return 'skipped';
   await fs.writeFile(file, existing.replace(pattern, content.trim()));
@@ -43,7 +43,7 @@ export async function run(args) {
   if (command === 'init' || command === 'build') {
     const prior = command === 'build' ? await requireGraph(root) : await loadGraph(root);
     let { graph, summary } = await build(root, prior); graph.repository.name = path.basename(root);
-    const guidance = command === 'init' ? await writeClaudeGuidance(root, graph) : null;
+    const guidance = command === 'init' ? await writeClaudeGuidance(root, graph, true) : null;
     if (guidance && guidance !== 'skipped') ({ graph } = await build(root, graph));
     await saveGraph(root, graph);
     process.stdout.write(`Graph-AI ${command === 'init' ? 'initialized' : 'updated'}.\nFiles indexed: ${Object.keys(graph.files).length}\nSymbols/nodes: ${Object.keys(graph.nodes).length}\nRelationships: ${graph.edges.length}\nAdded: ${summary.added.length} · Modified: ${summary.modified.length} · Deleted: ${summary.deleted.length} · Renamed: ${summary.renamed.length}\nParsed this run: ${summary.parsed}\nAffected semantic knowledge: ${summary.stale}\nCreated: ${GRAPH_PATH}${guidance === 'created' ? '\nCreated: CLAUDE.md' : guidance === 'updated' ? '\nUpdated: Graph-AI block in CLAUDE.md' : ''}\n`); return;

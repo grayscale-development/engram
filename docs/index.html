@@ -33,6 +33,22 @@
         <p class="hint" id="copy-hint">Requires Node.js 20 or newer.</p>
       </section>
 
+      <section class="section trial-section">
+        <p class="eyebrow">MEASURED ORIENTATION TRIAL</p>
+        <h2>12.4 seconds faster, including setup.</h2>
+        <p class="lede">Same fresh Claude Code prompt: “Tell me about this repo.” Run locally against the 737-file loan-fulfillment app.</p>
+        <div class="trial-timeline">
+          <div><span>PLAIN CLAUDE</span><strong>56.58s</strong><small>prompt to repository overview</small></div>
+          <div class="trial-graph"><span>GRAPH-AI + CLAUDE</span><strong>44.14s</strong><small>10.80s setup + 33.34s response</small></div>
+        </div>
+        <div class="trial-metrics">
+          <div><strong>40.1%</strong><span>less reported Claude token usage<br /><small>200,996 → 120,433 tokens</small></span></div>
+          <div><strong>59</strong><span>tokens in the orientation packet</span></div>
+          <div><strong>222.6 KB</strong><span>local graph size</span></div>
+        </div>
+        <p class="hint">One paired clean run on the same machine and model tier. Total Claude token usage includes input, output, and cache tokens reported by Claude Code.</p>
+      </section>
+
       <section class="section">
         <p class="eyebrow">HUGE TOKEN SAVINGS</p>
         <h2>73 tokens, not 24,521.</h2>

@@ -143,3 +143,9 @@ test('CLI lifecycle initializes, learns, retrieves, previews, and exports', asyn
   assert.match(await run('diff'), /Graph would change: no/);
   const exported = path.join(root, 'exported.json'); assert.match(await run('export', '--output', exported), /Exported readable graph/); assert.equal(JSON.parse(await fs.readFile(exported, 'utf8')).format_version, 3);
 });
+test('sync does not create Claude guidance when init did not create it', async () => {
+  const root = await fixture(); const cli = path.resolve('bin/graph-ai.js'); const { graph } = await build(root); await saveGraph(root, graph);
+  await fs.writeFile(path.join(root, 'delta.json'), JSON.stringify({ changes: [] }));
+  await exec(process.execPath, [cli, 'sync', '--input', 'delta.json', '--root', root]);
+  await assert.rejects(fs.access(path.join(root, 'CLAUDE.md')));
+});
