@@ -29,7 +29,7 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   assert.match(output, /Engram initialized/); assert.equal(cortex.chart.summary, ''); assert.deepEqual(cortex.chart.areas, []);
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
   assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /onboarding\/SKILL\.md/);
-  const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /Orientation/); assert.match(onboardingSkill, /Quick setup/);
+  const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /A\. \*\*Learn\*\*/); assert.match(onboardingSkill, /B\. \*\*Set up\*\*/); assert.match(onboardingSkill, /C\. \*\*Repair & update\*\*/); assert.match(onboardingSkill, /lettered choices/);
   const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Silent default/); assert.match(workflowSkill, /🧠 Cortex calibration/); assert.match(workflowSkill, /○ Observing/); assert.match(workflowSkill, /Progress to assisted focus/);
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
