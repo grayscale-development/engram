@@ -5,7 +5,7 @@ description: Introduce a user to Engram after initialization, then complete eith
 
 # Engram onboarding
 
-If `.engram/runtime/bin/engram.js` or this installed skill is missing, bootstrap Engram from the repository root first:
+When this skill is read directly from GitHub, or when `.engram/runtime/bin/engram.js` is missing, bootstrap Engram from the repository root first:
 
 ```sh
 scratch_cache="$(mktemp -d)" npm_config_cache="$scratch_cache" npx --yes github:grayscale-development/engram init
