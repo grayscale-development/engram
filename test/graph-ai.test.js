@@ -27,7 +27,8 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const root = await fixture(); const output = await run(root, 'init'); const cortex = await loadCortex(root);
   assert.match(output, /Engram initialized/); assert.equal(cortex.chart.summary, ''); assert.deepEqual(cortex.chart.areas, []);
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
-  assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /Local runtime/);
+  assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /onboarding\/SKILL\.md/);
+  const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /Orientation/); assert.match(onboardingSkill, /Quick setup/);
   const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Start every task/); assert.match(workflowSkill, /engram\.js doctor/);
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
@@ -115,7 +116,7 @@ test('replace and apply require a fresh revision and preserve agent-owned CRUD',
 
 test('init preserves an existing Cortex and compact reads can include revisions', async () => {
   const root = await fixture(); await run(root, 'init'); const before = await snapshot(root);
-  assert.match(await run(root, 'init'), /existing Cortex preserved/);
+  assert.match(await run(root, 'init'), /onboarding\/SKILL\.md/);
   const after = await snapshot(root); assert.equal(after.revision, before.revision);
   const compact = await run(root, 'read'); const pretty = await run(root, 'read', '--with-revision', '--pretty');
   assert.doesNotMatch(compact, /\n  /); assert.match(pretty, /\n  "revision"/); assert.deepEqual(JSON.parse(compact), after.cortex);

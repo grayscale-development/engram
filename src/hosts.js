@@ -31,6 +31,7 @@ export async function doctorReport(root) {
     { id: 'runtime-cli', path: path.join(root, RUNTIME_PATH, 'bin', 'engram.js'), required: true },
     { id: 'runtime-mcp', path: mcpServerPath(root), required: true },
     { id: 'cerebellum', path: path.join(root, CEREBELLUM_PATH), required: true },
+    { id: 'onboarding', path: path.join(root, '.engram', 'skills', 'onboarding', 'SKILL.md'), required: true },
     { id: 'evidence-report', path: path.join(root, '.engram', 'skills', 'evidence-report', 'SKILL.md'), required: true },
     { id: 'protected-evaluation', path: path.join(root, '.engram', 'skills', 'protected-evaluation', 'SKILL.md'), required: true }
   ];

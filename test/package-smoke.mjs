@@ -33,9 +33,10 @@ try {
   await run(process.execPath, [installedCli, 'init', '--root', targetRoot], packageDirectory);
   const runtimeCli = path.join(targetRoot, '.engram', 'runtime', 'bin', 'engram.js');
   const skill = path.join(targetRoot, '.engram', 'skills', 'cerebellum', 'SKILL.md');
+  const onboardingSkill = path.join(targetRoot, '.engram', 'skills', 'onboarding', 'SKILL.md');
   const evidenceSkill = path.join(targetRoot, '.engram', 'skills', 'evidence-report', 'SKILL.md');
   const evaluationSkill = path.join(targetRoot, '.engram', 'skills', 'protected-evaluation', 'SKILL.md');
-  await Promise.all([fs.access(runtimeCli), fs.access(skill), fs.access(evidenceSkill), fs.access(evaluationSkill), fs.access(path.join(targetRoot, '.engram', 'cortex.json'))]);
+  await Promise.all([fs.access(runtimeCli), fs.access(skill), fs.access(onboardingSkill), fs.access(evidenceSkill), fs.access(evaluationSkill), fs.access(path.join(targetRoot, '.engram', 'cortex.json'))]);
 
   const { stdout: readOutput } = await run(process.execPath, [runtimeCli, 'read', '--with-revision', '--root', targetRoot], targetRoot);
   const snapshot = JSON.parse(readOutput);

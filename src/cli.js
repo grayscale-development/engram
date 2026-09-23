@@ -40,6 +40,7 @@ const sourceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.
 async function installSkills(root) {
   const skills = [
     ['cerebellum', CEREBELLUM_PATH],
+    ['onboarding', '.engram/skills/onboarding/SKILL.md'],
     ['engram-workflow', '.engram/skills/engram-workflow/SKILL.md'],
     ['evidence-report', '.engram/skills/evidence-report/SKILL.md'],
     ['protected-evaluation', '.engram/skills/protected-evaluation/SKILL.md']
@@ -67,7 +68,7 @@ export async function run(args) {
     if (!cortex) await saveCortex(root, emptyCortex(root));
     await Promise.all([installSkills(root), installRuntime(root), ensureEvidenceSettings(root)]);
     await recordOperationEvidence(root, { operation: 'init', source: 'cli', startedAt, detail: { cortex_created: created, local_runtime_installed: true } });
-    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nCortex: ${created ? CORTEX_PATH : 'existing Cortex preserved'}\nAgent workflow: .engram/skills/engram-workflow/SKILL.md\nLocal runtime: ${RUNTIME_PATH}/bin/engram.js\nNext: run node ${RUNTIME_PATH}/bin/engram.js doctor, then have your agent read the workflow skill and Cerebellum before writing the first Cortex chart.\n`);
+    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nNext: ask your agent to read .engram/skills/onboarding/SKILL.md.\n`);
   }
   if (command === 'read') {
     const startedAt = Date.now(); const snapshot = await readCortexSnapshot(root); const output = args.includes('--with-revision') ? snapshot : snapshot.cortex;
