@@ -5,6 +5,12 @@ description: Introduce a user to Engram after initialization, then complete eith
 
 # Engram onboarding
 
+If `.engram/runtime/bin/engram.js` or this installed skill is missing, bootstrap Engram from the repository root first:
+
+```sh
+scratch_cache="$(mktemp -d)" npm_config_cache="$scratch_cache" npx --yes github:grayscale-development/engram init
+```
+
 Ask exactly one question before doing setup:
 
 > Would you like **Orientation** (about one minute: what Engram does and how it works) or **Quick setup** (skip the explanation and get it ready now)?
