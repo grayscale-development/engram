@@ -5,11 +5,12 @@ import path from 'node:path';
 import test from 'node:test';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
+import { automaticEvidenceSummary } from '../src/evidence.js';
 import { buildCortexIndex, focusCortex, searchCortexIndex } from '../src/index.js';
 import { handleMcpRequest } from '../src/mcp.js';
 import { recoverHistory } from '../src/history.js';
 import { applyCortexPatch, readCortexSnapshot, replaceCortex, verifyCortexHistory } from '../src/service.js';
-import { loadCortex, validateCortex } from '../src/storage.js';
+import { loadCortex, validateCortex, withCortexLock } from '../src/storage.js';
 
 const exec = promisify(execFile);
 const cli = path.resolve('bin/engram.js');
@@ -27,7 +28,18 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   assert.match(output, /Engram initialized/); assert.equal(cortex.chart.summary, ''); assert.deepEqual(cortex.chart.areas, []);
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
   assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /Local runtime/);
+  const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Start every task/); assert.match(workflowSkill, /engram\.js doctor/);
+  const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
+  assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
+  const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
+  const evidenceSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/evidence.json'), 'utf8')); assert.equal(evidenceSettings.enabled, true); assert.equal(evidenceSettings.retention.max_events, 2000);
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
+  const doctor = JSON.parse(await runInstalled(root, 'doctor')); assert.equal(doctor.status, 'ready'); assert.equal(doctor.checks.every((check) => check.present), true);
+  const codexMcp = await runInstalled(root, 'mcp-config', '--host', 'codex'); assert.match(codexMcp, /\[mcp_servers\.engram\]/); assert.match(codexMcp, /engram-mcp\.js/);
+  const cursorMcp = JSON.parse(await runInstalled(root, 'mcp-config', '--host', 'cursor')); assert.equal(cursorMcp.mcpServers.engram.command, 'node');
+  assert.match(await runInstalled(root, 'bundle', '--output', 'engram-team-bundle.json'), /Bundle written/);
+  const bundle = JSON.parse(await fs.readFile(path.join(root, 'engram-team-bundle.json'), 'utf8')); assert.equal(bundle.schema_version, 1); assert.equal(bundle.automatic_evidence.privacy.storage, 'local-only'); assert.equal(Array.isArray(bundle.limitations), true);
+  const migration = JSON.parse(await runInstalled(root, 'migrate')); assert.equal(migration.status, 'no_migration_needed'); assert.equal(migration.stored_format_version, 1);
   const installedRead = await runInstalledResult(root, 'read'); assert.match(installedRead.stdout, /"repository"/); assert.doesNotMatch(installedRead.stderr, /MODULE_TYPELESS_PACKAGE_JSON/);
   assert.match(await run(root, 'status'), /Revision:/); assert.match(await run(root, 'validate'), /Valid/);
 });
@@ -44,6 +56,34 @@ test('focus returns a bounded task-relevant Cortex slice without reading source'
   assert.equal(cliFocus.matches[0].id, 'merchant-transaction-update');
   assert.throws(() => focusCortex(current, 'merchant', 0), /1 through 50/);
   assert.throws(() => focusCortex(current, 'merchant', 1, 0), /1 through 20/);
+});
+
+test('automatic evidence records local CLI and MCP activity without retaining a task prompt', async () => {
+  const root = await fixture(); await run(root, 'init');
+  const first = await readCortexSnapshot(root);
+  await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [{ op: 'upsert', collection: 'areas', item: { id: 'orders', label: 'Orders', summary: 'Handles order creation.', keywords: ['order'], evidence: ['src/orders.js'] } }] } } } });
+  const secretQuery = 'private customer account 90210';
+  await runInstalled(root, 'focus', '--query', secretQuery);
+  await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_read', arguments: { root } } });
+  await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_focus', arguments: { root, query: 'order' } } });
+  const viaMcp = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_evidence', arguments: { root } } });
+  const evidence = await automaticEvidenceSummary(root);
+  assert.equal(evidence.status, 'available'); assert.equal(evidence.focus_actions, 2); assert.ok(evidence.events >= 4);
+  assert.equal(viaMcp.structuredContent.focus_actions, 2);
+  assert.equal(evidence.sources.cli >= 2, true); assert.equal(evidence.sources.mcp >= 2, true);
+  assert.equal(evidence.setup.cortex_created, true); assert.equal(evidence.estimated_context_reduction_tokens >= 0, true);
+  assert.equal(evidence.privacy.storage, 'local-only'); assert.equal(evidence.privacy.enabled, true);
+  assert.equal(evidence.first_cortex.entries, 1); assert.equal(evidence.first_cortex.elapsed_after_setup_ms >= 0, true);
+  const raw = await fs.readFile(path.join(root, '.engram/evidence.ndjson'), 'utf8');
+  assert.doesNotMatch(raw, new RegExp(secretQuery)); assert.doesNotMatch(raw, /src\/orders\.js/);
+  assert.match(await runInstalled(root, 'evidence', '--export', 'engram-evidence-export.json'), /Evidence exported/);
+  const exported = JSON.parse(await fs.readFile(path.join(root, 'engram-evidence-export.json'), 'utf8'));
+  assert.equal(exported.privacy.storage, 'local-only'); assert.doesNotMatch(JSON.stringify(exported), new RegExp(secretQuery));
+  const beforeOptOut = await fs.readFile(path.join(root, '.engram/evidence.ndjson'), 'utf8');
+  await fs.writeFile(path.join(root, '.engram/evidence.json'), JSON.stringify({ version: 1, enabled: false, retention: { max_events: 2000, max_bytes: 1048576 } }));
+  await runInstalled(root, 'read');
+  assert.equal(await fs.readFile(path.join(root, '.engram/evidence.ndjson'), 'utf8'), beforeOptOut);
+  assert.equal((await automaticEvidenceSummary(root)).privacy.enabled, false);
 });
 
 test('focus spreads its evidence budget across top matches before expanding one match', async () => {
@@ -96,6 +136,29 @@ test('history is append-only, content-addressed, and recoverable', async () => {
   assert.equal(recovered.revision, changed.revision); assert.deepEqual(recovered.cortex, changed.cortex);
 });
 
+test('a failed history append leaves a recoverable pending transaction instead of an untracked Cortex revision', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  const historyFile = path.join(root, '.engram/history/events.ndjson');
+  await fs.mkdir(historyFile, { recursive: true });
+  const patch = { operations: [{ op: 'upsert', collection: 'areas', item: { id: 'recoverable', label: 'Recoverable', summary: 'History must catch up after failure.' } }] };
+  await assert.rejects(applyCortexPatch(root, { expected_revision: initial.revision, patch, history: true }), /EISDIR|illegal operation/i);
+  const changed = await readCortexSnapshot(root);
+  assert.notEqual(changed.revision, initial.revision);
+  assert.equal(JSON.parse(await fs.readFile(path.join(root, '.engram/history/pending.json'), 'utf8')).before_revision, initial.revision);
+  await fs.rm(historyFile, { recursive: true });
+  const verified = await verifyCortexHistory(root);
+  assert.deepEqual(verified, { valid: true, events: 1, snapshots: 1, revision: changed.revision });
+  assert.deepEqual((await recoverHistory(root)).cortex, changed.cortex);
+  await assert.rejects(fs.access(path.join(root, '.engram/history/pending.json')), /ENOENT/);
+});
+
+test('replace history replays the normalized stored Cortex', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  const replacement = { repository: { name: 'replacement' }, chart: { summary: 'Replacement Cortex.', areas: [], workflows: [], decisions: [], conventions: [] } };
+  const changed = await replaceCortex(root, { expected_revision: initial.revision, cortex: replacement, history: true });
+  assert.deepEqual((await recoverHistory(root)).cortex, changed.cortex);
+});
+
 test('simultaneous writers cannot silently overwrite one another', async () => {
   const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
   const mutation = (id) => applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [{ op: 'upsert', collection: 'areas', item: { id, label: id, summary: 'Durable behavior.' } }] } });
@@ -104,6 +167,26 @@ test('simultaneous writers cannot silently overwrite one another', async () => {
   const failure = results.find((result) => result.status === 'rejected').reason;
   assert.ok(['CORTEX_BUSY', 'REVISION_CONFLICT'].includes(failure.code));
   assert.equal((await readCortexSnapshot(root)).cortex.chart.areas.length, 1);
+});
+
+test('a lock left by a dead process is recovered before a Cortex mutation', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  const lock = path.join(root, '.engram/cortex.lock');
+  await fs.writeFile(lock, `${JSON.stringify({ version: 1, pid: 99999999, created_at: '2020-01-01T00:00:00.000Z' })}\n`);
+  const changed = await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [{ op: 'upsert', collection: 'areas', item: { id: 'recovered', label: 'Recovered', summary: 'Mutation proceeds after a dead writer.' } }] } });
+  assert.equal(changed.cortex.chart.areas[0].id, 'recovered');
+  await assert.rejects(fs.access(lock), { code: 'ENOENT' });
+});
+
+test('active and malformed lock files remain busy and are never removed', async () => {
+  const root = await fixture(); await run(root, 'init'); const lock = path.join(root, '.engram/cortex.lock');
+  const active = `${JSON.stringify({ version: 1, pid: process.pid, created_at: new Date().toISOString() })}\n`;
+  await fs.writeFile(lock, active);
+  await assert.rejects(withCortexLock(root, async () => {}), (error) => error.code === 'CORTEX_BUSY');
+  assert.equal(await fs.readFile(lock, 'utf8'), active);
+  const malformed = 'not lock metadata\n'; await fs.writeFile(lock, malformed);
+  await assert.rejects(withCortexLock(root, async () => {}), (error) => error.code === 'CORTEX_BUSY');
+  assert.equal(await fs.readFile(lock, 'utf8'), malformed);
 });
 
 test('history writes a periodic recovery checkpoint after fifty events', async () => {
@@ -142,4 +225,5 @@ test('the MCP stdio server handles initialize and tools/list without process res
   const request = (id, method, params = {}) => new Promise((resolve) => { responses.set(id, resolve); child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`); });
   const initialized = await request(1, 'initialize', { protocolVersion: '2024-11-05' }); const listed = await request(2, 'tools/list'); child.kill();
   assert.equal(initialized.result.serverInfo.name, 'engram'); assert.equal(listed.result.tools.find((tool) => tool.name === 'engram_apply').inputSchema.required.includes('expected_revision'), true);
+  assert.ok(listed.result.tools.find((tool) => tool.name === 'engram_evidence'));
 });

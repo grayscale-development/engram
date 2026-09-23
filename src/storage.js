@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { CORTEX_LOCK_PATH, CORTEX_PATH, FORMAT_VERSION, MAX_CORTEX_BYTES, MAX_CORTEX_ENTRIES, MAX_EVIDENCE_LENGTH, MAX_EVIDENCE_PER_ENTRY, MAX_ID_LENGTH, MAX_KEYWORD_LENGTH, MAX_KEYWORDS_PER_ENTRY, MAX_LABEL_LENGTH, MAX_SUMMARY_LENGTH } from './constants.js';
 
 export class CortexBusyError extends Error {
@@ -74,11 +74,71 @@ export async function saveCortex(root, cortex) {
   const serialized = serializeCortex(cortex); const file = path.join(root, CORTEX_PATH); const temporary = `${file}.${process.pid}.tmp`; await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(temporary, serialized); await fs.rename(temporary, file);
   return { cortex, revision: cortexRevision(serialized) };
 }
+
+function lockMetadata() {
+  return { version: 1, pid: process.pid, created_at: new Date().toISOString() };
+}
+
+function parseLockMetadata(serialized) {
+  let metadata;
+  try { metadata = JSON.parse(serialized); }
+  catch { return null; }
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return null;
+  if (metadata.version !== 1 || !Number.isSafeInteger(metadata.pid) || metadata.pid < 1 || typeof metadata.created_at !== 'string' || !Number.isFinite(Date.parse(metadata.created_at))) return null;
+  return metadata;
+}
+
+function processIsAlive(pid) {
+  try { process.kill(pid, 0); return true; }
+  catch (error) {
+    // EPERM means the process exists but is not signalable. Treat all unknown
+    // errors as active too: availability is never worth deleting a live lock.
+    return error.code !== 'ESRCH';
+  }
+}
+
+async function recoverStaleLock(lock) {
+  let metadata;
+  try { metadata = parseLockMetadata(await fs.readFile(lock, 'utf8')); }
+  catch (error) { if (error.code === 'ENOENT') return true; throw error; }
+  if (!metadata || processIsAlive(metadata.pid)) return false;
+
+  // Rename is atomic. Once this succeeds, later acquirers create a new lock at
+  // `lock`; cleanup only touches the renamed stale file, never that new lock.
+  const recovered = `${lock}.stale-${process.pid}-${randomUUID()}`;
+  try { await fs.rename(lock, recovered); }
+  catch (error) { if (error.code === 'ENOENT') return true; throw error; }
+  await fs.unlink(recovered).catch((error) => { if (error.code !== 'ENOENT') throw error; });
+  return true;
+}
+
+async function acquireCortexLock(lock) {
+  for (;;) {
+    try {
+      const handle = await fs.open(lock, 'wx');
+      try { await handle.writeFile(`${JSON.stringify(lockMetadata())}\n`); }
+      catch (error) { await handle.close(); await fs.unlink(lock).catch(() => {}); throw error; }
+      return handle;
+    } catch (error) {
+      if (error.code !== 'EEXIST') throw error;
+      if (!await recoverStaleLock(lock)) throw new CortexBusyError();
+    }
+  }
+}
+
+async function removeOwnedLock(lock, handle) {
+  const owner = await handle.stat();
+  await handle.close();
+  try {
+    const current = await fs.stat(lock);
+    if (current.dev === owner.dev && current.ino === owner.ino) await fs.unlink(lock);
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+}
+
 export async function withCortexLock(root, operation) {
   const lock = path.join(root, CORTEX_LOCK_PATH); let handle;
   await fs.mkdir(path.dirname(lock), { recursive: true });
-  try { handle = await fs.open(lock, 'wx'); await handle.writeFile(`${process.pid}\n`); }
-  catch (error) { if (error.code === 'EEXIST') throw new CortexBusyError(); throw error; }
+  handle = await acquireCortexLock(lock);
   try { return await operation(); }
-  finally { await handle.close(); await fs.unlink(lock).catch((error) => { if (error.code !== 'ENOENT') throw error; }); }
+  finally { await removeOwnedLock(lock, handle); }
 }

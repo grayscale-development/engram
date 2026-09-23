@@ -3,4 +3,10 @@ node_modules/
 graph.json
 .ai/skills/
 .engram/skills/
+.engram/runtime/
+.engram/history/
+.engram/evidence.ndjson
+.engram/evidence.lock
+engram-evidence-export.json
+engram-team-bundle.json
 eval/results/

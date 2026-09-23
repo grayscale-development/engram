@@ -16,7 +16,8 @@
     "test": "node --test test/*.test.js",
     "lint": "node --check src/*.js && node --check bin/engram.js && node --check bin/engram-mcp.js && node --check bench/benchmark.mjs && node --check eval/runner.mjs && node --check eval/judges/*.mjs",
     "bench": "node bench/benchmark.mjs",
-    "eval": "node eval/runner.mjs"
+    "eval": "node eval/runner.mjs",
+    "smoke:package": "node test/package-smoke.mjs"
   },
   "engines": {
     "node": ">=20"

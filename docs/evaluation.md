@@ -24,6 +24,8 @@ npm run eval -- --adapter eval/adapters/codex-local.json --unsafe-local --scenar
 
 Reports are ignored under `eval/results/`. Each records suite and adapter hashes, trial-level duration, token usage when the adapter emits Codex JSONL, protected-judge checks, agent exit state, and every changed or disallowed path.
 
+To turn a completed JSON result into an executive-ready PDF, tell an AI agent to read the exact report with Engram's `evidence-report` skill. The skill must preserve the suite/adapter hashes, trust level, model metadata, and repetition count; it must not combine those measured results with automatic activity estimates.
+
 Copy the adapter for each experiment and set its `metadata` to the exact model, provider, reasoning setting, and agent version. That metadata is written into the report beside the adapter hash; never compare reports that differ on either value without labeling the comparison.
 
 ## Safety model
