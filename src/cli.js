@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CEREBELLUM_PATH, CORTEX_PATH, RUNTIME_PATH } from './constants.js';
+import { installAgentInstructions } from './agent-instructions.js';
 import { automaticEvidenceSummary, cortexEvidenceDetail, ensureEvidenceSettings, exportAutomaticEvidence, recordFocusEvidence, recordOperationEvidence } from './evidence.js';
 import { doctorReport, mcpConfigFor } from './hosts.js';
 import { migrationReport } from './migration.js';
@@ -70,7 +71,7 @@ export async function run(args) {
   if (command === 'init') {
     const startedAt = Date.now(); const cortex = await loadCortex(root); const created = !cortex;
     if (!cortex) await saveCortex(root, emptyCortex(root));
-    await Promise.all([installSkills(root), installRuntime(root), ensureEvidenceSettings(root), ensureShadowSettings(root)]);
+    await Promise.all([installSkills(root), installRuntime(root), installAgentInstructions(root), ensureEvidenceSettings(root), ensureShadowSettings(root)]);
     await recordOperationEvidence(root, { operation: 'init', source: 'cli', startedAt, detail: { cortex_created: created, local_runtime_installed: true } });
     return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nNext: ask your agent to read .engram/skills/onboarding/SKILL.md.\n`);
   }

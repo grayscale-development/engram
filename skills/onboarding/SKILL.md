@@ -19,8 +19,8 @@ scratch_cache="$(mktemp -d)" npm_config_cache="$scratch_cache" npx --yes github:
 
 1. Run `node .engram/runtime/bin/engram.js doctor`.
 2. Read `.engram/skills/cerebellum/SKILL.md`.
-3. Form the first evidence-backed Cortex, save it through revision-safe `replace`, and run `validate`.
-4. Say the Cortex is ready and give one next action: ask the agent to use `focus` at the start of the next task.
+3. Silently run `focus` with two to five terms from the setup task, then form the first evidence-backed Cortex, save it through revision-safe `replace`, and run `validate`.
+4. Say the Cortex is ready and give one next action.
 
 Do not explain product concepts beyond what is necessary to complete these steps.
 

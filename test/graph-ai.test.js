@@ -30,13 +30,15 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
   assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /onboarding\/SKILL\.md/);
   const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /Orientation/); assert.match(onboardingSkill, /Quick setup/);
-  const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Start every task/); assert.match(workflowSkill, /engram\.js doctor/);
+  const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Silent default/); assert.match(workflowSkill, /Independent accuracy/);
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
   const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
   const shadowSkill = await fs.readFile(path.join(root, '.engram/skills/shadow-mode/SKILL.md'), 'utf8'); assert.match(shadowSkill, /independent reviewer/); assert.match(shadowSkill, /95%/);
   const evidenceSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/evidence.json'), 'utf8')); assert.equal(evidenceSettings.enabled, true); assert.equal(evidenceSettings.retention.max_events, 2000);
   const shadowSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/shadow.json'), 'utf8')); assert.equal(shadowSettings.activation, 'shadow'); assert.equal(shadowSettings.minimum_independent_reviews, 20);
+  const agentInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.match(agentInstructions, /engram:automatic-workflow:start/); assert.match(agentInstructions, /silently run/); assert.match(agentInstructions, /🧠 Independent accuracy/);
+  await run(root, 'init'); const reinstalledInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.equal((reinstalledInstructions.match(/engram:automatic-workflow:start/g) ?? []).length, 1);
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
   const doctor = JSON.parse(await runInstalled(root, 'doctor')); assert.equal(doctor.status, 'ready'); assert.equal(doctor.checks.every((check) => check.present), true);
   const codexMcp = await runInstalled(root, 'mcp-config', '--host', 'codex'); assert.match(codexMcp, /\[mcp_servers\.engram\]/); assert.match(codexMcp, /engram-mcp\.js/);
@@ -46,6 +48,13 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const migration = JSON.parse(await runInstalled(root, 'migrate')); assert.equal(migration.status, 'no_migration_needed'); assert.equal(migration.stored_format_version, 1);
   const installedRead = await runInstalledResult(root, 'read'); assert.match(installedRead.stdout, /"repository"/); assert.doesNotMatch(installedRead.stderr, /MODULE_TYPELESS_PACKAGE_JSON/);
   assert.match(await run(root, 'status'), /Revision:/); assert.match(await run(root, 'validate'), /Valid/);
+});
+
+test('init adds only its managed instructions to an existing AGENTS file', async () => {
+  const root = await fixture(); const original = '# Local workflow\n\nKeep this instruction.\n';
+  await fs.writeFile(path.join(root, 'AGENTS.md'), original); await run(root, 'init');
+  const instructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8');
+  assert.match(instructions, /Keep this instruction/); assert.equal((instructions.match(/engram:automatic-workflow:start/g) ?? []).length, 1);
 });
 
 test('focus returns a bounded task-relevant Cortex slice without reading source', async () => {

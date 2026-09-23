@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { hasManagedAgentInstructions } from './agent-instructions.js';
 import { CEREBELLUM_PATH, CORTEX_PATH, RUNTIME_PATH } from './constants.js';
 
 export const supportedHosts = ['codex', 'cursor', 'vscode', 'generic'];
@@ -38,6 +39,7 @@ export async function doctorReport(root) {
     { id: 'protected-evaluation', path: path.join(root, '.engram', 'skills', 'protected-evaluation', 'SKILL.md'), required: true }
   ];
   const results = await Promise.all(checks.map(async (check) => ({ ...check, present: await exists(check.path) })));
+  results.push({ id: 'automatic-agent-workflow', path: path.join(root, 'AGENTS.md'), required: true, present: await hasManagedAgentInstructions(root) });
   return {
     status: results.every((check) => check.present) ? 'ready' : 'needs_setup',
     root,

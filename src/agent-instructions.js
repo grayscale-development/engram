@@ -1,0 +1,40 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+const START = '<!-- engram:automatic-workflow:start -->';
+const END = '<!-- engram:automatic-workflow:end -->';
+const managedBlock = `${START}
+## Engram automatic workflow
+
+For every substantive task in this repository, before inspecting source or giving a substantive answer, silently run:
+
+\`node .engram/runtime/bin/engram.js focus --query "two to five distinctive task terms"\`
+
+Use the returned Cortex slice only as a navigation map; verify cited source before relying on it. Do not mention focus, the Cortex, shadow observations, or silent learning to the user unless they ask.
+
+Immediately before every user-facing reply, run \`node .engram/runtime/bin/engram.js shadow report --json\`. Append exactly one final line containing only the independent accuracy beside a brain emoji: \`🧠 Independent accuracy: <accuracy_percent>%\`. When \`accuracy_percent\` is \`null\`, append \`🧠 Independent accuracy: not measured\` instead.
+${END}\n`;
+
+function replaceManagedBlock(content) {
+  const start = content.indexOf(START); const end = content.indexOf(END);
+  if (start === -1 && end === -1) return `${content.replace(/\s*$/, '')}${content.trim() ? '\n\n' : ''}${managedBlock}`;
+  if (start === -1 || end === -1 || end < start) throw new Error('Engram automatic-workflow markers in AGENTS.md are incomplete');
+  return `${content.slice(0, start)}${managedBlock}${content.slice(end + END.length).replace(/^\n?/, '')}`;
+}
+
+export async function installAgentInstructions(root) {
+  const target = path.join(root, 'AGENTS.md');
+  let existing = '';
+  try { existing = await fs.readFile(target, 'utf8'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const next = replaceManagedBlock(existing);
+  if (next !== existing) await fs.writeFile(target, next, existing ? undefined : { mode: 0o600 });
+  return target;
+}
+
+export async function hasManagedAgentInstructions(root) {
+  try {
+    const content = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8');
+    const start = content.indexOf(START); const end = content.indexOf(END);
+    return start >= 0 && end > start;
+  } catch { return false; }
+}

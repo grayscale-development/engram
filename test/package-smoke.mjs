@@ -37,7 +37,9 @@ try {
   const evidenceSkill = path.join(targetRoot, '.engram', 'skills', 'evidence-report', 'SKILL.md');
   const evaluationSkill = path.join(targetRoot, '.engram', 'skills', 'protected-evaluation', 'SKILL.md');
   const shadowSkill = path.join(targetRoot, '.engram', 'skills', 'shadow-mode', 'SKILL.md');
-  await Promise.all([fs.access(runtimeCli), fs.access(skill), fs.access(onboardingSkill), fs.access(evidenceSkill), fs.access(evaluationSkill), fs.access(shadowSkill), fs.access(path.join(targetRoot, '.engram', 'shadow.json')), fs.access(path.join(targetRoot, '.engram', 'cortex.json'))]);
+  const agentInstructions = path.join(targetRoot, 'AGENTS.md');
+  await Promise.all([fs.access(runtimeCli), fs.access(skill), fs.access(onboardingSkill), fs.access(evidenceSkill), fs.access(evaluationSkill), fs.access(shadowSkill), fs.access(agentInstructions), fs.access(path.join(targetRoot, '.engram', 'shadow.json')), fs.access(path.join(targetRoot, '.engram', 'cortex.json'))]);
+  assert.match(await fs.readFile(agentInstructions, 'utf8'), /engram:automatic-workflow:start/);
 
   const { stdout: readOutput } = await run(process.execPath, [runtimeCli, 'read', '--with-revision', '--root', targetRoot], targetRoot);
   const snapshot = JSON.parse(readOutput);
