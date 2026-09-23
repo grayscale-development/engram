@@ -35,9 +35,10 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
   const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
   const shadowSkill = await fs.readFile(path.join(root, '.engram/skills/shadow-mode/SKILL.md'), 'utf8'); assert.match(shadowSkill, /independent reviewer/); assert.match(shadowSkill, /95%/);
+  const reviewerSkill = await fs.readFile(path.join(root, '.engram/skills/cortex-reviewer/SKILL.md'), 'utf8'); assert.match(reviewerSkill, /shadow review/); assert.match(reviewerSkill, /independently inspect/);
   const evidenceSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/evidence.json'), 'utf8')); assert.equal(evidenceSettings.enabled, true); assert.equal(evidenceSettings.retention.max_events, 2000);
   const shadowSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/shadow.json'), 'utf8')); assert.equal(shadowSettings.activation, 'shadow'); assert.equal(shadowSettings.minimum_independent_reviews, 20);
-  const agentInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.match(agentInstructions, /engram:automatic-workflow:start/); assert.match(agentInstructions, /silently run/); assert.match(agentInstructions, /🧠 Independent accuracy/);
+  const agentInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.match(agentInstructions, /engram:automatic-workflow:start/); assert.match(agentInstructions, /Cortex reviewer/); assert.match(agentInstructions, /🧠 Independent accuracy/);
   await run(root, 'init'); const reinstalledInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.equal((reinstalledInstructions.match(/engram:automatic-workflow:start/g) ?? []).length, 1);
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
   const doctor = JSON.parse(await runInstalled(root, 'doctor')); assert.equal(doctor.status, 'ready'); assert.equal(doctor.checks.every((check) => check.present), true);
@@ -109,6 +110,8 @@ test('shadow mode promotes only after independent review and demotes below its c
   assert.equal((await shadowStatus(root)).scored_reviews, 0);
   const cliObservation = await recordShadowFocus(root, { source: 'test', focus: focused }); const cliReview = await writeJson(root, 'shadow-review.json', { observation_id: cliObservation, domain: 'authorization', reviewer: 'self', verdict: 'inconclusive' });
   assert.match(await runInstalled(root, 'shadow', 'record', '--input', cliReview), /CORTEX SHADOW MODE/);
+  const inlineObservation = await recordShadowFocus(root, { source: 'test', focus: focused });
+  assert.match(await runInstalled(root, 'shadow', 'review', '--observation-id', inlineObservation, '--domain', 'authorization', '--verdict', 'correct'), /CORTEX SHADOW MODE/);
   for (let index = 0; index < 20; index++) {
     const observation = await recordShadowFocus(root, { source: 'test', focus: focused });
     await recordShadowReview(root, { observation_id: observation, domain: 'authorization', reviewer: 'independent', verdict: 'correct' });

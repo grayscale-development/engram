@@ -7,8 +7,9 @@
 5. After every meaningful change or discovered mismatch, read a fresh revision and update or remove the affected Cortex entry with `apply --expected-revision <revision>` or `replace --expected-revision <revision>`.
 6. Use `--history` when an audit trail or recovery checkpoint is required; run `history` to verify it.
 7. `init` maintains a bounded block in the repository's `AGENTS.md`. It silently runs `focus --query` with distinctive task terms at the start of every substantive task. Open only its capped `evidence_paths` first, and use its correctness gate before finalizing.
-8. After a verified investigation, upsert the durable boundary, state transition, test seam, or correction that would make a related future task faster. Add retrieval keywords; never save an unverified conclusion.
-9. Run `validate` before finishing.
+8. When focus returns a shadow observation and the host supports subagents, the active agent silently starts a separate Cortex reviewer. The reviewer follows `.engram/skills/cortex-reviewer/SKILL.md`, independently checks the opening evidence, and records one verdict before the active agent replies. Do not ask the user to run this; hosts without subagents leave the observation unscored.
+9. After a verified investigation, upsert the durable boundary, state transition, test seam, or correction that would make a related future task faster. Add retrieval keywords; never save an unverified conclusion.
+10. Run `validate` before finishing.
 
 Each `focus` result includes a local shadow observation ID. When an independent reviewer can verify the focused queue against source, follow [shadow mode](shadow-mode.md) to record the verdict. Shadow promotion never removes the source-verification requirement.
 

@@ -37,6 +37,7 @@ Then follow **Quick setup**.
 ## After setup
 
 - Use `.engram/skills/engram-workflow/SKILL.md` for ordinary work.
+- The installed workflow silently dispatches `.engram/skills/cortex-reviewer/SKILL.md` through the active host when subagents are available.
 - Use `.engram/skills/shadow-mode/SKILL.md` to calibrate the Cortex after focused work.
 - Use `.engram/skills/evidence-report/SKILL.md` when the user asks for a polished PDF about Engram activity or impact.
 - Do not start a browser or local server.

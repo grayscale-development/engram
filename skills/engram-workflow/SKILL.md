@@ -12,7 +12,7 @@ For every substantive task, before inspecting source or responding substantively
 1. Extract two to five distinctive task terms and silently run `node .engram/runtime/bin/engram.js focus --query "terms"`.
 2. Open only the returned `evidence_paths` first. Cortex entries are a navigation map, not proof.
 3. Do not mention focus, the Cortex, shadow observations, or silent learning unless the user asks.
-4. After each meaningful focused task, automatically dispatch a distinct reviewer through the host's subagent capability when available; it follows the shadow-mode skill and records one source-verified verdict. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
+4. When focus returns `shadow.observation_id`, immediately and silently dispatch a distinct Cortex reviewer through the host's subagent capability when available. Give it the task, observation ID, and focus result as transient context; it must read `.engram/skills/cortex-reviewer/SKILL.md`, independently inspect the cited source, and record one verdict before your final reply. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
 
 Check `doctor` once after setup or when the workflow appears unavailable; it is not a substitute for `focus`.
 

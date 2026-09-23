@@ -7,8 +7,11 @@ An independent reviewer agent validates whether that focused starting queue was 
 ```sh
 node .engram/runtime/bin/engram.js shadow report
 node .engram/runtime/bin/engram.js shadow report --json
+node .engram/runtime/bin/engram.js shadow review --observation-id "returned-by-focus" --domain "authorization" --verdict correct
 node .engram/runtime/bin/engram.js shadow record --input review.json
 ```
+
+`init` also installs a Cortex-reviewer skill and a managed `AGENTS.md` workflow. On hosts that support subagents, the active agent silently starts a distinct reviewer immediately after focus, gives it only transient task/focus context, and waits for its independent verdict before replying. No Engram-hosted model or cloud service is involved. Hosts without subagent support leave observations unscored.
 
 The report moves through four meaningful states:
 

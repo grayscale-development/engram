@@ -33,6 +33,7 @@ export async function doctorReport(root) {
     { id: 'runtime-mcp', path: mcpServerPath(root), required: true },
     { id: 'cerebellum', path: path.join(root, CEREBELLUM_PATH), required: true },
     { id: 'onboarding', path: path.join(root, '.engram', 'skills', 'onboarding', 'SKILL.md'), required: true },
+    { id: 'cortex-reviewer', path: path.join(root, '.engram', 'skills', 'cortex-reviewer', 'SKILL.md'), required: true },
     { id: 'shadow-mode', path: path.join(root, '.engram', 'skills', 'shadow-mode', 'SKILL.md'), required: true },
     { id: 'shadow-settings', path: path.join(root, '.engram', 'shadow.json'), required: true },
     { id: 'evidence-report', path: path.join(root, '.engram', 'skills', 'evidence-report', 'SKILL.md'), required: true },

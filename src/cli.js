@@ -31,6 +31,8 @@ Commands:
   migrate [--root path]                                  inspect Cortex-format migration status without changing files
   shadow report [--json] [--root path]                   show Cortex shadow-learning progress and activation
   shadow record --input review.json [--root path]        record one source-verified shadow review
+  shadow review --observation-id id --domain name --verdict correct|incorrect|inconclusive [--reviewer independent] [--root path]
+                                                        record a reviewer verdict without a temporary JSON file
   index --input roots.json --output index.json            derive a cross-repository index from explicit Cortex roots
   search --index index.json --query words                 search a derived Cortex index
 
@@ -48,7 +50,8 @@ async function installSkills(root) {
     ['engram-workflow', '.engram/skills/engram-workflow/SKILL.md'],
     ['evidence-report', '.engram/skills/evidence-report/SKILL.md'],
     ['protected-evaluation', '.engram/skills/protected-evaluation/SKILL.md'],
-    ['shadow-mode', '.engram/skills/shadow-mode/SKILL.md']
+    ['shadow-mode', '.engram/skills/shadow-mode/SKILL.md'],
+    ['cortex-reviewer', '.engram/skills/cortex-reviewer/SKILL.md']
   ];
   await Promise.all(skills.map(async ([name, targetPath]) => {
     const source = path.join(sourceRoot, 'skills', name, 'SKILL.md'); const target = path.join(root, targetPath);
@@ -119,11 +122,14 @@ export async function run(args) {
     if (action === 'report' || action === 'status') {
       const output = await shadowStatus(root); return process.stdout.write(args.includes('--json') ? `${JSON.stringify(output, null, 2)}\n` : `${shadowReport(output)}\n`);
     }
-    if (action === 'record') {
-      const startedAt = Date.now(); const report = await recordShadowReview(root, await readJson(inputFor(args.slice(1), root)));
+    if (action === 'record' || action === 'review') {
+      const review = action === 'record'
+        ? await readJson(inputFor(args.slice(1), root))
+        : { observation_id: requiredOption(args, '--observation-id'), domain: requiredOption(args, '--domain'), reviewer: option(args, '--reviewer', 'independent'), verdict: requiredOption(args, '--verdict') };
+      const startedAt = Date.now(); const report = await recordShadowReview(root, review);
       await recordOperationEvidence(root, { operation: 'shadow-review', source: 'cli', startedAt }); return process.stdout.write(`${shadowReport(report)}\n`);
     }
-    throw new Error('shadow supports report, status, or record');
+    throw new Error('shadow supports report, status, record, or review');
   }
   if (command === 'bundle') {
     const startedAt = Date.now(); const result = await createReportBundle(root, path.resolve(root, requiredOption(args, '--output')));

@@ -15,9 +15,13 @@ Shadow mode improves confidence without allowing the Cortex to grade itself.
 
 ## After a task
 
-When the host supports subagents, automatically dispatch a distinct reviewer agent in parallel after the working task completes. It should inspect the source evidence and judge whether the focused starting queue was correct for one durable domain; it must not reuse the working agent's conclusion as proof. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
+When the host supports subagents, immediately and silently dispatch a distinct Cortex reviewer in parallel after focus returns an observation. Give it the task, observation ID, and focus result only as transient context. It reads `.engram/skills/cortex-reviewer/SKILL.md`, independently inspects the source evidence, and records its own verdict before the working agent's final reply. It must not reuse the working agent's conclusion as proof. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
 
-Record its verdict through MCP `engram_shadow_record` or the CLI with a JSON file:
+Record its verdict through MCP `engram_shadow_record`, the direct CLI command below, or the JSON-file CLI variant:
+
+```sh
+node .engram/runtime/bin/engram.js shadow review --observation-id "returned-by-focus" --domain "authorization" --verdict correct
+```
 
 ```json
 {
