@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises';
 import { automaticEvidenceSummary } from './evidence.js';
 import { verifyCortexHistory, readCortexSnapshot } from './service.js';
+import { shadowStatus } from './shadow.js';
 
 export async function createReportBundle(root, output) {
-  const [snapshot, evidence, history] = await Promise.all([
+  const [snapshot, evidence, history, shadow] = await Promise.all([
     readCortexSnapshot(root),
     automaticEvidenceSummary(root),
-    verifyCortexHistory(root)
+    verifyCortexHistory(root),
+    shadowStatus(root)
   ]);
   const bundle = {
     schema_version: 1,
@@ -16,6 +18,7 @@ export async function createReportBundle(root, output) {
     cortex: { revision: snapshot.revision, chart: snapshot.cortex.chart },
     history,
     automatic_evidence: evidence,
+    shadow_learning: shadow,
     limitations: [
       'This bundle does not include raw automatic-evidence events, task prompts, source snippets, or model output.',
       'Automatic evidence is local activity and Cortex-context sizing, not measured task success, total model tokens, cost, or latency.',

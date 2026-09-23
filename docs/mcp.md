@@ -12,7 +12,7 @@ Use `engram-mcp` as a local stdio MCP server when an agent host supports MCP. It
 }
 ```
 
-The server provides seven tools:
+The server provides nine tools:
 
 1. `engram_read` returns `{ cortex, revision }` from the authoritative local snapshot.
 2. `engram_focus` accepts a short task query and returns matching, agent-authored entries, a bounded evidence-opening queue, and a correctness gate. Verify its evidence before relying on it.
@@ -21,6 +21,8 @@ The server provides seven tools:
 5. `engram_validate` returns a validated snapshot and revision.
 6. `engram_history_verify` verifies the optional audit chain and recovery snapshots.
 7. `engram_evidence` returns local automatic-evidence activity: setup, Cortex mutations, focus calls, and estimated Cortex-context reduction. It never reports a task outcome as measured unless a paired evaluation report supplies one.
+8. `engram_shadow_report` returns the local shadow-learning phase, independent-review count, accuracy, and activation state.
+9. `engram_shadow_record` records one source-verified verdict for a `focus` observation. Only independent correct/incorrect reviews can promote assisted focus.
 
 Use the revision returned by `engram_read` exactly once for a mutation. A changed snapshot returns a `REVISION_CONFLICT` with the newest `{ cortex, revision }`; read it, merge the intended durable facts, and retry. A simultaneous write in progress returns `CORTEX_BUSY`; read and retry rather than guessing.
 
@@ -38,3 +40,7 @@ engram search --index cortex-index.json --query "deployment workflow"
 ## Automatic evidence
 
 Successful MCP Cortex operations are recorded locally in `.engram/evidence.ndjson`. The record contains operation names, source, duration, Cortex revision/counts, and bounded focus-sizing metrics—not raw task prompts, source snippets, evidence paths, or model output. `.engram/evidence.json` controls local recording and bounded retention; set `enabled` to `false` to opt out. Use `engram_evidence` or the CLI `engram evidence` to inspect its summary. `engram evidence --export report.json` creates an explicit JSON export; no automatic upload exists.
+
+## Shadow learning
+
+Every `engram_focus` response includes a `shadow.observation_id` when local shadow learning is available. A distinct reviewer agent can submit a source-verified verdict with `engram_shadow_record`; see [shadow mode](shadow-mode.md) for the promotion policy and privacy boundaries.

@@ -10,6 +10,7 @@ description: Use Engram's repository-local Cortex during engineering work. Use w
 1. Confirm the installation with `node .engram/runtime/bin/engram.js doctor`.
 2. Extract two to five distinctive task terms and run `node .engram/runtime/bin/engram.js focus --query "terms"`.
 3. Open only the returned `evidence_paths` first. Cortex entries are a navigation map, not proof.
+4. Note the returned `shadow.observation_id`. After each meaningful focused task, automatically dispatch a distinct reviewer through the host's subagent capability when available; it follows the shadow-mode skill and records one source-verified verdict. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
 
 ## Keep knowledge current
 

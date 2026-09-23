@@ -6,6 +6,7 @@ import { automaticEvidenceSummary, cortexEvidenceDetail, ensureEvidenceSettings,
 import { doctorReport, mcpConfigFor } from './hosts.js';
 import { migrationReport } from './migration.js';
 import { createReportBundle } from './report-bundle.js';
+import { ensureShadowSettings, recordShadowFocus, recordShadowReview, shadowGuidance, shadowReport, shadowStatus } from './shadow.js';
 import { buildCortexIndex, focusCortex, readCortexIndex, searchCortexIndex, writeCortexIndex } from './index.js';
 import { readJson } from './semantic.js';
 import { applyCortexPatch, readCortexSnapshot, replaceCortex, validateCortexSnapshot, verifyCortexHistory } from './service.js';
@@ -27,6 +28,8 @@ Commands:
   mcp-config --host codex|cursor|vscode|generic [--root path]  print a host-specific local MCP configuration snippet
   bundle --output report.json [--root path]              create an explicit, redacted team handoff bundle
   migrate [--root path]                                  inspect Cortex-format migration status without changing files
+  shadow report [--json] [--root path]                   show Cortex shadow-learning progress and activation
+  shadow record --input review.json [--root path]        record one source-verified shadow review
   index --input roots.json --output index.json            derive a cross-repository index from explicit Cortex roots
   search --index index.json --query words                 search a derived Cortex index
 
@@ -43,7 +46,8 @@ async function installSkills(root) {
     ['onboarding', '.engram/skills/onboarding/SKILL.md'],
     ['engram-workflow', '.engram/skills/engram-workflow/SKILL.md'],
     ['evidence-report', '.engram/skills/evidence-report/SKILL.md'],
-    ['protected-evaluation', '.engram/skills/protected-evaluation/SKILL.md']
+    ['protected-evaluation', '.engram/skills/protected-evaluation/SKILL.md'],
+    ['shadow-mode', '.engram/skills/shadow-mode/SKILL.md']
   ];
   await Promise.all(skills.map(async ([name, targetPath]) => {
     const source = path.join(sourceRoot, 'skills', name, 'SKILL.md'); const target = path.join(root, targetPath);
@@ -66,7 +70,7 @@ export async function run(args) {
   if (command === 'init') {
     const startedAt = Date.now(); const cortex = await loadCortex(root); const created = !cortex;
     if (!cortex) await saveCortex(root, emptyCortex(root));
-    await Promise.all([installSkills(root), installRuntime(root), ensureEvidenceSettings(root)]);
+    await Promise.all([installSkills(root), installRuntime(root), ensureEvidenceSettings(root), ensureShadowSettings(root)]);
     await recordOperationEvidence(root, { operation: 'init', source: 'cli', startedAt, detail: { cortex_created: created, local_runtime_installed: true } });
     return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nNext: ask your agent to read .engram/skills/onboarding/SKILL.md.\n`);
   }
@@ -79,6 +83,7 @@ export async function run(args) {
     const startedAt = Date.now(); const limit = Number(option(args, '--limit', '5')); const evidenceLimit = Number(option(args, '--evidence-limit', '5'));
     const snapshot = await readCortexSnapshot(root); const focused = focusCortex(snapshot, requiredOption(args, '--query'), limit, evidenceLimit);
     await recordFocusEvidence(root, { source: 'cli', startedAt, snapshot, focus: focused });
+    const observationId = await recordShadowFocus(root, { source: 'cli', focus: focused }); focused.shadow = await shadowGuidance(root, observationId);
     return process.stdout.write(`${JSON.stringify(focused)}\n`);
   }
   if (command === 'status') {
@@ -108,6 +113,17 @@ export async function run(args) {
   if (command === 'doctor') return process.stdout.write(`${JSON.stringify(await doctorReport(root), null, 2)}\n`);
   if (command === 'mcp-config') return process.stdout.write(mcpConfigFor(requiredOption(args, '--host'), root));
   if (command === 'migrate') return process.stdout.write(`${JSON.stringify(await migrationReport(root), null, 2)}\n`);
+  if (command === 'shadow') {
+    const action = args[1] ?? 'report';
+    if (action === 'report' || action === 'status') {
+      const output = await shadowStatus(root); return process.stdout.write(args.includes('--json') ? `${JSON.stringify(output, null, 2)}\n` : `${shadowReport(output)}\n`);
+    }
+    if (action === 'record') {
+      const startedAt = Date.now(); const report = await recordShadowReview(root, await readJson(inputFor(args.slice(1), root)));
+      await recordOperationEvidence(root, { operation: 'shadow-review', source: 'cli', startedAt }); return process.stdout.write(`${shadowReport(report)}\n`);
+    }
+    throw new Error('shadow supports report, status, or record');
+  }
   if (command === 'bundle') {
     const startedAt = Date.now(); const result = await createReportBundle(root, path.resolve(root, requiredOption(args, '--output')));
     await recordOperationEvidence(root, { operation: 'bundle', source: 'cli', startedAt });

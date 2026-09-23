@@ -10,6 +10,8 @@
 8. After a verified investigation, upsert the durable boundary, state transition, test seam, or correction that would make a related future task faster. Add retrieval keywords; never save an unverified conclusion.
 9. Run `validate` before finishing.
 
+Each `focus` result includes a local shadow observation ID. When an independent reviewer can verify the focused queue against source, follow [shadow mode](shadow-mode.md) to record the verdict. Shadow promotion never removes the source-verification requirement.
+
 Engram automatically records successful local CLI/MCP activity and focus sizing in `.engram/evidence.ndjson`; inspect the bounded summary with `node .engram/runtime/bin/engram.js evidence`. This is local activity evidence, not a task-outcome evaluation.
 
 The agent owns the Cortex. Engram stores and validates it; it never performs codebase analysis.

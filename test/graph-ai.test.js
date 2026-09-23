@@ -9,6 +9,7 @@ import { automaticEvidenceSummary } from '../src/evidence.js';
 import { buildCortexIndex, focusCortex, searchCortexIndex } from '../src/index.js';
 import { handleMcpRequest } from '../src/mcp.js';
 import { recoverHistory } from '../src/history.js';
+import { recordShadowFocus, recordShadowReview, shadowStatus } from '../src/shadow.js';
 import { applyCortexPatch, readCortexSnapshot, replaceCortex, verifyCortexHistory } from '../src/service.js';
 import { loadCortex, validateCortex, withCortexLock } from '../src/storage.js';
 
@@ -33,13 +34,15 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
   const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
+  const shadowSkill = await fs.readFile(path.join(root, '.engram/skills/shadow-mode/SKILL.md'), 'utf8'); assert.match(shadowSkill, /independent reviewer/); assert.match(shadowSkill, /95%/);
   const evidenceSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/evidence.json'), 'utf8')); assert.equal(evidenceSettings.enabled, true); assert.equal(evidenceSettings.retention.max_events, 2000);
+  const shadowSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/shadow.json'), 'utf8')); assert.equal(shadowSettings.activation, 'shadow'); assert.equal(shadowSettings.minimum_independent_reviews, 20);
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
   const doctor = JSON.parse(await runInstalled(root, 'doctor')); assert.equal(doctor.status, 'ready'); assert.equal(doctor.checks.every((check) => check.present), true);
   const codexMcp = await runInstalled(root, 'mcp-config', '--host', 'codex'); assert.match(codexMcp, /\[mcp_servers\.engram\]/); assert.match(codexMcp, /engram-mcp\.js/);
   const cursorMcp = JSON.parse(await runInstalled(root, 'mcp-config', '--host', 'cursor')); assert.equal(cursorMcp.mcpServers.engram.command, 'node');
   assert.match(await runInstalled(root, 'bundle', '--output', 'engram-team-bundle.json'), /Bundle written/);
-  const bundle = JSON.parse(await fs.readFile(path.join(root, 'engram-team-bundle.json'), 'utf8')); assert.equal(bundle.schema_version, 1); assert.equal(bundle.automatic_evidence.privacy.storage, 'local-only'); assert.equal(Array.isArray(bundle.limitations), true);
+  const bundle = JSON.parse(await fs.readFile(path.join(root, 'engram-team-bundle.json'), 'utf8')); assert.equal(bundle.schema_version, 1); assert.equal(bundle.automatic_evidence.privacy.storage, 'local-only'); assert.equal(bundle.shadow_learning.phase, 'observing'); assert.equal(Array.isArray(bundle.limitations), true);
   const migration = JSON.parse(await runInstalled(root, 'migrate')); assert.equal(migration.status, 'no_migration_needed'); assert.equal(migration.stored_format_version, 1);
   const installedRead = await runInstalledResult(root, 'read'); assert.match(installedRead.stdout, /"repository"/); assert.doesNotMatch(installedRead.stderr, /MODULE_TYPELESS_PACKAGE_JSON/);
   assert.match(await run(root, 'status'), /Revision:/); assert.match(await run(root, 'validate'), /Valid/);
@@ -54,7 +57,7 @@ test('focus returns a bounded task-relevant Cortex slice without reading source'
   const current = await readCortexSnapshot(root); const focused = focusCortex(current, 'tenant-isolation', 1, 1);
   assert.equal(focused.revision, current.revision); assert.equal(focused.matches.length, 1); assert.equal(focused.matches[0].id, 'merchant-transaction-update'); assert.deepEqual(focused.matches[0].matchedTerms, ['tenant-isolation']); assert.deepEqual(focused.evidence_paths, ['API/MerchantTransactionController.cs']); assert.deepEqual(focused.matches[0].evidence, ['API/MerchantTransactionController.cs']); assert.equal(focused.protocol.initial_evidence_limit, 1); assert.match(focused.protocol.correctness_gate[1], /authorized entity/);
   const cliFocus = JSON.parse(await runInstalled(root, 'focus', '--query', 'tenant-isolation', '--limit', '1', '--evidence-limit', '1'));
-  assert.equal(cliFocus.matches[0].id, 'merchant-transaction-update');
+  assert.equal(cliFocus.matches[0].id, 'merchant-transaction-update'); assert.match(cliFocus.shadow.observation_id, /^[a-f0-9-]{36}$/i); assert.equal(cliFocus.shadow.phase, 'observing');
   assert.throws(() => focusCortex(current, 'merchant', 0), /1 through 50/);
   assert.throws(() => focusCortex(current, 'merchant', 1, 0), /1 through 20/);
 });
@@ -85,6 +88,38 @@ test('automatic evidence records local CLI and MCP activity without retaining a 
   await runInstalled(root, 'read');
   assert.equal(await fs.readFile(path.join(root, '.engram/evidence.ndjson'), 'utf8'), beforeOptOut);
   assert.equal((await automaticEvidenceSummary(root)).privacy.enabled, false);
+});
+
+test('shadow mode promotes only after independent review and demotes below its confidence threshold', async () => {
+  const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
+  await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [{ op: 'upsert', collection: 'areas', item: { id: 'permissions', label: 'Permissions', summary: 'Enforces account access.', keywords: ['permission'], evidence: ['src/permissions.js'] } }] } });
+  const snapshot = await readCortexSnapshot(root); const focused = focusCortex(snapshot, 'permission', 5, 5);
+  const firstObservation = await recordShadowFocus(root, { source: 'test', focus: focused });
+  assert.equal((await shadowStatus(root)).phase, 'observing');
+  await recordShadowReview(root, { observation_id: firstObservation, domain: 'authorization', reviewer: 'self', verdict: 'correct' });
+  assert.equal((await shadowStatus(root)).scored_reviews, 0);
+  const cliObservation = await recordShadowFocus(root, { source: 'test', focus: focused }); const cliReview = await writeJson(root, 'shadow-review.json', { observation_id: cliObservation, domain: 'authorization', reviewer: 'self', verdict: 'inconclusive' });
+  assert.match(await runInstalled(root, 'shadow', 'record', '--input', cliReview), /CORTEX SHADOW MODE/);
+  for (let index = 0; index < 20; index++) {
+    const observation = await recordShadowFocus(root, { source: 'test', focus: focused });
+    await recordShadowReview(root, { observation_id: observation, domain: 'authorization', reviewer: 'independent', verdict: 'correct' });
+  }
+  let status = await shadowStatus(root); assert.equal(status.phase, 'assisted'); assert.equal(status.activation, 'assisted'); assert.equal(status.accuracy_percent, 100);
+  const viaCli = JSON.parse(await runInstalled(root, 'shadow', 'report', '--json')); assert.equal(viaCli.phase, 'assisted');
+  for (let index = 0; index < 2; index++) {
+    const observation = await recordShadowFocus(root, { source: 'test', focus: focused });
+    await recordShadowReview(root, { observation_id: observation, domain: 'authorization', reviewer: 'independent', verdict: 'incorrect' });
+  }
+  status = await shadowStatus(root); assert.equal(status.phase, 'improving'); assert.equal(status.activation, 'shadow'); assert.equal(status.accuracy_percent < 95, true);
+  const raw = await fs.readFile(path.join(root, '.engram/shadow.ndjson'), 'utf8'); assert.doesNotMatch(raw, /permission/); assert.doesNotMatch(raw, /src\/permissions\.js/);
+});
+
+test('disabled shadow learning neither records focus observations nor requests review', async () => {
+  const root = await fixture(); await run(root, 'init');
+  await fs.writeFile(path.join(root, '.engram/shadow.json'), JSON.stringify({ version: 1, enabled: false, activation: 'shadow', target_accuracy_percent: 95, minimum_independent_reviews: 20, promoted_at: null }));
+  const output = JSON.parse(await runInstalled(root, 'focus', '--query', 'private customer task'));
+  assert.equal(output.shadow.phase, 'disabled'); assert.equal(output.shadow.observation_id, null); assert.equal(output.shadow.review_required, false);
+  await assert.rejects(fs.access(path.join(root, '.engram/shadow.ndjson')));
 });
 
 test('focus spreads its evidence budget across top matches before expanding one match', async () => {
@@ -216,7 +251,7 @@ test('the persistent MCP handler returns structured snapshots and mutation confl
   const applied = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [{ op: 'upsert', collection: 'conventions', item: { id: 'compact', label: 'Compact', summary: 'Keep context small.' } }] } } } });
   assert.equal(applied.structuredContent.cortex.chart.conventions[0].id, 'compact');
   const focused = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_focus', arguments: { root, query: 'compact' } } });
-  assert.equal(focused.structuredContent.matches[0].id, 'compact'); assert.equal(focused.structuredContent.protocol.initial_evidence_limit, 5);
+  assert.equal(focused.structuredContent.matches[0].id, 'compact'); assert.equal(focused.structuredContent.protocol.initial_evidence_limit, 5); assert.match(focused.structuredContent.shadow.observation_id, /^[a-f0-9-]{36}$/i);
   await assert.rejects(handleMcpRequest({ method: 'tools/call', params: { name: 'engram_apply', arguments: { root, expected_revision: first.revision, patch: { operations: [] } } } }), (error) => error.code === 'REVISION_CONFLICT' && error.current.revision === applied.structuredContent.revision);
 });
 
@@ -226,5 +261,5 @@ test('the MCP stdio server handles initialize and tools/list without process res
   const request = (id, method, params = {}) => new Promise((resolve) => { responses.set(id, resolve); child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`); });
   const initialized = await request(1, 'initialize', { protocolVersion: '2024-11-05' }); const listed = await request(2, 'tools/list'); child.kill();
   assert.equal(initialized.result.serverInfo.name, 'engram'); assert.equal(listed.result.tools.find((tool) => tool.name === 'engram_apply').inputSchema.required.includes('expected_revision'), true);
-  assert.ok(listed.result.tools.find((tool) => tool.name === 'engram_evidence'));
+  assert.ok(listed.result.tools.find((tool) => tool.name === 'engram_evidence')); assert.ok(listed.result.tools.find((tool) => tool.name === 'engram_shadow_report'));
 });

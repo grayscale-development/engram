@@ -27,7 +27,13 @@ Generate a polished PDF that answers the user's actual question from local evide
    node .engram/runtime/bin/engram.js read --with-revision
    ```
 
-4. If the user identifies an Engram eval v2 JSON report, read that exact file as a separate evidence source. Accept only a report with `schema_version: 2`; retain its suite hash, adapter hash, trust level, repetitions, and paired-comparison summary in the PDF. Do not infer a result from an unverified file or from automatic evidence.
+4. Read the Cortex shadow-learning lifecycle when the report discusses readiness, trust, or automatic use:
+
+   ```sh
+   node .engram/runtime/bin/engram.js shadow report --json
+   ```
+
+5. If the user identifies an Engram eval v2 JSON report, read that exact file as a separate evidence source. Accept only a report with `schema_version: 2`; retain its suite hash, adapter hash, trust level, repetitions, and paired-comparison summary in the PDF. Do not infer a result from an unverified file or from automatic evidence.
 
 ## Create the PDF
 
@@ -39,6 +45,7 @@ Generate a polished PDF that answers the user's actual question from local evide
 ## Report honestly
 
 - State what the local record shows: setup, first maintained Cortex when available, CLI/MCP activity, focused-task count, and estimated Cortex-context reduction.
+- If included, state the shadow phase, independent scored-review count, routing accuracy, policy threshold, and activation. Shadow accuracy is only independently reviewed focus-routing quality for recorded observations.
 - Clearly separate estimates from measurements. Focus sizing is not total model-token savings, cost, latency, or task success.
 - A protected paired evaluation can support an outcome comparison only for its exact fixture, suite, adapter, model settings, and repetition count. State those boundaries next to the result.
 - If no paired evaluation report is available, say that success and performance outcomes are unknown. Do not manufacture comparisons.
