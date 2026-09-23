@@ -13,7 +13,7 @@
 
 Each `focus` result includes a local shadow observation ID. When an independent reviewer can verify the focused queue against source, follow [shadow mode](shadow-mode.md) to record the verdict. Shadow promotion never removes the source-verification requirement.
 
-Before each user-facing reply, the managed instructions run `shadow report --json` and append only the independent-accuracy footer. It shows calibration progress, not task success, cost, latency, or total token savings.
+Before each user-facing reply, the managed instructions run `shadow report --json` and append a compact three-line calibration footer: a four-step lifecycle with its active stage illuminated, progress toward the independent-review threshold, and independently verified accuracy against its target. It shows calibration progress, not task success, cost, latency, or total token savings.
 
 Engram automatically records successful local CLI/MCP activity and focus sizing in `.engram/evidence.ndjson`; inspect the bounded summary with `node .engram/runtime/bin/engram.js evidence`. This is local activity evidence, not a task-outcome evaluation.
 

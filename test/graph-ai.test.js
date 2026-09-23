@@ -30,7 +30,7 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
   assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /onboarding\/SKILL\.md/);
   const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /Orientation/); assert.match(onboardingSkill, /Quick setup/);
-  const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Silent default/); assert.match(workflowSkill, /Independent accuracy/);
+  const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Silent default/); assert.match(workflowSkill, /🧠 Cortex calibration/); assert.match(workflowSkill, /○ Observing/); assert.match(workflowSkill, /Progress to assisted focus/);
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
   const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
@@ -38,7 +38,7 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const reviewerSkill = await fs.readFile(path.join(root, '.engram/skills/cortex-reviewer/SKILL.md'), 'utf8'); assert.match(reviewerSkill, /shadow review/); assert.match(reviewerSkill, /independently inspect/);
   const evidenceSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/evidence.json'), 'utf8')); assert.equal(evidenceSettings.enabled, true); assert.equal(evidenceSettings.retention.max_events, 2000);
   const shadowSettings = JSON.parse(await fs.readFile(path.join(root, '.engram/shadow.json'), 'utf8')); assert.equal(shadowSettings.activation, 'shadow'); assert.equal(shadowSettings.minimum_independent_reviews, 20);
-  const agentInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.match(agentInstructions, /engram:automatic-workflow:start/); assert.match(agentInstructions, /Cortex reviewer/); assert.match(agentInstructions, /🧠 Independent accuracy/);
+  const agentInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.match(agentInstructions, /engram:automatic-workflow:start/); assert.match(agentInstructions, /Cortex reviewer/); assert.match(agentInstructions, /🧠 Cortex calibration/); assert.match(agentInstructions, /○ Observing/); assert.match(agentInstructions, /Progress to assisted focus/);
   await run(root, 'init'); const reinstalledInstructions = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8'); assert.equal((reinstalledInstructions.match(/engram:automatic-workflow:start/g) ?? []).length, 1);
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.engram/runtime/package.json'), 'utf8')), { private: true, type: 'module' });
   const doctor = JSON.parse(await runInstalled(root, 'doctor')); assert.equal(doctor.status, 'ready'); assert.equal(doctor.checks.every((check) => check.present), true);

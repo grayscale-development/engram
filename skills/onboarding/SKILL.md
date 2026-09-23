@@ -20,7 +20,7 @@ scratch_cache="$(mktemp -d)" npm_config_cache="$scratch_cache" npx --yes github:
 1. Run `node .engram/runtime/bin/engram.js doctor`.
 2. Read `.engram/skills/cerebellum/SKILL.md`.
 3. Silently run `focus` with two to five terms from the setup task, then form the first evidence-backed Cortex, save it through revision-safe `replace`, and run `validate`.
-4. Say the Cortex is ready and give one next action.
+4. Say the Cortex is ready. The installed workflow will use `focus` automatically when it applies; do not ask the user to request it.
 
 Do not explain product concepts beyond what is necessary to complete these steps.
 
