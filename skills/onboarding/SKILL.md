@@ -49,7 +49,7 @@ scratch_cache="$(mktemp -d)" npm_config_cache="$scratch_cache" npx --yes github:
 ```
 
 1. Run `node .engram/runtime/bin/engram.js doctor`.
-2. Say the installation is repaired and updated. The existing Cortex is preserved, and the installed workflow will use `focus` automatically when it applies.
+2. Say the installation is repaired and updated. The existing Cortex and calibration history are preserved, and the installed workflow will use `focus` automatically when it applies.
 
 If repair cannot complete, offer only lettered recovery choices, such as `A. Retry repair`, `B. Show the diagnostic output`, or `C. Stop`.
 
