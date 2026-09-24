@@ -12,6 +12,7 @@ Shadow mode improves confidence without allowing the Cortex to grade itself.
 - Every `focus` call automatically creates a local shadow observation and returns `shadow.observation_id`.
 - Treat a Cortex entry as navigation, never proof. Verify its cited source before making a conclusion.
 - Do not retain task prompts, source snippets, or model output in the shadow record.
+- For Engram, Cortex-workflow, or agent-host maintenance that is wholly outside the repository’s product domain, use CLI `focus --no-shadow` or MCP `engram_focus` with `track_shadow: false`. This preserves local activity evidence without polluting the repository’s routing score; it is never an escape hatch for a weak product-task focus.
 
 ## After a task
 
@@ -33,6 +34,8 @@ node .engram/runtime/bin/engram.js shadow review --observation-id "returned-by-f
 ```
 
 Use `incorrect` if the queue materially misrouted the task or omitted necessary evidence. Use `inconclusive` when source review cannot establish a verdict. A `self` review is useful operational feedback but never raises the confidence score.
+
+An `incorrect` verdict is an actionable routing miss. The working agent must inspect the relevant source and repair the matching durable Cortex entry before it closes the repository task; the shadow log is deliberately private and does not perform that mutation automatically.
 
 ## Promotion and demotion
 

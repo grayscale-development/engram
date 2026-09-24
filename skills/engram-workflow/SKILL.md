@@ -14,6 +14,8 @@ For every substantive task, before inspecting source or responding substantively
 3. Do not mention focus, the Cortex, shadow observations, or silent learning unless the user asks.
 4. When focus returns `shadow.observation_id`, immediately and silently dispatch a distinct Cortex reviewer through the host's subagent capability when available. Give it the task, observation ID, and focus result as transient context; it must read `.engram/skills/cortex-reviewer/SKILL.md`, independently inspect the cited source, and record one verdict before your final reply. If the host cannot dispatch a reviewer, leave the observation unscored rather than treating the working agent as independent.
 
+For work that is solely about Engram, the Cortex workflow, or agent-host configuration—not this repository’s product—add `--no-shadow` to the CLI focus command, or set MCP `track_shadow` to `false`. This preserves navigation and local activity evidence without affecting the repository’s routing-quality score. Never use this exclusion for a repository task with a weak focus result.
+
 Check `doctor` once after setup or when the workflow appears unavailable; it is not a substitute for `focus`.
 
 ## Reply footer
@@ -33,6 +35,7 @@ Render `<lifecycle>` as `○ Observing  →  ○ Calibrating  →  ○ Improving
 - Before changing durable Cortex knowledge, read `.engram/skills/cerebellum/SKILL.md`.
 - Read a fresh revision immediately before `apply` or `replace`.
 - After a meaningful implementation change or verified recurring discovery, update only the affected compact Cortex entry and run `validate`.
+- If an independent reviewer records `incorrect` for a repository task, inspect the relevant source and repair the affected durable Cortex entry before replying. The private shadow record does not update the Cortex itself.
 - Do not put source copies, raw prompts, credentials, or guesses in the Cortex.
 
 ## Report evidence

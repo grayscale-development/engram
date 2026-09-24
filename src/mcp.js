@@ -8,7 +8,7 @@ const schema = (properties, required = []) => ({ type: 'object', properties, req
 const rootProperty = { type: 'string', description: 'Absolute or current-working-directory-relative repository root.' };
 export const tools = [
   { name: 'engram_read', description: 'Read the authoritative compact Cortex snapshot and its optimistic-concurrency revision.', inputSchema: schema({ root: rootProperty }) },
-  { name: 'engram_focus', description: 'Return a bounded task-relevant Cortex slice, evidence-opening queue, and correctness gate. Use it to navigate, then verify the cited source.', inputSchema: schema({ root: rootProperty, query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 50 }, evidence_limit: { type: 'integer', minimum: 1, maximum: 20 } }, ['query']) },
+  { name: 'engram_focus', description: 'Return a bounded task-relevant Cortex slice, evidence-opening queue, and correctness gate. Use it to navigate, then verify the cited source. Set track_shadow false only for Engram/meta work outside this repository’s Cortex domain.', inputSchema: schema({ root: rootProperty, query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 50 }, evidence_limit: { type: 'integer', minimum: 1, maximum: 20 }, track_shadow: { type: 'boolean' } }, ['query']) },
   { name: 'engram_replace', description: 'Replace a Cortex only when expected_revision matches the latest read. Set history true to append an audit event.', inputSchema: schema({ root: rootProperty, expected_revision: { type: 'string' }, cortex: { type: 'object' }, history: { type: 'boolean' } }, ['expected_revision', 'cortex']) },
   { name: 'engram_apply', description: 'Apply Cortex CRUD operations only when expected_revision matches the latest read. Set history true to append an audit event.', inputSchema: schema({ root: rootProperty, expected_revision: { type: 'string' }, patch: { type: 'object' }, history: { type: 'boolean' } }, ['expected_revision', 'patch']) },
   { name: 'engram_validate', description: 'Validate the current Cortex and return its revision.', inputSchema: schema({ root: rootProperty }) },
@@ -36,7 +36,7 @@ async function observedFocus(root, args) {
   try {
     const snapshot = await readCortexSnapshot(root); const focus = focusCortex(snapshot, args.query, args.limit ?? 5, args.evidence_limit ?? 5);
     await recordFocusEvidence(root, { source: 'mcp', startedAt, snapshot, focus });
-    const observationId = await recordShadowFocus(root, { source: 'mcp', focus }); focus.shadow = await shadowGuidance(root, observationId);
+    const shadowExcluded = args.track_shadow === false; const observationId = shadowExcluded ? null : await recordShadowFocus(root, { source: 'mcp', focus }); focus.shadow = await shadowGuidance(root, observationId, { excluded: shadowExcluded });
     return focus;
   } catch (error) {
     await recordOperationEvidence(root, { operation: 'focus', source: 'mcp', startedAt, outcome: 'error', detail: { error_code: error?.code ?? 'ENGRAM_ERROR' } });

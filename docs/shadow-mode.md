@@ -13,6 +13,8 @@ node .engram/runtime/bin/engram.js shadow record --input review.json
 
 `init` also installs a Cortex-reviewer skill and a managed `AGENTS.md` workflow. On hosts that support subagents, the active agent silently starts a distinct reviewer immediately after focus, gives it only transient task/focus context, and waits for its independent verdict before replying. No Engram-hosted model or cloud service is involved. Hosts without subagent support leave observations unscored.
 
+Engram/Cortex-workflow and agent-host maintenance can use CLI `focus --no-shadow` or MCP `engram_focus` with `track_shadow: false`. This explicitly excludes work outside the repository’s product domain from the routing score while keeping ordinary product-task misses measurable. An independent `incorrect` verdict is a repair signal for the working agent: it must update the relevant durable Cortex entry from source evidence; shadow telemetry never mutates the Cortex automatically.
+
 The report moves through four meaningful states:
 
 | Phase | Meaning |

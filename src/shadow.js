@@ -151,9 +151,10 @@ export function shadowReport(status) {
   if (status.domains.length) { lines.push('', 'Domains:'); for (const domain of status.domains) lines.push(`- ${domain.domain}: ${domain.accuracy_percent === null ? 'not measured' : `${domain.accuracy_percent}%`} across ${domain.scored_reviews} scored independent review${domain.scored_reviews === 1 ? '' : 's'} (${domain.phase})`); }
   return lines.join('\n');
 }
-export async function shadowGuidance(root, observationId = null) {
+export async function shadowGuidance(root, observationId = null, { excluded = false } = {}) {
   try {
     const status = await shadowStatus(root);
+    if (excluded) return { observation_id: null, phase: 'excluded', activation: status.activation, review_required: false, note: 'Shadow scoring was explicitly skipped because this focus is outside the repository Cortex domain.' };
     return { observation_id: observationId, phase: status.phase, activation: status.activation, review_required: status.phase !== 'disabled' && status.activation !== 'assisted', note: status.phase === 'disabled' ? 'Shadow learning is disabled; focus still requires source verification.' : status.activation === 'assisted' ? 'Cortex focus is calibrated for assisted use; verify cited source before relying on it.' : 'Cortex focus remains in shadow calibration; verify cited source and submit an independent review after the task.' };
   } catch { return { observation_id: observationId, phase: 'unavailable', activation: 'shadow', review_required: false, note: 'Shadow learning is unavailable; focus still requires source verification.' }; }
 }

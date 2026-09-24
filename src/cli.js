@@ -20,7 +20,7 @@ Commands:
   read [--with-revision] [--pretty] [--root path]         print compact Cortex JSON; include a mutation revision when needed
   replace --input cortex.json --expected-revision hash     safely replace the Cortex
   apply --input patch.json --expected-revision hash        safely apply agent-authored CRUD operations
-  focus --query words [--limit number] [--evidence-limit number] [--root path]  return a bounded task-relevant Cortex slice
+  focus --query words [--limit number] [--evidence-limit number] [--no-shadow] [--root path]  return a bounded task-relevant Cortex slice
   status [--root path]                                    show Cortex counts and current revision
   validate [--root path]                                  validate the stored Cortex
   history [--root path]                                   verify the optional Cortex audit history
@@ -76,7 +76,7 @@ export async function run(args) {
     if (!cortex) await saveCortex(root, emptyCortex(root));
     await Promise.all([installSkills(root), installRuntime(root), installAgentInstructions(root), ensureEvidenceSettings(root), ensureShadowSettings(root)]);
     await recordOperationEvidence(root, { operation: 'init', source: 'cli', startedAt, detail: { cortex_created: created, local_runtime_installed: true } });
-    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\nNext: ask your agent to read .engram/skills/onboarding/SKILL.md.\n`);
+    return process.stdout.write(`Engram ${created ? 'initialized' : 'ready'}.\n`);
   }
   if (command === 'read') {
     const startedAt = Date.now(); const snapshot = await readCortexSnapshot(root); const output = args.includes('--with-revision') ? snapshot : snapshot.cortex;
@@ -87,7 +87,7 @@ export async function run(args) {
     const startedAt = Date.now(); const limit = Number(option(args, '--limit', '5')); const evidenceLimit = Number(option(args, '--evidence-limit', '5'));
     const snapshot = await readCortexSnapshot(root); const focused = focusCortex(snapshot, requiredOption(args, '--query'), limit, evidenceLimit);
     await recordFocusEvidence(root, { source: 'cli', startedAt, snapshot, focus: focused });
-    const observationId = await recordShadowFocus(root, { source: 'cli', focus: focused }); focused.shadow = await shadowGuidance(root, observationId);
+    const shadowExcluded = args.includes('--no-shadow'); const observationId = shadowExcluded ? null : await recordShadowFocus(root, { source: 'cli', focus: focused }); focused.shadow = await shadowGuidance(root, observationId, { excluded: shadowExcluded });
     return process.stdout.write(`${JSON.stringify(focused)}\n`);
   }
   if (command === 'status') {

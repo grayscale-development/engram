@@ -28,9 +28,10 @@ test('init creates an empty agent-owned Cortex and installs the Cerebellum', asy
   const root = await fixture(); const output = await run(root, 'init'); const cortex = await loadCortex(root);
   assert.match(output, /Engram initialized/); assert.equal(cortex.chart.summary, ''); assert.deepEqual(cortex.chart.areas, []);
   const skill = await fs.readFile(path.join(root, '.engram/skills/cerebellum/SKILL.md'), 'utf8'); assert.match(skill, /Engram does not scan, parse, or infer facts/);
-  assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.match(output, /onboarding\/SKILL\.md/);
+  assert.match(skill, /node \.engram\/runtime\/bin\/engram\.js/); assert.doesNotMatch(output, /ask your agent/i);
   const onboardingSkill = await fs.readFile(path.join(root, '.engram/skills/onboarding/SKILL.md'), 'utf8'); assert.match(onboardingSkill, /A\. \*\*Learn\*\*/); assert.match(onboardingSkill, /B\. \*\*Set up\*\*/); assert.match(onboardingSkill, /C\. \*\*Repair & update\*\*/); assert.match(onboardingSkill, /lettered choices/);
   const workflowSkill = await fs.readFile(path.join(root, '.engram/skills/engram-workflow/SKILL.md'), 'utf8'); assert.match(workflowSkill, /Silent default/); assert.match(workflowSkill, /🧠 Cortex calibration/); assert.match(workflowSkill, /○ Observing/); assert.match(workflowSkill, /Progress to assisted focus/);
+  assert.match(workflowSkill, /--no-shadow/); assert.match(workflowSkill, /records `incorrect`/);
   const evidenceReportSkill = await fs.readFile(path.join(root, '.engram/skills/evidence-report/SKILL.md'), 'utf8');
   assert.match(evidenceReportSkill, /Engram evidence report/); assert.match(evidenceReportSkill, /engram\.js evidence/); assert.match(evidenceReportSkill, /polished PDF/);
   const evaluationSkill = await fs.readFile(path.join(root, '.engram/skills/protected-evaluation/SKILL.md'), 'utf8'); assert.match(evaluationSkill, /control\/treatment/); assert.match(evaluationSkill, /container adapter/);
@@ -134,6 +135,16 @@ test('disabled shadow learning neither records focus observations nor requests r
   await assert.rejects(fs.access(path.join(root, '.engram/shadow.ndjson')));
 });
 
+test('out-of-scope focus keeps navigation and activity evidence without changing shadow calibration', async () => {
+  const root = await fixture(); await run(root, 'init');
+  const cli = JSON.parse(await runInstalled(root, 'focus', '--query', 'Engram host configuration', '--no-shadow'));
+  assert.equal(cli.shadow.phase, 'excluded'); assert.equal(cli.shadow.observation_id, null); assert.equal(cli.shadow.review_required, false);
+  const mcp = await handleMcpRequest({ method: 'tools/call', params: { name: 'engram_focus', arguments: { root, query: 'Engram workflow maintenance', track_shadow: false } } });
+  assert.equal(mcp.structuredContent.shadow.phase, 'excluded'); assert.equal(mcp.structuredContent.shadow.observation_id, null); assert.equal(mcp.structuredContent.shadow.review_required, false);
+  await assert.rejects(fs.access(path.join(root, '.engram/shadow.ndjson')));
+  assert.equal((await automaticEvidenceSummary(root)).focus_actions, 2);
+});
+
 test('focus spreads its evidence budget across top matches before expanding one match', async () => {
   const root = await fixture(); await run(root, 'init'); const initial = await readCortexSnapshot(root);
   await applyCortexPatch(root, { expected_revision: initial.revision, patch: { operations: [
@@ -163,7 +174,7 @@ test('replace and apply require a fresh revision and preserve agent-owned CRUD',
 
 test('init preserves an existing Cortex and compact reads can include revisions', async () => {
   const root = await fixture(); await run(root, 'init'); const before = await snapshot(root);
-  assert.match(await run(root, 'init'), /onboarding\/SKILL\.md/);
+  assert.match(await run(root, 'init'), /Engram ready\./);
   const after = await snapshot(root); assert.equal(after.revision, before.revision);
   const compact = await run(root, 'read'); const pretty = await run(root, 'read', '--with-revision', '--pretty');
   assert.doesNotMatch(compact, /\n  /); assert.match(pretty, /\n  "revision"/); assert.deepEqual(JSON.parse(compact), after.cortex);

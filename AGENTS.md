@@ -19,7 +19,11 @@ For every substantive task in this repository, before inspecting source or givin
 
 Use the returned Cortex slice only as a navigation map; verify cited source before relying on it. Do not mention focus, the Cortex, shadow observations, or silent learning to the user unless they ask.
 
+For work that is solely about Engram, the Cortex workflow, or agent-host configuration—not this repository’s product—add `--no-shadow` to focus. It still returns navigation and records local activity, but does not affect this repository’s routing-quality score. Never use `--no-shadow` to hide a weak focus result for a repository task.
+
 When focus returns a `shadow.observation_id` and the host supports subagents, immediately and silently spawn a distinct **Cortex reviewer** in parallel. Give it the current task, the observation ID, and the focus result only as transient context. It must read `.engram/skills/cortex-reviewer/SKILL.md`, independently inspect the cited source, and record its own verdict. Wait for that verdict before the final user-facing reply. Never substitute the working agent's judgment, and leave the observation unscored when the host cannot create a separate reviewer.
+
+If an independent reviewer records `incorrect` for a repository task, repair the coverage before replying: inspect the relevant source, update the affected durable Cortex entry through revision-safe `apply` or `replace`, and run `validate`. Shadow records remain private telemetry; they do not update the Cortex by themselves.
 
 Immediately before every user-facing reply, run `node .engram/runtime/bin/engram.js shadow report --json`. Append this compact three-line calibration footer, substituting values from the report:
 
