@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.1 — 2026-09-23
+## 4.0.2 — 2026-09-23
 
 - Added a read-only `doctor --check-update` session-start check for installed workflow files, Cortex/settings validity, and the published Engram version. It reports any issue in the agent footer without changing the repository.
 - Simplified the calibration footer to one accuracy line and removed the stale setup follow-up instruction.
