@@ -43,7 +43,7 @@ function compareVersions(left, right) {
   return 0;
 }
 async function latestPublishedVersion() {
-  const response = await fetch(`https://raw.githubusercontent.com/grayscale-development/engram/main/package.json?session_check=${Date.now()}`, { signal: AbortSignal.timeout(3_000) });
+  const response = await fetch('https://api.github.com/repos/grayscale-development/engram/contents/package.json?ref=main', { headers: { Accept: 'application/vnd.github.raw+json' }, signal: AbortSignal.timeout(3_000) });
   if (!response.ok) throw new Error(`update check returned HTTP ${response.status}`);
   const manifest = await response.json();
   if (!manifest || typeof manifest.version !== 'string') throw new Error('update check returned no package version');
