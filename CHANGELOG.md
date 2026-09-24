@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.1 — 2026-09-23
+
+- Added a read-only `doctor --check-update` session-start check for installed workflow files, Cortex/settings validity, and the published Engram version. It reports any issue in the agent footer without changing the repository.
+- Simplified the calibration footer to one accuracy line and removed the stale setup follow-up instruction.
+- Added explicit shadow-score exclusion for Engram/Cortex/host maintenance, while requiring source-backed Cortex repairs after independent product-task routing misses.
+
 ## 4.0.0 — 2026-09-22
 
 - Replaced the shell-command agent benchmark prototype with protected eval v2: typed adapters, full-diff integrity checks, external judges, reproducible reports, and a paired Cortex transfer experiment.

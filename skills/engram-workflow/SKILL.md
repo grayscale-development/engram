@@ -5,6 +5,16 @@ description: Use Engram's repository-local Cortex during engineering work. Use w
 
 # Engram workflow
 
+## Session health check
+
+At the beginning of every session in a repository that has `.engram`, before inspecting source or doing substantive work, silently run:
+
+```sh
+node .engram/runtime/bin/engram.js doctor --check-update
+```
+
+This is read-only. It validates the installed workflow and Cortex configuration, then checks the published Engram version with a short timeout. Keep its result for the footer; do not update or repair unless the user asks.
+
 ## Silent default
 
 For every substantive task, before inspecting source or responding substantively:
@@ -16,11 +26,11 @@ For every substantive task, before inspecting source or responding substantively
 
 For work that is solely about Engram, the Cortex workflow, or agent-host configuration—not this repository’s product—add `--no-shadow` to the CLI focus command, or set MCP `track_shadow` to `false`. This preserves navigation and local activity evidence without affecting the repository’s routing-quality score. Never use this exclusion for a repository task with a weak focus result.
 
-Check `doctor` once after setup or when the workflow appears unavailable; it is not a substitute for `focus`.
+The session health check is not a substitute for `focus`.
 
 ## Reply footer
 
-Immediately before every user-facing reply, run `node .engram/runtime/bin/engram.js shadow report --json`. Append exactly one final line: `🧠 Calibrating Cortex - <accuracy_percent>%`. When `accuracy_percent` is `null`, use `🧠 Calibrating Cortex - not measured`. Do not add calibration metrics or explanations.
+Immediately before every user-facing reply, run `node .engram/runtime/bin/engram.js shadow report --json`. Append exactly one final line: `🧠 Calibrating Cortex - <accuracy_percent>%`. When `accuracy_percent` is `null`, use `🧠 Calibrating Cortex - not measured`. If the session's `doctor --check-update` report contains issues, append one additional final footer line: `⚠️ Engram check: <issues>. Ask me to update or repair it.` Do not add other calibration metrics or explanations.
 
 ## Keep knowledge current
 

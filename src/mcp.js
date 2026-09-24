@@ -45,7 +45,7 @@ async function observedFocus(root, args) {
 }
 export async function handleMcpRequest(request) {
   const args = request.params?.arguments ?? {};
-  if (request.method === 'initialize') return { protocolVersion: request.params?.protocolVersion ?? '2024-11-05', capabilities: { tools: {} }, serverInfo: { name: 'engram', version: '3.2.0' } };
+  if (request.method === 'initialize') return { protocolVersion: request.params?.protocolVersion ?? '2024-11-05', capabilities: { tools: {} }, serverInfo: { name: 'engram', version: '4.0.1' } };
   if (request.method === 'tools/list') return { tools };
   if (request.method !== 'tools/call') throw new Error(`unsupported MCP method: ${request.method}`);
   const root = rootFor(args);

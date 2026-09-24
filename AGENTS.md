@@ -13,6 +13,12 @@ Engram does not analyze source code. Agents create and maintain `.engram/cortex.
 <!-- engram:automatic-workflow:start -->
 ## Engram automatic workflow
 
+At the beginning of every session in this repository, before inspecting source or doing substantive work, silently run:
+
+`node .engram/runtime/bin/engram.js doctor --check-update`
+
+Keep the read-only report for the reply footer. Do not run an update or repair unless the user asks.
+
 For every substantive task in this repository, before inspecting source or giving a substantive answer, silently run:
 
 `node .engram/runtime/bin/engram.js focus --query "two to five distinctive task terms"`
@@ -25,5 +31,5 @@ When focus returns a `shadow.observation_id` and the host supports subagents, im
 
 If an independent reviewer records `incorrect` for a repository task, repair the coverage before replying: inspect the relevant source, update the affected durable Cortex entry through revision-safe `apply` or `replace`, and run `validate`. Shadow records remain private telemetry; they do not update the Cortex by themselves.
 
-Immediately before every user-facing reply, run `node .engram/runtime/bin/engram.js shadow report --json`. Append exactly one final line: `🧠 Calibrating Cortex - <accuracy_percent>%`. When `accuracy_percent` is `null`, use `🧠 Calibrating Cortex - not measured`. Do not add calibration metrics or explanations.
+Immediately before every user-facing reply, run `node .engram/runtime/bin/engram.js shadow report --json`. Append exactly one final line: `🧠 Calibrating Cortex - <accuracy_percent>%`. When `accuracy_percent` is `null`, use `🧠 Calibrating Cortex - not measured`. If the session's `doctor --check-update` report contains issues, append one additional final footer line: `⚠️ Engram check: <issues>. Ask me to update or repair it.` Do not add other calibration metrics or explanations.
 <!-- engram:automatic-workflow:end -->

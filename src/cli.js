@@ -25,7 +25,7 @@ Commands:
   validate [--root path]                                  validate the stored Cortex
   history [--root path]                                   verify the optional Cortex audit history
   evidence [--export report.json] [--root path]            print or explicitly export local activity evidence
-  doctor [--root path]                                    verify that the local agent workflow is ready
+  doctor [--check-update] [--root path]                   verify the local workflow; optionally check the published version
   mcp-config --host codex|cursor|vscode|generic [--root path]  print a host-specific local MCP configuration snippet
   bundle --output report.json [--root path]              create an explicit, redacted team handoff bundle
   migrate [--root path]                                  inspect Cortex-format migration status without changing files
@@ -61,7 +61,8 @@ async function installSkills(root) {
 async function installRuntime(root) {
   const target = path.join(root, RUNTIME_PATH);
   for (const directory of ['bin', 'src']) await fs.cp(path.join(sourceRoot, directory), path.join(target, directory), { recursive: true, force: true });
-  await fs.writeFile(path.join(target, 'package.json'), `${JSON.stringify({ private: true, type: 'module' })}\n`);
+  const sourcePackage = JSON.parse(await fs.readFile(path.join(sourceRoot, 'package.json'), 'utf8'));
+  await fs.writeFile(path.join(target, 'package.json'), `${JSON.stringify({ private: true, type: 'module', engram_version: sourcePackage.version })}\n`);
 }
 function status(snapshot) {
   const chart = snapshot.cortex.chart;
@@ -114,7 +115,7 @@ export async function run(args) {
     await recordOperationEvidence(root, { operation: 'evidence-export', source: 'cli', startedAt });
     return process.stdout.write(`Evidence exported: ${result.output}\nEvents: ${result.events}\n`);
   }
-  if (command === 'doctor') return process.stdout.write(`${JSON.stringify(await doctorReport(root), null, 2)}\n`);
+  if (command === 'doctor') return process.stdout.write(`${JSON.stringify(await doctorReport(root, { checkUpdate: args.includes('--check-update') }), null, 2)}\n`);
   if (command === 'mcp-config') return process.stdout.write(mcpConfigFor(requiredOption(args, '--host'), root));
   if (command === 'migrate') return process.stdout.write(`${JSON.stringify(await migrationReport(root), null, 2)}\n`);
   if (command === 'shadow') {

@@ -1,6 +1,6 @@
 {
   "name": "@grayscale-development/engram",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "An AI-maintained repository cortex.",
   "keywords": ["ai", "coding-agents", "repository", "agent-memory", "brain", "developer-tools", "cli"],
   "homepage": "https://github.com/grayscale-development/engram#readme",

@@ -1,6 +1,6 @@
 # Agent workflow
 
-1. Run `init`, then `doctor`. Confirm `.engram/cortex.json`, `.engram/skills/engram-workflow/SKILL.md`, `.engram/skills/cerebellum/SKILL.md`, and `.engram/runtime/bin/engram.js` exist before continuing. If bootstrap was interrupted, rerun `init`; it preserves an existing Cortex and reinstalls the skills and local runtime.
+1. At the start of each session, run `doctor --check-update`. It read-only validates `.engram/cortex.json`, the installed skills/runtime, managed instructions, and settings, then checks the published version with a short timeout. Report issues in the footer; do not repair or update unless the user asks. After setup, `doctor` can still be run without the update check for a local-only readiness report. If bootstrap was interrupted, rerun `init`; it preserves an existing Cortex and reinstalls the skills and local runtime.
 2. Read `.engram/skills/engram-workflow/SKILL.md`, then `.engram/skills/cerebellum/SKILL.md`.
 3. Inspect the repository and form the first Cortex in an input JSON file.
 4. Use the local runtime: `node .engram/runtime/bin/engram.js read --with-revision`, then form the first Cortex with `replace --expected-revision <revision>`.
@@ -13,7 +13,7 @@
 
 Each `focus` result includes a local shadow observation ID. When an independent reviewer can verify the focused queue against source, follow [shadow mode](shadow-mode.md) to record the verdict. Shadow promotion never removes the source-verification requirement.
 
-Before each user-facing reply, the managed instructions run `shadow report --json` and append one compact calibration line with independently verified accuracy. It shows calibration progress, not task success, cost, latency, or total token savings.
+Before each user-facing reply, the managed instructions run `shadow report --json` and append one compact calibration line with independently verified accuracy. When the session health check found a configuration or update issue, they append a second warning line asking the user whether to update or repair. It shows calibration progress, not task success, cost, latency, or total token savings.
 
 Engram automatically records successful local CLI/MCP activity and focus sizing in `.engram/evidence.ndjson`; inspect the bounded summary with `node .engram/runtime/bin/engram.js evidence`. This is local activity evidence, not a task-outcome evaluation.
 
